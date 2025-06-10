@@ -84,9 +84,11 @@ public class TrayController : MonoBehaviour
 			return null;
 
 		Transform item = _items.Last();
+		if (item == null)
+			return null;
 
-		_items.Remove(item);
+		_items.RemoveAt(_items.Count - 1);
 
-		return null;
+		return item;
 	}
 }

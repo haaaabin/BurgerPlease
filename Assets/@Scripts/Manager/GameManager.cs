@@ -35,4 +35,34 @@ public class GameManager : Singleton<GameManager>
     }
     #endregion
 
+    #region
+    public GameObject MoneyPrefab;
+
+    private Transform _moneyRoot;
+    public Transform MoneyRoot
+    {
+        get
+        {
+            if (_moneyRoot == null)
+            {
+                GameObject go = new GameObject("@MoneyRoot");
+                _moneyRoot = go.transform;
+            }
+            return _moneyRoot;
+        }
+    }
+
+    public GameObject SpawnMoney()
+    {
+        GameObject go = Instantiate(MoneyPrefab);
+        go.name = MoneyPrefab.name;
+        go.transform.parent = MoneyRoot;
+        return go;
+    }
+
+    public void DeSpawnMoney(GameObject money)
+    {
+        Destroy(money);
+    }
+    #endregion
 }
