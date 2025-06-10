@@ -31,8 +31,6 @@ public class PlayerInteraction : MonoBehaviour
         if (pc == null)
             return;
 
-        Debug.Log("ontriggerenter");
-
         _player = pc;
     }
 
