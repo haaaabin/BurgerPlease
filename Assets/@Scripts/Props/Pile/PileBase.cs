@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class PileBase : MonoBehaviour
@@ -21,11 +22,16 @@ public class PileBase : MonoBehaviour
     // 현재 스택에 쌓인 오브젝트의 개수를 외부에서 읽을 수 있게 하는 읽기 전용 프로퍼티
     public int ObjectCount => _objects.Count;
 
-    public void AddToPile(GameObject go)
+    public void AddToPile(GameObject go, bool jump = false)
     {
         _objects.Push(go);
 
-        go.transform.position = GetPositionAt(_objects.Count - 1);
+        Vector3 pos = GetPositionAt(_objects.Count - 1);
+
+        if (jump)
+            go.transform.DOJump(pos, 5, 1, 0.3f);
+        else
+            go.transform.position = pos;
     }
 
     public GameObject RemoveFromPile()
