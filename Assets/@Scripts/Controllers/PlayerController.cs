@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
     public void UpdateAnimation()
     {
         int nextAnim = -1;
-        Debug.Log(nextAnim.ToString());
+        
         switch (State)
         {
             case EState.Idle:
