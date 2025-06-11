@@ -2,11 +2,12 @@ using UnityEngine;
 
 public static class Define
 {
-    public enum EState
+    public enum EAnimState
     {
         None,
         Idle,
         Move,
+        Eating,
     }
 
     public enum EGuestState
