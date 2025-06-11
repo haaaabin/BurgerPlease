@@ -36,6 +36,9 @@ public class Grill : MonoBehaviour
 
     private void OnPlayerBurgerInteraction(PlayerController pc)
     {
+        if (pc.Tray.ETrayObject == Define.ETrayObject.Trash)
+            return;
+
         GameObject go = _burgers.RemoveFromPile();
         if (go == null)
             return;

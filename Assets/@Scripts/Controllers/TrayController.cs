@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Define;
 
 public class TrayController : MonoBehaviour
 {
@@ -14,6 +15,25 @@ public class TrayController : MonoBehaviour
 
 	[SerializeField]
 	private float _itemHeight = 0.5f;
+
+	private ETrayObject _trayObject = ETrayObject.None;
+	public ETrayObject ETrayObject
+	{
+		get { return _trayObject; }
+		set
+		{
+			_trayObject = value;
+			switch (value)
+			{
+				case ETrayObject.Trash:
+					_itemHeight = 0.2f;
+					break;
+				case ETrayObject.Burger:
+					_itemHeight = 0.5f;
+					break;
+			}
+		}
+	}
 
 	public int ItemCount => _items.Count;   // 쟁반 위에 들고 있는 아이템 개수
 	public int ReservedCount => _reserved.Count;  // 쟁반 위로 이동 중

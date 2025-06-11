@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5591fc7395ac2f946b2b879922d7615a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 3
+  _moveSpeed: 5
   _rotateSpeed: 360
 --- !u!1 &1267415634190895513
 GameObject:
@@ -561,8 +561,8 @@ Transform:
   m_GameObject: {fileID: 3437786131141389439}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 1.2, z: 0.6}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7150048220887206435}
@@ -635,7 +635,6 @@ MonoBehaviour:
   _shakeRange: {x: 0.8, y: 0.4}
   _bendFactor: 0.1
   _itemHeight: 0.5
-  prefab: {fileID: 3236845577413567611, guid: 24310ebd84b4dd54491deaa4a0b0a26e, type: 3}
 --- !u!1 &3507678065622115252
 GameObject:
   m_ObjectHideFlags: 0
