@@ -27,11 +27,21 @@ public static class Define
         Dirty,
     }
 
-    public enum ETrayObject
+    public enum EObjectType
     {
         None,
-        Burger,
         Trash,
+        Burger,
+        Money,
+    }
+
+    public enum EEventType
+    {
+        MoneyChanged,
+        HireWorker,
+        UnlockProp,
+
+        MaxCount
     }
 
     public const int GRILL_MAX_BURGER_COUNT = 20;

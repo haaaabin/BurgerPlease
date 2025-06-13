@@ -9,16 +9,35 @@ using UnityEngine;
 public class Grill : MonoBehaviour
 {
     private BurgerPile _burgers;
+    private WorkerInteraction _interaction;
 
-    void Start()
+    public int BurgerCount => _burgers.ObjectCount;
+    public WorkerController CurrentWorker => _interaction.CurrentWorker;
+    void Awake()
     {
         _burgers = Utils.FindChild<BurgerPile>(gameObject);
 
-        PlayerInteraction interaction = _burgers.GetComponent<PlayerInteraction>();
-        interaction.InteractInterval = 0.2f;
-        interaction.OnPlayerInteraction = OnPlayerBurgerInteraction;
+        _interaction = _burgers.GetComponent<WorkerInteraction>();
+        _interaction.InteractInterval = 0.2f;
+        _interaction.OnInteraction = OnWorkerBurgerInteraction;
 
-        StartCoroutine(CoSpawnBurgers());
+    }
+
+    Coroutine _coSpawnBurger;
+
+    private void OnEnable()
+    {
+        if (_coSpawnBurger != null)
+            StopCoroutine(_coSpawnBurger);
+
+        _coSpawnBurger = StartCoroutine(CoSpawnBurgers());
+    }
+
+    private void OnDisable()
+    {
+        if (_coSpawnBurger != null)
+            StopCoroutine(_coSpawnBurger);
+        _coSpawnBurger = null;
     }
 
     IEnumerator CoSpawnBurgers()
@@ -27,22 +46,17 @@ public class Grill : MonoBehaviour
         {
             yield return new WaitUntil(() => _burgers.ObjectCount < Define.GRILL_MAX_BURGER_COUNT);
 
-            GameObject go = GameManager.Instance.SpawnBurger();
-            _burgers.AddToPile(go);
+            _burgers.SpawnObject();
 
             yield return new WaitForSeconds(Define.GRILL_SPAWN_BURGER_INTERVAL);
         }
     }
 
-    private void OnPlayerBurgerInteraction(PlayerController pc)
+    private void OnWorkerBurgerInteraction(WorkerController wc)
     {
-        if (pc.Tray.ETrayObject == Define.ETrayObject.Trash)
+        if (wc.Tray.CurrentTrayObjectType == Define.EObjectType.Trash)
             return;
 
-        GameObject go = _burgers.RemoveFromPile();
-        if (go == null)
-            return;
-
-        pc.Tray.AddToTray(go.transform);
+        _burgers.PileToTray(wc.Tray);
     }
 }

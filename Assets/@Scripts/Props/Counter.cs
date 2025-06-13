@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // 1. 햄버거 쌓이는 Pile (ok)
@@ -24,7 +25,15 @@ public class Counter : MonoBehaviour
     private List<Vector3> _queuePoints = new List<Vector3>();
     List<GuestController> _queueGuests = new List<GuestController>();
 
+    List<WorkerController> Workers = new List<WorkerController>();
     public List<Table> Tables = new List<Table>();
+
+    private WorkerInteraction _burgerInteraction;
+    public WorkerController CurrentBurgerWorker => _burgerInteraction.CurrentWorker;
+
+    private WorkerInteraction _casherInteraction;
+    public WorkerController CurrentCasherWorker => _casherInteraction.CurrentWorker;
+
 
     void Start()
     {
@@ -33,23 +42,25 @@ public class Counter : MonoBehaviour
         _queuePoints = Utils.FindChild<Waypoints>(gameObject).GetPoints();
 
         // 햄버거 인터렉션
-        _burgerPile.GetComponent<PlayerInteraction>().InteractInterval = 0.1f;
-        _burgerPile.GetComponent<PlayerInteraction>().OnPlayerInteraction = OnPlayerBurgerInteraction;
+        _burgerInteraction = _burgerPile.GetComponent<WorkerInteraction>();
+        _burgerInteraction.InteractInterval = 0.1f;
+        _burgerInteraction.OnInteraction = OnBurgerInteraction;
 
         // 돈 인터렉션
-        _moneyPile.GetComponent<PlayerInteraction>().InteractInterval = 0.1f;
-        _moneyPile.GetComponent<PlayerInteraction>().OnPlayerInteraction = OnPlayerMoneyInteraction;
+        _moneyPile.GetComponent<WorkerInteraction>().InteractInterval = 0.1f;
+        _moneyPile.GetComponent<WorkerInteraction>().OnInteraction = OnMoneyInteraction;
 
         // 손님 인터렉션
         GameObject machine = Utils.FindChild(gameObject, "Machine");
-        machine.GetComponent<PlayerInteraction>().InteractInterval = 1;
-        machine.GetComponent<PlayerInteraction>().OnPlayerInteraction = OnPlayerGuestInteraction;
+        machine.GetComponent<WorkerInteraction>().InteractInterval = 1;
+        machine.GetComponent<WorkerInteraction>().OnInteraction = OnGuestInteraction;
 
         StartCoroutine(CoSpawnGuest());
     }
 
     void Update()
     {
+        // 손님 AI
         UpdateGuestQueueAI();
         UpdateGuestOrderAI();
     }
@@ -65,8 +76,7 @@ public class Counter : MonoBehaviour
 
             _spawnMoneyRemaining--;
 
-            GameObject go = GameManager.Instance.SpawnMoney();
-            _moneyPile.AddToPile(go, true);
+            _moneyPile.SpawnObject();
         }
     }
 
@@ -83,7 +93,7 @@ public class Counter : MonoBehaviour
             GuestController guest = go.GetComponent<GuestController>();
             guest.CurrentDestQueueIndex = _queuePoints.Count - 1;
             guest.GuestState = Define.EGuestState.Queuing;
-            guest.Destination = _queuePoints.Last();
+            guest.SetDestination(_queuePoints.Last());
 
             _queueGuests.Add(guest);
         }
@@ -136,39 +146,25 @@ public class Counter : MonoBehaviour
 
     }
 
-    private void OnPlayerBurgerInteraction(PlayerController pc)
+    private void OnBurgerInteraction(WorkerController wc)
     {
-        if (pc.Tray.ETrayObject == Define.ETrayObject.Trash)
+        if (wc.Tray.CurrentTrayObjectType == Define.EObjectType.Trash)
             return;
 
-        Transform t = pc.Tray.RemoveFromTray();
-
-        if (t == null)
-            return;
-
-        _burgerPile.AddToPile(t.gameObject, true);
+        _burgerPile.TrayToPile(wc.Tray);
     }
 
-    private void OnPlayerMoneyInteraction(PlayerController pc)
+    private void OnMoneyInteraction(WorkerController wc)
     {
-        GameObject money = _moneyPile.RemoveFromPile();
-        if (money == null)
-            return;
+        _moneyPile.DeSpawnObjectWithJump(wc.transform.position, () =>
+        {
 
-        Vector3 targetPos = pc.transform.position + Vector3.up * 0.8f;
-
-        money.transform.DOJump(
-                targetPos,
-                1.8f,
-                1,
-                0.5f
-                ).OnComplete(() =>
-                {
-                    GameManager.Instance.DeSpawnMoney(money);
-                });
+            GameManager.Instance.Money += 100;
+            Debug.Log("GameManager.Instance.Money :" + GameManager.Instance.Money);
+        });
     }
 
-    private void OnPlayerGuestInteraction(PlayerController pc)
+    private void OnGuestInteraction(WorkerController wc)
     {
         // 손님 있어야 함
         if (_nextOrderBurgerCount == 0)
@@ -204,18 +200,20 @@ public class Counter : MonoBehaviour
             guest.GuestState = Define.EGuestState.Serving;
             guest.OrderCount = 0;
 
-            GameObject burger = _burgerPile.RemoveFromPile();
-            guest.Tray.AddToTray(burger.transform);
+            _burgerPile.PileToTray(guest.Tray);
 
             _spawnMoneyRemaining = 10;
             StartCoroutine(CoSpawnMoney());
         }
 
+        // 점유한다.
         destTable.Guests = _queueGuests.GetRange(0, _nextOrderBurgerCount);
         destTable.TableState = Define.ETableState.Reversed;
 
+        // 줄에서 제거
         _queueGuests.RemoveRange(0, _nextOrderBurgerCount);
 
+        // 주문 처리 끝났으므로 0으로 리셋
         _nextOrderBurgerCount = 0;
     }
 

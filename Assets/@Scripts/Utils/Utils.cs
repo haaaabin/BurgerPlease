@@ -59,16 +59,16 @@ public static class Utils
 		return (T)Enum.Parse(typeof(T), value, true);
 	}
 
-	public static ETrayObject GetTrayObjectType(Transform t)
+	public static EObjectType GetTrayObjectType(Transform t)
 	{
 		switch (t.gameObject.tag)
 		{
 			case "Trash":
-				return ETrayObject.Trash;
+				return EObjectType.Trash;
 			case "Burger":
-				return ETrayObject.Burger;
+				return EObjectType.Burger;
 		}
 
-		return ETrayObject.None;
+		return EObjectType.None;
 	}
 }

@@ -45,12 +45,12 @@ public class Table : MonoBehaviour
         _trashPile = Utils.FindChild<TrashPile>(gameObject);
 
         // 쓰레기 인터랙션.
-        _trashPile.GetComponent<PlayerInteraction>().InteractInterval = 0.02f;
-        _trashPile.GetComponent<PlayerInteraction>().OnPlayerInteraction = OnPlayerTrashInteraction;
+        _trashPile.GetComponent<WorkerInteraction>().InteractInterval = 0.02f;
+        _trashPile.GetComponent<WorkerInteraction>().OnInteraction = OnTrashInteraction;
 
         // 돈 인터랙션.
-        _moneyPile.GetComponent<PlayerInteraction>().InteractInterval = 0.02f;
-        _moneyPile.GetComponent<PlayerInteraction>().OnPlayerInteraction = OnPlayerMoneyInteraction;
+        _moneyPile.GetComponent<WorkerInteraction>().InteractInterval = 0.02f;
+        _moneyPile.GetComponent<WorkerInteraction>().OnInteraction = OnMoneyInteraction;
     }
 
     // Update is called once per frame
@@ -82,8 +82,7 @@ public class Table : MonoBehaviour
                 guest.GuestState = Define.EGuestState.Eating;
                 guest.transform.rotation = Chairs[i].rotation;
 
-                Transform burger = guest.Tray.RemoveFromTray();
-                _burgerPile.AddToPile(burger.gameObject, true);
+                _burgerPile.TrayToPile(guest.Tray);
             }
 
             _eatingTimeRemaining = Random.Range(5, 11);
@@ -96,23 +95,27 @@ public class Table : MonoBehaviour
             {
                 _eatingTimeRemaining = 0;
 
+                // 버거 제거
                 for (int i = 0; i < Guests.Count; i++)
                 {
-                    GameObject burger = _burgerPile.RemoveFromPile();
-                    if (burger == null)
-                        return;
-
-                    GameManager.Instance.DeSpawnBurger(burger);
+                    _burgerPile.DeSpawnObject();
                 }
 
+                // 쓰레기 생성
                 SpawnTrashRemaining = Guests.Count;
-
                 StartCoroutine(CoSpawnTrash());
 
+                SpawnMoneyRemaining = Guests.Count;
+                StartCoroutine(CoSpawnMoney());
+
+                // 손님 퇴장
                 foreach (GuestController guest in Guests)
                 {
                     guest.GuestState = EGuestState.Leaving;
-                    guest.Destination = Define.GUEST_LEAVE_POS;
+                    guest.SetDestination(GUEST_LEAVE_POS, () =>
+                    {
+                        GameManager.Instance.DeSpawnGuest(guest.gameObject);
+                    });
                 }
 
                 Guests.Clear();
@@ -138,41 +141,42 @@ public class Table : MonoBehaviour
 
             SpawnTrashRemaining--;
 
-            GameObject go = GameManager.Instance.SpawnTrash();
-            _trashPile.AddToPile(go, jump: true);
+            _trashPile.SpawnObject();
+        }
+    }
+
+    private IEnumerator CoSpawnMoney()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Define.MONEY_SPAWN_INTERVAL);
+
+            if (SpawnMoneyRemaining <= 0)
+                continue;
+
+            SpawnMoneyRemaining--;
+
+            _moneyPile.SpawnObject();
         }
     }
 
     #region Interaction
-    private void OnPlayerMoneyInteraction(PlayerController pc)
+
+    private void OnTrashInteraction(WorkerController wc)
     {
-        GameObject money = _moneyPile.RemoveFromPile();
-        if (money == null)
+        if (wc.Tray.CurrentTrayObjectType == Define.EObjectType.Burger)
             return;
 
-        Vector3 targetPos = pc.transform.position + Vector3.up * 0.8f;
-
-        money.transform.DOJump(
-                targetPos,
-                1.8f,
-                1,
-                0.5f
-                ).OnComplete(() =>
-                {
-                    GameManager.Instance.DeSpawnMoney(money);
-                });
+        _trashPile.PileToTray(wc.Tray);
     }
 
-    private void OnPlayerTrashInteraction(PlayerController pc)
+    private void OnMoneyInteraction(WorkerController wc)
     {
-        if (pc.Tray.ETrayObject == Define.ETrayObject.Burger)
-            return;
-
-        GameObject trash = _trashPile.RemoveFromPile();
-        if (trash == null)
-            return;
-
-        pc.Tray.AddToTray(trash.transform);
+        _moneyPile.DeSpawnObjectWithJump(wc.transform.position, () =>
+        {
+            GameManager.Instance.Money += 100;
+            Debug.Log("GameManager.Instance.Money :" + GameManager.Instance.Money);
+        });
     }
     #endregion
 }
