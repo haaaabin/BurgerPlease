@@ -16,19 +16,19 @@ public class TrayController : MonoBehaviour
 	[SerializeField]
 	private float _itemHeight = 0.5f;
 
-	private ETrayObject _trayObject = ETrayObject.None;
-	public ETrayObject ETrayObject
+	private EObjectType _objectType = EObjectType.None;
+	public EObjectType CurrentTrayObjectType
 	{
-		get { return _trayObject; }
+		get { return _objectType; }
 		set
 		{
-			_trayObject = value;
+			_objectType = value;
 			switch (value)
 			{
-				case ETrayObject.Trash:
+				case EObjectType.Trash:
 					_itemHeight = 0.2f;
 					break;
-				case ETrayObject.Burger:
+				case EObjectType.Burger:
 					_itemHeight = 0.5f;
 					break;
 			}
@@ -44,11 +44,13 @@ public class TrayController : MonoBehaviour
 
 	private MeshRenderer _meshRenderer;
 	private PlayerController _player;
+	private StickManController _owner;
+	public bool IsPlayer = false;
 
 	public bool Visible
 	{
-		set { _meshRenderer.enabled = value; _player?.UpdateAnimation(); }
-		get { return _meshRenderer.enabled; }
+		set { if (_meshRenderer != null) _meshRenderer.enabled = value; _owner?.UpdateAnimation(); }
+		get { return (_meshRenderer != null) ? _meshRenderer.enabled : false; }
 	}
 
 	void Start()
@@ -65,9 +67,14 @@ public class TrayController : MonoBehaviour
 		if (_items.Count == 0)
 			return;
 
-		Vector3 dir = GameManager.Instance.JoystickDir;
-		Vector3 moveDir = new Vector3(dir.x, 0, dir.y);
-		moveDir = (Quaternion.Euler(0, 45, 0) * moveDir).normalized;
+		Vector3 moveDir = Vector3.zero;
+
+		if (IsPlayer)
+		{
+			Vector3 dir = GameManager.Instance.JoystickDir;
+			moveDir = new Vector3(dir.x, 0, dir.y);
+			moveDir = (Quaternion.Euler(0, 45, 0) * moveDir).normalized;
+		}
 
 		_items[0].position = transform.position;
 		_items[0].rotation = transform.rotation;

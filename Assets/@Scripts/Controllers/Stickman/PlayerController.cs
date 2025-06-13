@@ -8,6 +8,7 @@ public class PlayerController : WorkerController
         base.Awake();
 
         _navMeshAgent.enabled = false;
+        Tray.IsPlayer = true;
     }
 
     protected override void Update()
