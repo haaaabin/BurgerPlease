@@ -4,7 +4,7 @@ using DG.Tweening;
 using static Define;
 using System.Collections;
 
-public class Table : MonoBehaviour
+public class Table : UnlockableBase
 {
     public List<Transform> Chairs = new List<Transform>();
 

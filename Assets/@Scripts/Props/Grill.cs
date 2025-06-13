@@ -6,7 +6,7 @@ using UnityEngine;
 // 3. [Collider] 길찾기 막기
 // 4. Burger Pile 
 // 5. [Trigger] 햄버거 영역 안으로 들어오면 플레이어가 갖고 감
-public class Grill : MonoBehaviour
+public class Grill : UnlockableBase
 {
     private BurgerPile _burgers;
     private WorkerInteraction _interaction;
@@ -23,6 +23,7 @@ public class Grill : MonoBehaviour
 
     }
 
+    // 비활성화 -> 활성화 될 때 정지했다가 다시 시작하도록 
     Coroutine _coSpawnBurger;
 
     private void OnEnable()

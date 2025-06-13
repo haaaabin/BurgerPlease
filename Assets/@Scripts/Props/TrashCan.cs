@@ -3,7 +3,7 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using static Define;
 
-public class TrashCan : MonoBehaviour
+public class TrashCan : UnlockableBase
 {
     void Start()
     {

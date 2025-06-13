@@ -12,7 +12,7 @@ using UnityEngine;
 // 4. 돈 먹는 Trigger (ok)
 // 5. 손님 줄 
 // 6. 손님 계산 받기 Trigger (손님 있어야 함. 햄버거 있어야 함. 자리 있어야 함)
-public class Counter : MonoBehaviour
+public class Counter : UnlockableBase
 {
     private BurgerPile _burgerPile;
     private MoneyPile _moneyPile;
