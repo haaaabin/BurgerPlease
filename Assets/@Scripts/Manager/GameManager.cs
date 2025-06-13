@@ -6,6 +6,10 @@ public class GameManager : Singleton<GameManager>
 {
     public Vector2 JoystickDir { get; set; } = Vector2.zero;
 
+    #region UI
+    public UI_UpgradeEmployeePopup UpgradeEmployeePopup;
+    #endregion
+    
     #region Data
     public long _money = 10000;
 
