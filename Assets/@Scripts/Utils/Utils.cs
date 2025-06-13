@@ -71,4 +71,13 @@ public static class Utils
 
 		return EObjectType.None;
 	}
+
+	public static string GetMoneyText(long money)
+	{
+		if (money < 1000) return money.ToString();
+		if (money < 100000) return (money / 1000f).ToString("0.##") + "k";
+		if (money < 100000000) return (money / 100000f).ToString("0.##") + "m";
+		if (money < 100000000000) return (money / 100000000f).ToString("0.##") + "b";
+		return (money / 100000000000f).ToString("0.##") + "t";
+	}
 }
