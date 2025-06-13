@@ -1,8 +1,57 @@
+using System;
 using UnityEngine;
+using static Define;
 
 public class GameManager : Singleton<GameManager>
 {
     public Vector2 JoystickDir { get; set; } = Vector2.zero;
+
+    #region Data
+    public long _money = 10000;
+
+    public long Money
+    {
+        get { return _money; }
+        set
+        {
+            _money = value;
+            OnMoneyChanged?.Invoke();
+            BroadcastEvent(EEventType.MoneyChanged);
+        }
+    }
+    #endregion
+
+    #region Event
+    public event Action OnMoneyChanged;
+    Action[] _events = new Action[(int)EEventType.MaxCount];
+
+    public void AddEventListener(EEventType type, Action action)
+    {
+        int index = (int)type;
+        if (_events.Length < index)
+            return;
+
+        _events[index] += action;
+    }
+
+    public void RemoveEventListener(EEventType type, Action action)
+    {
+        int index = (int)type;
+        if (_events.Length < index)
+            return;
+
+        _events[index] -= action;
+    }
+
+    public void BroadcastEvent(EEventType type)
+    {
+        int index = (int)type;
+        if (_events.Length < index)
+            return;
+
+        _events[index]?.Invoke();
+    }
+    #endregion
 
     #region Burger
     public GameObject BurgerPrefab;
