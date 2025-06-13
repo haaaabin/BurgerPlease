@@ -31,15 +31,22 @@ public class GuestController : StickManController
     {
         base.Update();
 
-        if (HasArrivedAtDestination)
+        if (GuestState != EGuestState.Eating)
         {
-            _navMeshAgent.isStopped = true;
-            State = EAnimState.Idle;
+            if (HasArrivedAtDestination)
+            {
+                _navMeshAgent.isStopped = true;
+                State = EAnimState.Idle;
+            }
+            else
+            {
+                State = EAnimState.Move;
+                LookAtDestination();
+            }
         }
         else
         {
-            State = EAnimState.Move;
-            LookAtDestination();
+            _navMeshAgent.isStopped = true;
         }
 
         transform.position = new Vector3(transform.position.x, 0, transform.position.z);
