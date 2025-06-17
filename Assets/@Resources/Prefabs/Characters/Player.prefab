@@ -1000,6 +1000,7 @@ MonoBehaviour:
   _shakeRange: {x: 0.8, y: 0.4}
   _bendFactor: 0.1
   _itemHeight: 0.5
+  IsPlayer: 1
 --- !u!1 &3507678065622115252
 GameObject:
   m_ObjectHideFlags: 0

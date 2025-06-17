@@ -10,13 +10,13 @@ public class UI_GameScene : MonoBehaviour
     {
         RefreshUI();
         GameManager.Instance.AddEventListener(Define.EEventType.MoneyChanged, RefreshUI);
-        GameManager.Instance.OnMoneyChanged += RefreshUI;
+        // GameManager.Instance.OnMoneyChanged += RefreshUI;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.RemoveEventListener(Define.EEventType.MoneyChanged, RefreshUI);
-        GameManager.Instance.OnMoneyChanged -= RefreshUI;
+        // GameManager.Instance.OnMoneyChanged -= RefreshUI;
     }
 
     public void RefreshUI()

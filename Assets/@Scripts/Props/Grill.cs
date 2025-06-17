@@ -13,6 +13,8 @@ public class Grill : UnlockableBase
 
     public int BurgerCount => _burgers.ObjectCount;
     public WorkerController CurrentWorker => _interaction.CurrentWorker;
+    public Transform WorkerPos;
+
     void Awake()
     {
         _burgers = Utils.FindChild<BurgerPile>(gameObject);

@@ -5,6 +5,8 @@ using static Define;
 
 public class TrashCan : UnlockableBase
 {
+    public Transform WorkerPos;
+    
     void Start()
     {
         WorkerInteraction interaction = Utils.FindChild<WorkerInteraction>(gameObject);

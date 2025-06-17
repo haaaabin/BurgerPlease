@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InteractInterval: 0.5
+  CurrentWorker: {fileID: 0}
 --- !u!1 &208882928499750819
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,6 +436,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6875121829811569266}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4694160100387576093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6789557780918415259}
+  m_Layer: 0
+  m_Name: CashierWorkerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6789557780918415259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4694160100387576093}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.48, y: 0.2, z: -1.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6018584844754908605}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5590163140425463303
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,6 +620,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InteractInterval: 0.5
+  CurrentWorker: {fileID: 0}
 --- !u!1 &6266448835412050375
 GameObject:
   m_ObjectHideFlags: 0
@@ -623,6 +656,8 @@ Transform:
   - {fileID: 915269937475457686}
   - {fileID: 3236229715171100729}
   - {fileID: 6875121829811569266}
+  - {fileID: 8004270437612446049}
+  - {fileID: 6789557780918415259}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &3102210507735155674
@@ -637,8 +672,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feaf478624701fe40946197550c5e3d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tables:
-  - {fileID: 0}
+  Owner: {fileID: 0}
+  Workers: []
+  BurgerWorkerPos: {fileID: 8004270437612446049}
+  CashierWorkerPos: {fileID: 6789557780918415259}
 --- !u!1 &6333533969897044473
 GameObject:
   m_ObjectHideFlags: 0
@@ -700,6 +737,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6875121829811569266}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8280289244199592799
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8004270437612446049}
+  m_Layer: 0
+  m_Name: BurgerWorkerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8004270437612446049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8280289244199592799}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.3, y: 0, z: -1.33}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6018584844754908605}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8690189990998008204
 GameObject:
@@ -800,6 +868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InteractInterval: 0.5
+  CurrentWorker: {fileID: 0}
 --- !u!114 &7017126327638532064
 MonoBehaviour:
   m_ObjectHideFlags: 0

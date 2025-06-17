@@ -16,6 +16,7 @@ public class Counter : UnlockableBase
 {
     private BurgerPile _burgerPile;
     private MoneyPile _moneyPile;
+    public MainCounterSystem Owner;
 
     int _spawnMoneyRemaining = 0;
 
@@ -25,15 +26,19 @@ public class Counter : UnlockableBase
     private List<Vector3> _queuePoints = new List<Vector3>();
     List<GuestController> _queueGuests = new List<GuestController>();
 
-    List<WorkerController> Workers = new List<WorkerController>();
-    public List<Table> Tables = new List<Table>();
+    public List<WorkerController> Workers = new List<WorkerController>();
+    public List<Table> Tables => Owner?.Tables;
 
     private WorkerInteraction _burgerInteraction;
     public WorkerController CurrentBurgerWorker => _burgerInteraction.CurrentWorker;
+    public Transform BurgerWorkerPos;
+    public int BurgerCount => _burgerPile.ObjectCount;
+    public bool NeedMoreBurgers => (_nextOrderBurgerCount > 0 && BurgerCount < _nextOrderBurgerCount);
 
     private WorkerInteraction _casherInteraction;
     public WorkerController CurrentCasherWorker => _casherInteraction.CurrentWorker;
-
+    public Transform CashierWorkerPos;
+    public bool NeedCashier => (CurrentCasherWorker == null);
 
     void Start()
     {
@@ -52,9 +57,12 @@ public class Counter : UnlockableBase
 
         // 손님 인터렉션
         GameObject machine = Utils.FindChild(gameObject, "Machine");
-        machine.GetComponent<WorkerInteraction>().InteractInterval = 1;
-        machine.GetComponent<WorkerInteraction>().OnInteraction = OnGuestInteraction;
+        _casherInteraction = machine.GetComponent<WorkerInteraction>();
+        _casherInteraction.InteractInterval = 1f;
+        _casherInteraction.OnInteraction = OnGuestInteraction;
 
+        _spawnMoneyRemaining = 50;
+        StartCoroutine(CoSpawnMoney());
         StartCoroutine(CoSpawnGuest());
     }
 
@@ -156,47 +164,26 @@ public class Counter : UnlockableBase
 
     private void OnMoneyInteraction(WorkerController wc)
     {
+        if (wc.Tray.IsPlayer == false) return;
         _moneyPile.DeSpawnObjectWithJump(wc.transform.position, () =>
         {
 
             GameManager.Instance.Money += 100;
-            Debug.Log("GameManager.Instance.Money :" + GameManager.Instance.Money);
+            // Debug.Log("GameManager.Instance.Money :" + GameManager.Instance.Money);
         });
     }
 
     private void OnGuestInteraction(WorkerController wc)
     {
-        // 손님 있어야 함
-        if (_nextOrderBurgerCount == 0)
-            return;
-
-        // 햄버거 있어야 함
-        if (_burgerPile.ObjectCount < _nextOrderBurgerCount)
-            return;
-
         // 자리 수가 맞는 테이블이 있어야 함
-        Table destTable = null;
-        foreach (Table table in Tables)
-        {
-            if (table.IsOccupied)
-            {
-                continue;
-            }
-
-            if (_nextOrderBurgerCount > table.Chairs.Count)
-                continue;
-
-            destTable = table;
-            break;
-        }
-
+        Table destTable = FindTableToServeGuest();
         if (destTable == null)
             return;
 
         for (int i = 0; i < _nextOrderBurgerCount; i++)
         {
             GuestController guest = _queueGuests[i];
-            guest.Destination = destTable.Chairs[i].position;
+            guest.SetDestination(destTable.Chairs[i].position);
             guest.GuestState = Define.EGuestState.Serving;
             guest.OrderCount = 0;
 
@@ -217,4 +204,26 @@ public class Counter : UnlockableBase
         _nextOrderBurgerCount = 0;
     }
 
+    public Table FindTableToServeGuest()
+    {
+        // 손님 있어야 함
+        if (_nextOrderBurgerCount == 0)
+            return null;
+
+        if (_burgerPile.ObjectCount < _nextOrderBurgerCount)
+            return null;
+
+        foreach (Table table in Tables)
+        {
+            if (table.IsOccupied)
+                continue;
+
+            if (_nextOrderBurgerCount > table.Chairs.Count)
+                continue;
+
+            return table;
+        }
+
+        return null;
+    }
 }

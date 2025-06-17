@@ -6,10 +6,18 @@ public class GameManager : Singleton<GameManager>
 {
     public Vector2 JoystickDir { get; set; } = Vector2.zero;
 
+    private void Awake()
+    {
+        if (UpgradeEmployeePopup == null)
+            UpgradeEmployeePopup = Utils.FindChild<UI_UpgradeEmployeePopup>(gameObject);
+
+        UpgradeEmployeePopup.gameObject.SetActive(false);
+    }
+
     #region UI
     public UI_UpgradeEmployeePopup UpgradeEmployeePopup;
     #endregion
-    
+
     #region Data
     public long _money = 10000;
 
@@ -19,14 +27,14 @@ public class GameManager : Singleton<GameManager>
         set
         {
             _money = value;
-            OnMoneyChanged?.Invoke();
+            // OnMoneyChanged?.Invoke();
             BroadcastEvent(EEventType.MoneyChanged);
         }
     }
     #endregion
 
     #region Event
-    public event Action OnMoneyChanged;
+    // public event Action OnMoneyChanged;
     Action[] _events = new Action[(int)EEventType.MaxCount];
 
     public void AddEventListener(EEventType type, Action action)
@@ -178,6 +186,37 @@ public class GameManager : Singleton<GameManager>
     public void DeSpawnTrash(GameObject trash)
     {
         Destroy(trash);
+    }
+    #endregion
+
+    #region Worker
+    public GameObject WorkerPrefab;
+
+    private Transform _workerRoot;
+    public Transform WorkerRoot
+    {
+        get
+        {
+            if (_workerRoot == null)
+            {
+                GameObject go = new GameObject("@WorkerRoot");
+                _workerRoot = go.transform;
+            }
+            return _workerRoot;
+        }
+    }
+
+    public GameObject SpawnWorker()
+    {
+        GameObject go = Instantiate(WorkerPrefab);
+        go.name = WorkerPrefab.name;
+        go.transform.parent = WorkerRoot;
+        return go;
+    }
+
+    public void DeSpawnWorker(GameObject worker)
+    {
+        Destroy(worker);
     }
     #endregion
 }

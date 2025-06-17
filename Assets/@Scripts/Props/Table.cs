@@ -3,6 +3,7 @@ using UnityEngine;
 using DG.Tweening;
 using static Define;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class Table : UnlockableBase
 {
@@ -13,6 +14,8 @@ public class Table : UnlockableBase
     private TrashPile _trashPile;
     private BurgerPile _burgerPile;
     private MoneyPile _moneyPile;
+
+    public Transform WorkerPos;
 
     public int SpawnMoneyRemaining = 0;
     public int SpawnTrashRemaining = 0;
@@ -34,7 +37,7 @@ public class Table : UnlockableBase
             if (_trashPile.ObjectCount > 0)
                 return true;
 
-            return Guests.Count > 0;
+            return TableState != ETableState.None;
         }
     }
 
@@ -51,9 +54,11 @@ public class Table : UnlockableBase
         // 돈 인터랙션.
         _moneyPile.GetComponent<WorkerInteraction>().InteractInterval = 0.02f;
         _moneyPile.GetComponent<WorkerInteraction>().OnInteraction = OnMoneyInteraction;
+
+        StartCoroutine(CoSpawnTrash());
+        StartCoroutine(CoSpawnMoney());
     }
 
-    // Update is called once per frame
     void Update()
     {
         UpdateGuestAI();
@@ -63,9 +68,6 @@ public class Table : UnlockableBase
 
     private void UpdateGuestAI()
     {
-        if (IsOccupied == false)
-            return;
-
         if (TableState == ETableState.Reversed)
         {
             // 손님이 모두 착석하기 기다린다.
@@ -103,10 +105,8 @@ public class Table : UnlockableBase
 
                 // 쓰레기 생성
                 SpawnTrashRemaining = Guests.Count;
-                StartCoroutine(CoSpawnTrash());
 
                 SpawnMoneyRemaining = Guests.Count;
-                StartCoroutine(CoSpawnMoney());
 
                 // 손님 퇴장
                 foreach (GuestController guest in Guests)
@@ -121,11 +121,12 @@ public class Table : UnlockableBase
                 Guests.Clear();
                 TableState = ETableState.Dirty;
             }
-            else if (TableState == ETableState.Dirty)
-            {
-                if (_trashPile.ObjectCount == 0)
-                    TableState = ETableState.None;
-            }
+        }
+        else if (TableState == ETableState.Dirty)
+        {
+            if (SpawnTrashRemaining == 0 && _trashPile.ObjectCount == 0)
+                TableState = ETableState.None;
+
         }
 
     }
@@ -172,10 +173,11 @@ public class Table : UnlockableBase
 
     private void OnMoneyInteraction(WorkerController wc)
     {
+        if (wc.Tray.IsPlayer == false) return;
+
         _moneyPile.DeSpawnObjectWithJump(wc.transform.position, () =>
         {
             GameManager.Instance.Money += 100;
-            Debug.Log("GameManager.Instance.Money :" + GameManager.Instance.Money);
         });
     }
     #endregion

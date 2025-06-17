@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public static class Define
@@ -42,6 +43,15 @@ public static class Define
         UnlockProp,
 
         MaxCount
+    }
+
+    public enum EMainCounterJob
+    {
+        MoveBurger,
+        CounterCashier,
+        CleanTable,
+
+        MaxCount,
     }
 
     public const int GRILL_MAX_BURGER_COUNT = 20;
