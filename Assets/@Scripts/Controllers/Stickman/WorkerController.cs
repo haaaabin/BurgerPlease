@@ -6,7 +6,9 @@ using static Define;
 public class WorkerController : StickManController
 {
     protected CharacterController _controller;
+    public SystemBase CurrentSystem;
 
+    public Coroutine WorkerJob;
     protected override void Awake()
     {
         base.Awake();

@@ -4,16 +4,30 @@ using System.Collections.Generic;
 using System.Linq;
 using static Define;
 
-public class MainCounterSystem : MonoBehaviour
+public class MainCounterSystem : SystemBase
 {
     public Grill Grill;
     public Counter Counter;
     public List<Table> Tables = new List<Table>();
     public TrashCan TrashCan;
-    public List<WorkerController> Workers = new List<WorkerController>();
+    public Office Office;
 
     // 직원들이 담당하는 일들
     public WorkerController[] Jobs = new WorkerController[(int)EMainCounterJob.MaxCount];
+    public override bool HasJob
+    {
+        get
+        {
+            for (int i = 0; i < (int)EMainCounterJob.MaxCount; i++)
+            {
+                EMainCounterJob type = (EMainCounterJob)i;
+                if (ShouldDoJob(type))
+                    return true;
+            }
+
+            return false;
+        }
+    }
 
     private void Awake()
     {
@@ -22,13 +36,11 @@ public class MainCounterSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.AddEventListener(EEventType.HireWorker, OnHireWorker);
         GameManager.Instance.AddEventListener(EEventType.UnlockProp, FindProps);
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.RemoveEventListener(EEventType.HireWorker, OnHireWorker);
         GameManager.Instance.RemoveEventListener(EEventType.UnlockProp, FindProps);
     }
 
@@ -47,16 +59,11 @@ public class MainCounterSystem : MonoBehaviour
             Counter.Owner = this;
     }
     #region Worker
-    private void OnHireWorker()
+    public override void AddWorker(WorkerController worker)
     {
-        GameObject go = GameManager.Instance.SpawnWorker();
-        WorkerController wc = go.GetComponent<WorkerController>();
-        go.transform.position = Vector3.zero;
+        base.AddWorker(worker);
 
-        // 나중에는 직원 배치를 여러 시스템(MainCounter, Drive-Thru 등) 중 하나를 골라서 한다.
-        Workers.Add(wc);
-
-        StartCoroutine(DoMainCounterWorkerJob(wc));
+        worker.StartCoroutine(DoMainCounterWorkerJob(worker));
     }
 
     private bool ShouldDoJob(EMainCounterJob jobType)
@@ -114,9 +121,13 @@ public class MainCounterSystem : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
 
+            bool foundJob = false;
+
             // 햄버거 운반
             if (ShouldDoJob(EMainCounterJob.MoveBurger))
             {
+                foundJob = true;
+
                 // 일간 점유
                 Jobs[(int)EMainCounterJob.MoveBurger] = wc;
 
@@ -147,6 +158,8 @@ public class MainCounterSystem : MonoBehaviour
             // 카운터 계산대
             if (ShouldDoJob(EMainCounterJob.CounterCashier))
             {
+                foundJob = true;
+
                 // 일간 점유
                 Jobs[(int)EMainCounterJob.CounterCashier] = wc;
 
@@ -167,6 +180,8 @@ public class MainCounterSystem : MonoBehaviour
             // 테이블 청소
             if (ShouldDoJob(EMainCounterJob.CleanTable))
             {
+                foundJob = true;
+
                 Table table = Tables.Where(t => t.TableState == ETableState.Dirty).FirstOrDefault();
                 if (table == null)
                     continue;
@@ -194,6 +209,10 @@ public class MainCounterSystem : MonoBehaviour
                 // 일간 점유 해제
                 Jobs[(int)EMainCounterJob.CleanTable] = null;
             }
+
+            if (foundJob == false)
+                RemoveWorker(wc);
+
         }
     }
     #endregion
