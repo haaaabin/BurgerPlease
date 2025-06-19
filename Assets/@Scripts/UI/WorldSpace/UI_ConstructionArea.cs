@@ -49,8 +49,8 @@ public class UI_ConstructionArea : MonoBehaviour
         {
             SpentMoney = TotalUpgradeMoney;
 
-            Owner.gameObject.SetActive(true);
-            gameObject.SetActive(false);
+            // 해금 완료
+            Owner.SetUnlockedState(EUnlockedState.Unlocked);
 
             GameManager.Instance.BroadcastEvent(Define.EEventType.UnlockProp);
         }
@@ -58,7 +58,7 @@ public class UI_ConstructionArea : MonoBehaviour
         RefreshUI();
     }
 
-    private void RefreshUI()
+    public void RefreshUI()
     {
         _slider.value = SpentMoney / (float)TotalUpgradeMoney;
         _moneyText.text = Utils.GetMoneyText(MoneyRemaining);

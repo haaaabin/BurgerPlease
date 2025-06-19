@@ -217,7 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slider: {fileID: 3356030880753370505}
   _moneyText: {fileID: 3692276741203861130}
-  Owner: {fileID: 0}
+  Owner: {fileID: 468066725336428793}
   SpentMoney: 0
   TotalUpgradeMoney: 10000
 --- !u!114 &3356030880753370505 stripped
@@ -299,11 +299,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8460527369328500114, guid: 89655bd4e43e52e40b2e180d06f1ef7f, type: 3}
+      propertyPath: ConstructionArea
+      value: 
+      objectReference: {fileID: 5411575174814943160}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89655bd4e43e52e40b2e180d06f1ef7f, type: 3}
+--- !u!114 &468066725336428793 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8460527369328500114, guid: 89655bd4e43e52e40b2e180d06f1ef7f, type: 3}
+  m_PrefabInstance: {fileID: 8293164196889111915}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f761d220c33def4b80e5d42ddc8e830, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3006993508993709593 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6534090083323714418, guid: 89655bd4e43e52e40b2e180d06f1ef7f, type: 3}

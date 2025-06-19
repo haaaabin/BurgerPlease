@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(WorkerInteraction))]
-public class Office : MonoBehaviour
+public class Office : UnlockableBase
 {
     private void Start()
     {

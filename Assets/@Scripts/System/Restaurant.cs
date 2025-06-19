@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Define;
 
@@ -7,8 +8,11 @@ public class Restaurant : MonoBehaviour
 {
     public List<SystemBase> RestaurantSystems = new List<SystemBase>();
 
+    public int StageNum = 0;
     public List<UnlockableBase> Props = new List<UnlockableBase>();
     public List<WorkerController> Workers = new List<WorkerController>();
+
+    private RestaurantData _data;
 
     private void OnEnable()
     {
@@ -21,6 +25,28 @@ public class Restaurant : MonoBehaviour
         GameManager.Instance.RemoveEventListener(EEventType.HireWorker, OnHireWorker);
     }
 
+    public void SetInfo(RestaurantData data)
+    {
+        _data = data;
+
+        RestaurantSystems = GetComponentsInChildren<SystemBase>().ToList();
+        Props = GetComponentsInChildren<UnlockableBase>().ToList();
+        if (RestaurantSystems == null || Props == null || _data == null)
+            Debug.Log("null");
+        for (int i = 0; i < Props.Count; i++)
+        {
+            UnlockableStateData stateData = data.UnlockableStates[i];
+            Props[i].SetInfo(stateData);
+        }
+
+        Tutorial tutorial = GetComponent<Tutorial>();
+        if (tutorial != null)
+            tutorial.SetInfo(data);
+
+        for (int i = 0; i < data.WorkerCount; i++)
+            OnHireWorker();
+    }
+
     private void OnHireWorker()
     {
         GameObject go = GameManager.Instance.SpawnWorker();
@@ -29,6 +55,8 @@ public class Restaurant : MonoBehaviour
 
         // 나중에는 직원 배치를 여러 시스템(MainCounter, Drive-Thru 등) 중 하나를 골라서 한다.
         Workers.Add(wc);
+
+        _data.WorkerCount = Mathf.Max(_data.WorkerCount, Workers.Count);
     }
 
     // 일감 분배

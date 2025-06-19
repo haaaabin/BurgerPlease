@@ -120,6 +120,10 @@ PrefabInstance:
       propertyPath: WorkerPos
       value: 
       objectReference: {fileID: 1850850423138909423}
+    - target: {fileID: 6621930436418488028, guid: d662096304dedc645a8a0fd85414c0bf, type: 3}
+      propertyPath: ConstructionArea
+      value: 
+      objectReference: {fileID: 4659588871093865021}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

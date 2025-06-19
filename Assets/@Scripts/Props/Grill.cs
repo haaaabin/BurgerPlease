@@ -14,6 +14,7 @@ public class Grill : UnlockableBase
     public int BurgerCount => _burgers.ObjectCount;
     public WorkerController CurrentWorker => _interaction.CurrentWorker;
     public Transform WorkerPos;
+    public bool StopSpawnBurger = true;
 
     void Awake()
     {
@@ -49,7 +50,8 @@ public class Grill : UnlockableBase
         {
             yield return new WaitUntil(() => _burgers.ObjectCount < Define.GRILL_MAX_BURGER_COUNT);
 
-            _burgers.SpawnObject();
+            if (StopSpawnBurger == false)
+                _burgers.SpawnObject();
 
             yield return new WaitForSeconds(Define.GRILL_SPAWN_BURGER_INTERVAL);
         }

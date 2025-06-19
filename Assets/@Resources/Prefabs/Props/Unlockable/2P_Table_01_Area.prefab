@@ -45,6 +45,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 2P_Table_01
       objectReference: {fileID: 0}
+    - target: {fileID: 3364347857832960330, guid: 306ff4af6687bbe40b1a2b4eab59763f, type: 3}
+      propertyPath: ConstructionArea
+      value: 
+      objectReference: {fileID: 2345906730013594085}
     - target: {fileID: 9187162768647592101, guid: 306ff4af6687bbe40b1a2b4eab59763f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -221,6 +225,10 @@ PrefabInstance:
     - target: {fileID: 8621988837232000837, guid: 74726f06beb129c48878d3a59bd5f84b, type: 3}
       propertyPath: m_Name
       value: UI_ConstructionArea
+      objectReference: {fileID: 0}
+    - target: {fileID: 8621988837232000837, guid: 74726f06beb129c48878d3a59bd5f84b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

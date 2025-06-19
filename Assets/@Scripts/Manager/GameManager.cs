@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using static Define;
 
@@ -6,35 +7,66 @@ public class GameManager : Singleton<GameManager>
 {
     public Vector2 JoystickDir { get; set; } = Vector2.zero;
 
-    private void Awake()
+    public PlayerController Player;
+    public Restaurant Restaurant;
+    private GameSaveData SaveData
     {
-        if (UpgradeEmployeePopup == null)
-            UpgradeEmployeePopup = Utils.FindChild<UI_UpgradeEmployeePopup>(gameObject);
+        get
+        {
+            return SaveManager.Instance.SaveData;
+        }
+    }
 
+    public long Money
+    {
+        get { return SaveData.Money; }
+        set
+        {
+            SaveData.Money = value;
+            BroadcastEvent(EEventType.MoneyChanged);
+        }
+    }
+
+    private void Start()
+    {
+        UpgradeEmployeePopup = Utils.FindChild<UI_UpgradeEmployeePopup>(gameObject);
         UpgradeEmployeePopup.gameObject.SetActive(false);
+        StartCoroutine(CoInitialize());
+    }
+
+    // 한 프레임 기다려서 모든 오브젝트 초기화 끝나고 실행
+    public IEnumerator CoInitialize()
+    {
+        yield return new WaitForEndOfFrame();
+
+        Player = FindAnyObjectByType<PlayerController>();
+        Restaurant = FindAnyObjectByType<Restaurant>();
+
+        // int index = Restaurant.StageNum;
+        // Restaurant.SetInfo(SaveData.Restaurants[index]);
+
+        // StartCoroutine(CoSaveData());
+    }
+
+    private IEnumerator CoSaveData()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(10);
+
+            SaveData.RestaurantIndex = Restaurant.StageNum;
+            SaveData.PlayerPosition = Player.transform.position;
+
+            SaveManager.Instance.SaveGame();
+        }
     }
 
     #region UI
     public UI_UpgradeEmployeePopup UpgradeEmployeePopup;
-    #endregion
-
-    #region Data
-    public long _money = 10000;
-
-    public long Money
-    {
-        get { return _money; }
-        set
-        {
-            _money = value;
-            // OnMoneyChanged?.Invoke();
-            BroadcastEvent(EEventType.MoneyChanged);
-        }
-    }
+    public UI_GameScene GameSceneUI;
     #endregion
 
     #region Event
-    // public event Action OnMoneyChanged;
     Action[] _events = new Action[(int)EEventType.MaxCount];
 
     public void AddEventListener(EEventType type, Action action)

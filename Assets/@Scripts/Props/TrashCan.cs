@@ -3,14 +3,16 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using static Define;
 
-public class TrashCan : UnlockableBase
+public class TrashCan : MonoBehaviour
 {
     public Transform WorkerPos;
-    
+    private WorkerInteraction _interaction;
+    public WorkerController CurrentWorker => _interaction.CurrentWorker;
+
     void Start()
     {
         WorkerInteraction interaction = Utils.FindChild<WorkerInteraction>(gameObject);
-        interaction.InteractInterval = 0.2f;
+        interaction.InteractInterval = 0.1f;
         interaction.OnInteraction = OnWorkerInteraction;
     }
 

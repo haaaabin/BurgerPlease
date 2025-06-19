@@ -87,7 +87,6 @@ GameObject:
   - component: {fileID: 7552533016432852396}
   - component: {fileID: 4012203120776190185}
   - component: {fileID: 228231525304833096}
-  - component: {fileID: 1620689331898587284}
   m_Layer: 5
   m_Name: UI_Joystick
   m_TagString: Untagged
@@ -180,20 +179,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1620689331898587284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3244652858345191040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 885c78bd9885abf4da2fd1b44a1e8e79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _background: {fileID: 3896988977792808879}
-  _cursor: {fileID: 9052133038130690070}
 --- !u!1 &3896988977792808879
 GameObject:
   m_ObjectHideFlags: 0
