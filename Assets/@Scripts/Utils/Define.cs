@@ -23,7 +23,7 @@ public static class Define
     public enum ETableState
     {
         None,
-        Reversed,
+        Reserved,
         Eating,
         Dirty,
     }

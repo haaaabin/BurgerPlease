@@ -195,7 +195,7 @@ public class Counter : UnlockableBase
 
         // 점유한다.
         destTable.Guests = _queueGuests.GetRange(0, _nextOrderBurgerCount);
-        destTable.TableState = Define.ETableState.Reversed;
+        destTable.TableState = Define.ETableState.Reserved;
 
         // 줄에서 제거
         _queueGuests.RemoveRange(0, _nextOrderBurgerCount);

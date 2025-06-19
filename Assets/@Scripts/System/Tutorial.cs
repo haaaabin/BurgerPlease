@@ -1,10 +1,12 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public enum ETutorialState
 {
     None,
-    // CreateDoor,
+    // CreateDoor
     CreateFirstTable,
     CreateBurgerMachine,
     CreateCounter,
@@ -13,8 +15,9 @@ public enum ETutorialState
     SellBurger,
     CleanTable,
     CreateSecondTable,
-    // OpenDistrictArea,
+    // OpenDistrictArea
     CreateOffice,
+
     Done,
 }
 
@@ -34,13 +37,14 @@ public class Tutorial : MonoBehaviour
     public void SetInfo(RestaurantData data)
     {
         _data = data;
+
         if (_state == ETutorialState.None)
             _state = ETutorialState.CreateFirstTable;
 
         StartCoroutine(CoStartTutorial());
     }
 
-    private IEnumerator CoStartTutorial()
+    IEnumerator CoStartTutorial()
     {
         yield return new WaitForEndOfFrame();
 
@@ -61,12 +65,13 @@ public class Tutorial : MonoBehaviour
 
         if (_state == ETutorialState.CreateFirstTable)
         {
-            GameManager.Instance.GameSceneUI.SetToastMessage("Create FirstTable");
+            GameManager.Instance.GameSceneUI.SetToastMessage("Create First Table");
 
             firstTable.SetUnlockedState(EUnlockedState.ProcessingConstruction);
             yield return new WaitUntil(() => firstTable.IsUnlocked);
             _state = ETutorialState.CreateBurgerMachine;
         }
+
         firstTable.SetUnlockedState(EUnlockedState.Unlocked);
 
         if (_state == ETutorialState.CreateBurgerMachine)
@@ -77,6 +82,7 @@ public class Tutorial : MonoBehaviour
             yield return new WaitUntil(() => grill.IsUnlocked);
             _state = ETutorialState.CreateCounter;
         }
+
         grill.SetUnlockedState(EUnlockedState.Unlocked);
 
         if (_state == ETutorialState.CreateCounter)
@@ -87,6 +93,7 @@ public class Tutorial : MonoBehaviour
             yield return new WaitUntil(() => counter.IsUnlocked);
             _state = ETutorialState.PickupBurger;
         }
+
         counter.SetUnlockedState(EUnlockedState.Unlocked);
         grill.StopSpawnBurger = false;
 
@@ -110,7 +117,7 @@ public class Tutorial : MonoBehaviour
         {
             GameManager.Instance.GameSceneUI.SetToastMessage("Sell Burger");
 
-            yield return new WaitUntil(() => firstTable.TableState == Define.ETableState.Reversed);
+            yield return new WaitUntil(() => firstTable.TableState == Define.ETableState.Reserved);
             _state = ETutorialState.CleanTable;
         }
 
@@ -118,14 +125,15 @@ public class Tutorial : MonoBehaviour
         {
             GameManager.Instance.GameSceneUI.SetToastMessage("");
 
-            // 테이블 위 쓰레기 생성 대기
+            // 테이블 위 쓰레기 생성 대기.
             yield return new WaitUntil(() => firstTable.TableState == Define.ETableState.Dirty);
 
             GameManager.Instance.GameSceneUI.SetToastMessage("Clean Table");
 
-            // 테이블 위 쓰레기 줍고
+            // 테이블 위 쓰레기를 줍고.
             yield return new WaitUntil(() => firstTable.TableState != Define.ETableState.Dirty);
 
+            // 쓰레기통에 버린다.
             yield return new WaitUntil(() => trashCan.CurrentWorker != null);
             _state = ETutorialState.CreateSecondTable;
         }
@@ -138,6 +146,7 @@ public class Tutorial : MonoBehaviour
             yield return new WaitUntil(() => secondTable.IsUnlocked);
             _state = ETutorialState.CreateOffice;
         }
+
         secondTable.SetUnlockedState(EUnlockedState.Unlocked);
 
         if (_state == ETutorialState.CreateOffice)
@@ -148,6 +157,7 @@ public class Tutorial : MonoBehaviour
             yield return new WaitUntil(() => office.IsUnlocked);
             _state = ETutorialState.Done;
         }
+
         office.SetUnlockedState(EUnlockedState.Unlocked);
 
         GameManager.Instance.GameSceneUI.SetToastMessage("");

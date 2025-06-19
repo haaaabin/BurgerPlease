@@ -68,7 +68,7 @@ public class Table : UnlockableBase
 
     private void UpdateGuestAI()
     {
-        if (TableState == ETableState.Reversed)
+        if (TableState == ETableState.Reserved)
         {
             // 손님이 모두 착석하기 기다린다.
             foreach (GuestController guest in Guests)
