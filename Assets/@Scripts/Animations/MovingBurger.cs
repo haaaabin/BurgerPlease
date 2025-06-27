@@ -3,23 +3,23 @@ using UnityEngine;
 
 public class MovingBurger : MonoBehaviour
 {
-    private Vector3 _originalPosition;
-    private float _destZ;
+	private Vector3 _originalPosition;
+	private float _destZ;
 
-    private void Start()
-    {
-        _originalPosition = transform.position;
-        _destZ = transform.position.z - 1;
+	void Start()
+	{
+		_originalPosition = transform.position;
+		_destZ = transform.position.z - 1;
 
-        Move();
-    }
+		Move();
+	}
 
-    private void Move()
-    {
-        transform.position = _originalPosition;
+	void Move()
+	{
+		transform.position = _originalPosition;
 
-        transform.DOMoveZ(_destZ, 1)
-            .SetEase(Ease.Linear)
-            .OnComplete(Move);
-    }
+		transform.DOMoveZ(_destZ, 1)
+			.SetEase(Ease.Linear)
+			.OnComplete(Move);
+	}
 }

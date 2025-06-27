@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using static Define;
@@ -6,153 +7,153 @@ using static Define;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class StickManController : MonoBehaviour
+public class StickmanController : MonoBehaviour
 {
-    [SerializeField, Range(1, 5)]
-    protected float _moveSpeed = 3;
+	[SerializeField, Range(1, 5)]
+	protected float _moveSpeed = 3;
 
-    [SerializeField]
-    protected float _rotateSpeed = 360;
+	[SerializeField]
+	protected float _rotateSpeed = 360;
 
-    protected Animator _animator;
-    protected AudioSource _audioSource;
-    protected NavMeshAgent _navMeshAgent;
-    protected UI_OrderBubble _orderBubble;
+	protected Animator _animator;
+	protected AudioSource _audioSource;
+	protected NavMeshAgent _navMeshAgent;
+	protected UI_OrderBubble _orderBubble;
 
-    public TrayController Tray { get; protected set; }
+	public TrayController Tray { get; protected set; }
 
-    #region Animator
-    private EAnimState _state = EAnimState.None;
-    public EAnimState State
-    {
-        get { return _state; }
-        set
-        {
-            if (_state == value)
-                return;
-            _state = value;
-            UpdateAnimation();
-        }
-    }
+	#region Animator
+	private EAnimState _state = EAnimState.None;
+	public EAnimState State
+	{
+		get { return _state; }
+		set
+		{
+			if (_state == value)
+				return;
 
-    int _lastAnim = -1;
+			_state = value;
 
-    public void UpdateAnimation()
-    {
-        int nextAnim = -1;
+			UpdateAnimation();
+		}
+	}
 
-        switch (State)
-        {
-            case EAnimState.Idle:
-                nextAnim = IsServing ? Define.SERVING_IDLE : Define.IDLE;
-                break;
-            case EAnimState.Move:
-                nextAnim = IsServing ? Define.SERVING_MOVE : Define.MOVE;
-                break;
-            case EAnimState.Eating:
-                nextAnim = Define.EATING;
-                break;
-        }
+	int _lastAnim = -1;
 
-        if (_lastAnim == nextAnim)
-            return;
+	public virtual void UpdateAnimation()
+	{
+		int nextAnim = -1;
 
-        _animator.CrossFade(nextAnim, 0.01f);
-        _lastAnim = nextAnim;
-    }
-    #endregion
+		switch (State)
+		{
+			case EAnimState.Idle:
+				nextAnim = IsServing ? Define.SERVING_IDLE : Define.IDLE;
+				break;
+			case EAnimState.Move:
+				nextAnim = IsServing ? Define.SERVING_MOVE : Define.MOVE;
+				break;
+			case EAnimState.Eating:
+				nextAnim = Define.EATING;
+				break;
+		}
 
-    #region NavMeshAgent
-    // 목적지 설정 속성
-    public Vector3 Destination
-    {
-        get { return _navMeshAgent.destination; }
-        set
-        {
-            _navMeshAgent.SetDestination(value);
-            _navMeshAgent.isStopped = false;
-            LookAtDestination();
-        }
-    }
+		if (_lastAnim == nextAnim)
+			return;
 
-    // 목적지에 도착했는지 여부를 확인하는 속성
-    public bool HasArrivedAtDestination
-    {
-        get
-        {
-            Vector3 dir = Destination - transform.position;
-            return dir.sqrMagnitude < 0.2f;
-        }
-    }
+		_animator.CrossFade(nextAnim, 0.01f);
+		_lastAnim = nextAnim;
+	}
+	#endregion
 
-    protected void LookAtDestination()
-    {
-        Vector3 moveDir = (Destination - transform.position).normalized;
-        if (moveDir != Vector3.zero && moveDir.sqrMagnitude > 0.01f)
-        {
-            Quaternion lookRotation = Quaternion.LookRotation(moveDir);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * _rotateSpeed);
-        }
-    }
+	#region NavMeshAgent
+	public Vector3 Destination
+	{
+		get { return _navMeshAgent.destination; }
+		protected set
+		{
+			_navMeshAgent.SetDestination(value);
+			_navMeshAgent.isStopped = false;
+			LookAtDestination();
+		}
+	}
 
-    // 목적지 도착 시 실행할 콜백을 저장할 변수
-    public Action OnArrivedAtDestCallback;
+	public bool HasArrivedAtDestination
+	{
+		get
+		{
+			Vector3 dir = Destination - transform.position;
+			return dir.sqrMagnitude < 0.2f;
+		}
+	}
 
-    public void SetDestination(Vector3 dest, Action onArrivedAtDest = null)
-    {
-        Destination = dest;
-        OnArrivedAtDestCallback = onArrivedAtDest;
-    }
-    #endregion
+	protected void LookAtDestination()
+	{
+		Vector3 moveDir = (Destination - transform.position).normalized;
+		if (moveDir != Vector3.zero && moveDir.sqrMagnitude > 0.01f)
+		{
+			Quaternion lookRotation = Quaternion.LookRotation(moveDir);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * _rotateSpeed);
+		}
+	}
 
-    #region Tray
-    public bool IsServing => Tray.Visible;
-    #endregion
+	private Action OnArrivedAtDestCallback;
 
-    #region OrderBubble
-    public int OrderCount
-    {
-        set
-        {
-            _orderBubble.Count = value;
+	public void SetDestination(Vector3 dest, Action onArrivedAtDest = null)
+	{
+		Destination = dest;
+		OnArrivedAtDestCallback = onArrivedAtDest;
+	}
+	#endregion
 
-            if (value > 0)
-                _orderBubble.gameObject.SetActive(true);
-            else
-                _orderBubble.gameObject.SetActive(false);
-        }
-    }
-    #endregion
+	#region OrderBubble
+	public int OrderCount
+	{
+		set
+		{
+			_orderBubble.Count = value;
 
-    protected virtual void Awake()
-    {
-        _animator = GetComponent<Animator>();
-        _audioSource = GetComponent<AudioSource>();
-        _navMeshAgent = GetComponent<NavMeshAgent>();
-        _orderBubble = Utils.FindChild<UI_OrderBubble>(gameObject);
-        Tray = Utils.FindChild<TrayController>(gameObject);
+			if (value > 0)
+				_orderBubble.gameObject.SetActive(true);
+			else
+				_orderBubble.gameObject.SetActive(false);
+		}
+	}
+	#endregion
 
-        _navMeshAgent.speed = _moveSpeed;
-        _navMeshAgent.stoppingDistance = 0.05f;
-        _navMeshAgent.radius = 0.1f;
-        _navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+	#region Tray
+	public bool IsServing => Tray.Visible;
+	#endregion
 
-        Destination = transform.position;
+	protected virtual void Awake()
+	{
+		_animator = GetComponent<Animator>();
+		_audioSource = GetComponent<AudioSource>();
+		_navMeshAgent = GetComponent<NavMeshAgent>();
+		_orderBubble = Utils.FindChild<UI_OrderBubble>(gameObject);
+		Tray = Utils.FindChild<TrayController>(gameObject);
 
-        OrderCount = 0;
-    }
+		_navMeshAgent.speed = _moveSpeed;
+		_navMeshAgent.stoppingDistance = 0.1f;
+		_navMeshAgent.radius = 0.01f;
+		_navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
 
-    protected virtual void Update()
-    {
-        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+		Destination = transform.position;
 
-        if (OnArrivedAtDestCallback != null)
-        {
-            if (HasArrivedAtDestination)
-            {
-                OnArrivedAtDestCallback?.Invoke();
-                OnArrivedAtDestCallback = null;
-            }
-        }
-    }
+		OrderCount = 0;
+	}
+
+	protected virtual void Update()
+	{
+		// 중력 작용.
+		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+
+		if (OnArrivedAtDestCallback != null)
+		{
+			if (HasArrivedAtDestination)
+			{
+				OnArrivedAtDestCallback?.Invoke();
+				OnArrivedAtDestCallback = null;
+			}
+		}
+	}
 }

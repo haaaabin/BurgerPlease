@@ -66,5 +66,12 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj",
     },
-    "dotnet.defaultSolution": "BurgerPlease.sln"
+    "dotnet.defaultSolution": "BurgerPlease.sln",
+    "cSpell.words": [
+        "Behaviour",
+        "Lerp",
+        "Mathf",
+        "Tweening",
+        "Unlockable"
+    ]
 }

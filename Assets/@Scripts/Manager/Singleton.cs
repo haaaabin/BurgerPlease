@@ -1,3 +1,4 @@
+using UnityEditorInternal;
 using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
@@ -22,8 +23,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
 					_instance = t;
 				}
-
-				DontDestroyOnLoad(_instance.gameObject);
 			}
 
 			return _instance;

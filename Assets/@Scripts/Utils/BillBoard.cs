@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class BillBoard : MonoBehaviour
+public class Billboard : MonoBehaviour
 {
-    void LateUpdate()
-    {
-        transform.rotation =  Camera.main.transform.rotation;
-    }
+	void LateUpdate()
+	{
+		transform.rotation = Camera.main.transform.rotation;
+	}
 }

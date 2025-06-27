@@ -1190,6 +1190,7 @@ GameObject:
   - component: {fileID: 1995485483440258197}
   - component: {fileID: 543601483825120984}
   - component: {fileID: 5656394494627779228}
+  - component: {fileID: 5607538250670781930}
   m_Layer: 5
   m_Name: UI_UpgradeEmployeePopup
   m_TagString: Untagged
@@ -1280,6 +1281,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &5607538250670781930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2396252258214300441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbc09279919df5948a0102dd28560447, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _closeButton: {fileID: 7719288181055816484}
+  _speedItem: {fileID: 4348747924051466733}
+  _capacityItem: {fileID: 5338397632512570116}
+  _hireItem: {fileID: 3008513451716712111}
 --- !u!1 &2561749452371656415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1781,6 +1798,7 @@ GameObject:
   - component: {fileID: 4685000244102579185}
   - component: {fileID: 2261295393050659991}
   - component: {fileID: 4166641469385309015}
+  - component: {fileID: 3008513451716712111}
   m_Layer: 5
   m_Name: Hire
   m_TagString: Untagged
@@ -1850,6 +1868,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3008513451716712111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3922180204944690499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42da5c796026f2e4ab4461fdc746cf1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _purchaseButton: {fileID: 7049112666657684748}
+  _costText: {fileID: 3156614487416625362}
 --- !u!1 &4208617802326910197
 GameObject:
   m_ObjectHideFlags: 0
@@ -2559,6 +2591,7 @@ GameObject:
   - component: {fileID: 5408194412091002229}
   - component: {fileID: 1860385677947088684}
   - component: {fileID: 8271728651058936360}
+  - component: {fileID: 4348747924051466733}
   m_Layer: 5
   m_Name: MoveSpeed
   m_TagString: Untagged
@@ -2628,6 +2661,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4348747924051466733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5126450310084211703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42da5c796026f2e4ab4461fdc746cf1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _purchaseButton: {fileID: 8136421543812141746}
+  _costText: {fileID: 486529601094252446}
 --- !u!1 &5132896454263447959
 GameObject:
   m_ObjectHideFlags: 0
@@ -3652,6 +3699,7 @@ GameObject:
   - component: {fileID: 7169254439679395483}
   - component: {fileID: 1972157987475782166}
   - component: {fileID: 966380921174312507}
+  - component: {fileID: 5338397632512570116}
   m_Layer: 5
   m_Name: Capacity
   m_TagString: Untagged
@@ -3721,6 +3769,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5338397632512570116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8253849148562657922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42da5c796026f2e4ab4461fdc746cf1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _purchaseButton: {fileID: 8000504150162375442}
+  _costText: {fileID: 1206598005009350735}
 --- !u!1 &8757538608742376925
 GameObject:
   m_ObjectHideFlags: 0

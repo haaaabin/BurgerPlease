@@ -1,254 +1,126 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor.Overlays;
 using UnityEngine;
 using static Define;
 
 public class GameManager : Singleton<GameManager>
 {
-    public Vector2 JoystickDir { get; set; } = Vector2.zero;
+	public Vector2 JoystickDir { get; set; } = Vector2.zero;
 
-    public PlayerController Player;
-    public Restaurant Restaurant;
-    private GameSaveData SaveData
-    {
-        get
-        {
-            return SaveManager.Instance.SaveData;
-        }
-    }
+	public PlayerController Player;
 
-    public long Money
-    {
-        get { return SaveData.Money; }
-        set
-        {
-            SaveData.Money = value;
-            BroadcastEvent(EEventType.MoneyChanged);
-        }
-    }
+	public Restaurant Restaurant;
+	private GameSaveData SaveData
+	{
+		get
+		{
+			return SaveManager.Instance.SaveData;
+		}
+	}
 
-    private void Start()
-    {
-        UpgradeEmployeePopup = Utils.FindChild<UI_UpgradeEmployeePopup>(gameObject);
-        UpgradeEmployeePopup.gameObject.SetActive(false);
-        StartCoroutine(CoInitialize());
-    }
+	public long Money
+	{
+		get { return SaveData.Money; }
+		set
+		{
+			SaveData.Money = value;
+			BroadcastEvent(EEventType.MoneyChanged);
+		}
+	}
 
-    // 한 프레임 기다려서 모든 오브젝트 초기화 끝나고 실행
-    public IEnumerator CoInitialize()
-    {
-        yield return new WaitForEndOfFrame();
+	private void Start()
+	{
+		UpgradeEmployeePopup = Utils.FindChild<UI_UpgradeEmployeePopup>(gameObject);
+		UpgradeEmployeePopup.gameObject.SetActive(false);
+		StartCoroutine(CoInitialize());
+	}
 
-        Player = FindAnyObjectByType<PlayerController>();
-        Restaurant = FindAnyObjectByType<Restaurant>();
+	// 한 프레임 기다려서 모든 오브젝트 초기화 끝나고 실행.
+	public IEnumerator CoInitialize()
+	{
+		yield return new WaitForEndOfFrame();
 
-        // int index = Restaurant.StageNum;
-        // Restaurant.SetInfo(SaveData.Restaurants[index]);
+		Player = GameObject.FindAnyObjectByType<PlayerController>();
+		Restaurant = GameObject.FindAnyObjectByType<Restaurant>();
 
-        // StartCoroutine(CoSaveData());
-    }
+		int index = Restaurant.StageNum;
+		Restaurant.SetInfo(SaveData.Restaurants[index]);
 
-    private IEnumerator CoSaveData()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(10);
+		StartCoroutine(CoSaveData());
+	}
 
-            SaveData.RestaurantIndex = Restaurant.StageNum;
-            SaveData.PlayerPosition = Player.transform.position;
+	IEnumerator CoSaveData()
+	{
+		while (true)
+		{
+			yield return new WaitForSeconds(10);
 
-            SaveManager.Instance.SaveGame();
-        }
-    }
+			SaveData.RestaurantIndex = Restaurant.StageNum;
+			SaveData.PlayerPosition = Player.transform.position;
 
-    #region UI
-    public UI_UpgradeEmployeePopup UpgradeEmployeePopup;
-    public UI_GameScene GameSceneUI;
-    #endregion
+			SaveManager.Instance.SaveGame();
+		}
+	}
 
-    #region Event
-    Action[] _events = new Action[(int)EEventType.MaxCount];
+	#region UIManager
+	public UI_UpgradeEmployeePopup UpgradeEmployeePopup;
+	public UI_GameScene GameSceneUI;
+	#endregion
 
-    public void AddEventListener(EEventType type, Action action)
-    {
-        int index = (int)type;
-        if (_events.Length < index)
-            return;
+	#region ObjectManager
+	public GameObject WorkerPrefab;
+	public GameObject SpawnWorker() { return PoolManager.Instance.Pop(WorkerPrefab); }
+	public void DespawnWorker(GameObject worker) { PoolManager.Instance.Push(worker); }
 
-        _events[index] += action;
-    }
+	public GameObject BurgerPrefab;
+	public GameObject SpawnBurger() { return PoolManager.Instance.Pop(BurgerPrefab); }
+	public void DespawnBurger(GameObject burger) { PoolManager.Instance.Push(burger); }
 
-    public void RemoveEventListener(EEventType type, Action action)
-    {
-        int index = (int)type;
-        if (_events.Length < index)
-            return;
+	public GameObject MoneyPrefab;
+	public GameObject SpawnMoney() { return PoolManager.Instance.Pop(MoneyPrefab); }
+	public void DespawnMoney(GameObject money) { PoolManager.Instance.Push(money); }
 
-        _events[index] -= action;
-    }
+	public GameObject TrashPrefab;
+	public GameObject SpawnTrash() { return PoolManager.Instance.Pop(TrashPrefab); }
+	public void DespawnTrash(GameObject trash) { PoolManager.Instance.Push(trash); }
 
-    public void BroadcastEvent(EEventType type)
-    {
-        int index = (int)type;
-        if (_events.Length < index)
-            return;
+	public GameObject GuestPrefab;
+	public GameObject SpawnGuest() { return PoolManager.Instance.Pop(GuestPrefab); }
+	public void DespawnGuest(GameObject guest) { PoolManager.Instance.Push(guest); }
+	#endregion
 
-        _events[index]?.Invoke();
-    }
-    #endregion
+	#region Events
+	public void AddEventListener(EEventType type, Action action)
+	{
+		int index = (int)type;
+		if (_events.Length < index)
+			return;
 
-    #region Burger
-    public GameObject BurgerPrefab;
+		_events[index] += action;
+	}
 
-    private Transform _burgerRoot;
-    public Transform BurgerRoot
-    {
-        get
-        {
-            if (_burgerRoot == null)
-            {
-                GameObject go = new GameObject("@BurgerRoot");
-                _burgerRoot = go.transform;
-            }
-            return _burgerRoot;
-        }
-    }
+	public void RemoveEventListener(EEventType type, Action action)
+	{
+		int index = (int)type;
+		if (_events.Length < index)
+			return;
 
-    public GameObject SpawnBurger()
-    {
-        GameObject go = Instantiate(BurgerPrefab);
-        go.name = BurgerPrefab.name;
-        go.transform.parent = BurgerRoot;
-        return go;
-    }
+		_events[index] -= action;
+	}
 
-    public void DeSpawnBurger(GameObject burger)
-    {
-        Destroy(burger);
-    }
-    #endregion
+	public void BroadcastEvent(EEventType type)
+	{
+		int index = (int)type;
+		if (_events.Length < index)
+			return;
 
-    #region Money
-    public GameObject MoneyPrefab;
+		_events[index]?.Invoke();
+	}
 
-    private Transform _moneyRoot;
-    public Transform MoneyRoot
-    {
-        get
-        {
-            if (_moneyRoot == null)
-            {
-                GameObject go = new GameObject("@MoneyRoot");
-                _moneyRoot = go.transform;
-            }
-            return _moneyRoot;
-        }
-    }
-
-    public GameObject SpawnMoney()
-    {
-        GameObject go = Instantiate(MoneyPrefab);
-        go.name = MoneyPrefab.name;
-        go.transform.parent = MoneyRoot;
-        return go;
-    }
-
-    public void DeSpawnMoney(GameObject money)
-    {
-        Destroy(money);
-    }
-    #endregion
-
-    #region Guest
-    public GameObject GuestPrefab;
-
-    private Transform _guestRoot;
-    public Transform GuestRoot
-    {
-        get
-        {
-            if (_guestRoot == null)
-            {
-                GameObject go = new GameObject("@GuestRoot");
-                _guestRoot = go.transform;
-            }
-            return _guestRoot;
-        }
-    }
-
-    public GameObject SpawnGuest()
-    {
-        GameObject go = Instantiate(GuestPrefab);
-        go.name = GuestPrefab.name;
-        go.transform.parent = GuestRoot;
-        return go;
-    }
-
-    public void DeSpawnGuest(GameObject guest)
-    {
-        Destroy(guest);
-    }
-    #endregion
-
-    #region Trash
-    public GameObject TrashPrefab;
-
-    private Transform _trashRoot;
-    public Transform TrashRoot
-    {
-        get
-        {
-            if (_trashRoot == null)
-            {
-                GameObject go = new GameObject("@TrashRoot");
-                _trashRoot = go.transform;
-            }
-            return _trashRoot;
-        }
-    }
-
-    public GameObject SpawnTrash()
-    {
-        GameObject go = Instantiate(TrashPrefab);
-        go.name = TrashPrefab.name;
-        go.transform.parent = TrashRoot;
-        return go;
-    }
-
-    public void DeSpawnTrash(GameObject trash)
-    {
-        Destroy(trash);
-    }
-    #endregion
-
-    #region Worker
-    public GameObject WorkerPrefab;
-
-    private Transform _workerRoot;
-    public Transform WorkerRoot
-    {
-        get
-        {
-            if (_workerRoot == null)
-            {
-                GameObject go = new GameObject("@WorkerRoot");
-                _workerRoot = go.transform;
-            }
-            return _workerRoot;
-        }
-    }
-
-    public GameObject SpawnWorker()
-    {
-        GameObject go = Instantiate(WorkerPrefab);
-        go.name = WorkerPrefab.name;
-        go.transform.parent = WorkerRoot;
-        return go;
-    }
-
-    public void DeSpawnWorker(GameObject worker)
-    {
-        Destroy(worker);
-    }
-    #endregion
+	Action[] _events = new Action[(int)EEventType.MaxCount];
+	#endregion
 }
