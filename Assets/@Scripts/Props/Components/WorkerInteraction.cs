@@ -1,3 +1,4 @@
+using Microsoft.Unity.VisualStudio.Editor;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -12,6 +13,11 @@ public class WorkerInteraction : MonoBehaviour
 	public float InteractInterval = 0.5f;
 	public WorkerController CurrentWorker;
 	private Coroutine _coWorkerInteraction;
+
+	[SerializeField]
+	private SpriteRenderer _machineOnTriggerEnterImage;
+	[SerializeField]
+	private SpriteRenderer _machineOnTriggerExitImage;
 
 	private void OnEnable()
 	{
@@ -48,6 +54,12 @@ public class WorkerInteraction : MonoBehaviour
 
 		CurrentWorker = wc;
 		OnTriggerStart?.Invoke(wc);
+
+		if (_machineOnTriggerEnterImage != null)
+		{
+			_machineOnTriggerEnterImage.gameObject.SetActive(true);
+			_machineOnTriggerExitImage.gameObject.SetActive(false);
+		}
 	}
 
 	void OnTriggerExit(Collider other)
@@ -58,5 +70,11 @@ public class WorkerInteraction : MonoBehaviour
 
 		CurrentWorker = null;
 		OnTriggerEnd?.Invoke(wc);
+
+		if (_machineOnTriggerExitImage != null)
+		{
+			_machineOnTriggerExitImage.gameObject.SetActive(true);
+			_machineOnTriggerEnterImage.gameObject.SetActive(false);
+		}
 	}
 }
