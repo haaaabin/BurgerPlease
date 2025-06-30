@@ -15,6 +15,7 @@ public class MainCounterSystem : SystemBase
 	public List<Table> Tables = new List<Table>();
 	public TrashCan TrashCan;
 	public Office Office;
+	public RestaurantDoor Door;
 
 	// 직원들이 담당하는 일들.
 	public WorkerController[] Jobs = new WorkerController[(int)EMainCounterJob.MaxCount];

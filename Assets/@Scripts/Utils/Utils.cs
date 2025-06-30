@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using static Define;
 
 
@@ -83,4 +84,23 @@ public static class Utils
 		if (money < 1000000000000) return (money / 1000000000f).ToString("0.##") + "b"; // (b)
 		return (money / 1000000000000f).ToString("0.##") + "t"; // (t)
 	}
+
+	public static void PlayBounceEffect(Transform transform)
+	{
+		if (transform == null) return;
+
+		transform.DOKill(true);
+		transform.localScale = Vector3.one * 0.2f;
+
+		Sequence seq = DOTween.Sequence();
+
+		// 1. 팍! 커짐 + 짧게 흔들림 동시에
+		seq.Append(transform.DOScale(1, 0.7f).SetEase(Ease.OutElastic));
+		seq.Join(transform.DOPunchRotation(new Vector3(0, 0, 2f), 0.15f, 2, 0.57f));
+
+		// 2. 흔들림 끝나자마자 바로 축소 시작
+		seq.Append(transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack));
+	}
+
+
 }

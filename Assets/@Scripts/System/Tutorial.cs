@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -6,7 +7,7 @@ using static UnityEngine.Rendering.DebugUI;
 public enum ETutorialState
 {
 	None,
-	// CreateDoor
+	CreateDoor,
 	CreateFirstTable,
 	CreateBurgerMachine,
 	CreateCounter,
@@ -34,12 +35,12 @@ public class Tutorial : MonoBehaviour
 		set { _data.TutorialState = value; }
 	}
 
-    public void SetInfo(RestaurantData data)
+	public void SetInfo(RestaurantData data)
 	{
 		_data = data;
 
 		if (_state == ETutorialState.None)
-			_state = ETutorialState.CreateFirstTable;
+			_state = ETutorialState.CreateDoor;
 
 		StartCoroutine(CoStartTutorial());
 	}
@@ -48,6 +49,7 @@ public class Tutorial : MonoBehaviour
 	{
 		yield return new WaitForEndOfFrame();
 
+		RestaurantDoor door = _mainCounterSystem.Door;
 		Counter counter = _mainCounterSystem.Counter;
 		Grill grill = _mainCounterSystem.Grill;
 		Table firstTable = _mainCounterSystem.Tables[0];
@@ -55,20 +57,40 @@ public class Tutorial : MonoBehaviour
 		Office office = _mainCounterSystem.Office;
 		TrashCan trashCan = _mainCounterSystem.TrashCan;
 
+		door.SetUnlockedState(EUnlockedState.Hidden);
 		counter.SetUnlockedState(EUnlockedState.Hidden);
 		grill.SetUnlockedState(EUnlockedState.Hidden);
 		firstTable.SetUnlockedState(EUnlockedState.Hidden);
 		secondTable.SetUnlockedState(EUnlockedState.Hidden);
 		office.SetUnlockedState(EUnlockedState.Hidden);
 
+
 		grill.StopSpawnBurger = true;
+
+
+		if (_state == ETutorialState.CreateDoor)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Create Door");
+
+			door.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
+			yield return new WaitUntil(() => _mainCounterSystem.Door.IsUnlocked);
+			Utils.PlayBounceEffect(door.transform);
+			door.UnlockEffect.OnPlayParticleSystem();
+
+			_state = ETutorialState.CreateFirstTable;
+		}
 
 		if (_state == ETutorialState.CreateFirstTable)
 		{
 			GameManager.Instance.GameSceneUI.SetToastMessage("Create First Table");
 
 			firstTable.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
 			yield return new WaitUntil(() => firstTable.IsUnlocked);
+			Utils.PlayBounceEffect(firstTable.transform);
+			firstTable.UnlockEffect.OnPlayParticleSystem();
+
 			_state = ETutorialState.CreateBurgerMachine;
 		}
 
@@ -79,7 +101,11 @@ public class Tutorial : MonoBehaviour
 			GameManager.Instance.GameSceneUI.SetToastMessage("Create BurgerMachine");
 
 			grill.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
 			yield return new WaitUntil(() => grill.IsUnlocked);
+			Utils.PlayBounceEffect(grill.transform);
+			grill.UnlockEffect.OnPlayParticleSystem();
+
 			_state = ETutorialState.CreateCounter;
 		}
 
@@ -90,7 +116,11 @@ public class Tutorial : MonoBehaviour
 			GameManager.Instance.GameSceneUI.SetToastMessage("Create Counter");
 
 			counter.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
 			yield return new WaitUntil(() => counter.IsUnlocked);
+			Utils.PlayBounceEffect(counter.transform);
+			counter.UnlockEffect.OnPlayParticleSystem();
+
 			_state = ETutorialState.PickupBurger;
 		}
 
@@ -104,7 +134,7 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => grill.CurrentWorker != null);
 			_state = ETutorialState.PutBurgerOnCounter;
 		}
-				
+
 		if (_state == ETutorialState.PutBurgerOnCounter)
 		{
 			GameManager.Instance.GameSceneUI.SetToastMessage("Put Burger On Counter");
@@ -142,8 +172,12 @@ public class Tutorial : MonoBehaviour
 		{
 			GameManager.Instance.GameSceneUI.SetToastMessage("Create Second Table");
 
-			secondTable.SetUnlockedState(EUnlockedState.ProcessingConstruction);			
+			secondTable.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
 			yield return new WaitUntil(() => secondTable.IsUnlocked);
+			Utils.PlayBounceEffect(secondTable.transform);
+			secondTable.UnlockEffect.OnPlayParticleSystem();
+
 			_state = ETutorialState.CreateOffice;
 		}
 
@@ -154,7 +188,11 @@ public class Tutorial : MonoBehaviour
 			GameManager.Instance.GameSceneUI.SetToastMessage("Create Office");
 
 			office.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
 			yield return new WaitUntil(() => office.IsUnlocked);
+			Utils.PlayBounceEffect(office.transform);
+			office.UnlockEffect.OnPlayParticleSystem();
+			
 			_state = ETutorialState.Done;
 		}
 
@@ -164,4 +202,6 @@ public class Tutorial : MonoBehaviour
 
 		yield return null;
 	}
+
+
 }

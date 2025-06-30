@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConstructionArea: {fileID: 1703630565269750067}
+  UnlockEffect: {fileID: 0}
   Chairs:
   - {fileID: 6080055250482005243}
   - {fileID: 5185375499076523547}
@@ -417,6 +418,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InteractInterval: 0.5
   CurrentWorker: {fileID: 0}
+  _machineOnTriggerEnterImage: {fileID: 0}
+  _machineOnTriggerExitImage: {fileID: 0}
 --- !u!1 &5536313473069419080
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,6 +538,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InteractInterval: 0.5
   CurrentWorker: {fileID: 0}
+  _machineOnTriggerEnterImage: {fileID: 0}
+  _machineOnTriggerExitImage: {fileID: 0}
 --- !u!1 &8422995291618827625
 GameObject:
   m_ObjectHideFlags: 0

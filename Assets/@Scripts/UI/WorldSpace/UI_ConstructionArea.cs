@@ -19,7 +19,7 @@ public class UI_ConstructionArea : MonoBehaviour
 
 	public long SpentMoney
 	{
-		get {  return Owner.SpentMoney; }
+		get { return Owner.SpentMoney; }
 		set { Owner.SpentMoney = value; }
 	}
 

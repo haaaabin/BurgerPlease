@@ -4,6 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(WorkerInteraction))]
 public class Door : MonoBehaviour
 {
+	public PlayParticleSystem UnlockEffect;
+	
 	[SerializeField]
 	private Transform _doorTransform;
 

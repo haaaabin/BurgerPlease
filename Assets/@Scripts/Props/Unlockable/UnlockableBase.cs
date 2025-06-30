@@ -11,6 +11,7 @@ public class UnlockableBase : MonoBehaviour
 {
 	public UI_ConstructionArea ConstructionArea;
 	private UnlockableStateData _data;
+	public PlayParticleSystem UnlockEffect;
 
 	public void SetInfo(UnlockableStateData data)
 	{
@@ -28,7 +29,7 @@ public class UnlockableBase : MonoBehaviour
 	public bool IsUnlocked => State == EUnlockedState.Unlocked;
 	public long SpentMoney
 	{
-		get { return _data != null ? _data.SpentMoney : 0;}
+		get { return _data != null ? _data.SpentMoney : 0; }
 		set { if (_data != null) { _data.SpentMoney = value; } }
 	}
 
