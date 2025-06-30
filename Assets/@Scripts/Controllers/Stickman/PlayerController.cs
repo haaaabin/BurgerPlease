@@ -24,16 +24,24 @@ public class PlayerController : WorkerController
 		{
 			// 이동.
 			_controller.Move(moveDir * Time.deltaTime * _moveSpeed);
-			
+
 			// 고개 돌리기.
 			Quaternion lookRotation = Quaternion.LookRotation(moveDir);
 			transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * _rotateSpeed);
 
 			State = EAnimState.Move;
+			if (_particle != null && !_particle.isPlaying)
+			{
+				_particle.Play();
+			}
 		}
 		else
 		{
 			State = EAnimState.Idle;
+			if (_particle != null && _particle.isPlaying)
+			{
+				_particle.Stop();
+			}
 		}
 		
 		// 중력 작용.

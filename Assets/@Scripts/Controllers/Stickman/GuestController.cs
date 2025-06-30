@@ -10,14 +10,14 @@ public class GuestController : StickmanController
 	public EGuestState GuestState
 	{
 		get { return _guestState; }
-		set 
-		{ 
+		set
+		{
 			_guestState = value;
-			
+
 			if (value == EGuestState.Eating)
 				State = EAnimState.Eating;
 
-			UpdateAnimation(); 
+			UpdateAnimation();
 		}
 	}
 
@@ -25,7 +25,7 @@ public class GuestController : StickmanController
 
 	protected override void Awake()
 	{
-		base.Awake();		
+		base.Awake();
 	}
 
 	protected override void Update()

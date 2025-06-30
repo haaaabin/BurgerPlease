@@ -102,8 +102,6 @@ public class TrayController : MonoBehaviour
 		if (TotalItemCount >= _maxItemCount)
 			return;
 
-		Debug.Log("_maxItemCount" + _maxItemCount);
-
 		// 운반하는 물체 종류 추적을 위해.
 		EObjectType objectType = Utils.GetTrayObjectType(child);
 		if (objectType == EObjectType.None)

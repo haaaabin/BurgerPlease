@@ -9,12 +9,11 @@ public class PlayParticleSystem : MonoBehaviour
     {
         _unlockEffect.Stop();
     }
-    
+
     public void OnPlayParticleSystem()
     {
         if (_unlockEffect != null)
         {
-            _unlockEffect.gameObject.SetActive(true);
             _unlockEffect.Play();
         }
     }

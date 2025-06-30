@@ -44,10 +44,18 @@ public class WorkerController : StickmanController
 		{
 			_navMeshAgent.isStopped = true;
 			State = EAnimState.Idle;
+			if (_particle != null && _particle.isPlaying)
+			{
+				_particle.Stop();
+			}
 		}
 		else
 		{
 			State = EAnimState.Move;
+			if (_particle != null && !_particle.isPlaying)
+			{
+				_particle.Play();
+			}
 			LookAtDestination();
 		}
 	}

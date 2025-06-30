@@ -19,6 +19,7 @@ public class StickmanController : MonoBehaviour
 	protected AudioSource _audioSource;
 	protected NavMeshAgent _navMeshAgent;
 	protected UI_OrderBubble _orderBubble;
+	protected ParticleSystem _particle;
 
 	public TrayController Tray { get; protected set; }
 
@@ -130,6 +131,7 @@ public class StickmanController : MonoBehaviour
 		_audioSource = GetComponent<AudioSource>();
 		_navMeshAgent = GetComponent<NavMeshAgent>();
 		_orderBubble = Utils.FindChild<UI_OrderBubble>(gameObject);
+		_particle = Utils.FindChild<ParticleSystem>(gameObject);
 		Tray = Utils.FindChild<TrayController>(gameObject);
 
 		_navMeshAgent.speed = _moveSpeed;
