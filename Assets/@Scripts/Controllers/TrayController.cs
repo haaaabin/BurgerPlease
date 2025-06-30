@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using static Define;
 using static UnityEngine.UI.GridLayoutGroup;
@@ -50,6 +51,9 @@ public class TrayController : MonoBehaviour
 	private StickmanController _owner;
 	public bool IsPlayer = false;
 
+	[SerializeField]
+	private TextMeshProUGUI _maxText;
+
 	public bool Visible
 	{
 		set { if (_meshRenderer != null) _meshRenderer.enabled = value; _owner?.UpdateAnimation(); }
@@ -63,6 +67,9 @@ public class TrayController : MonoBehaviour
 		Visible = false;
 
 		MaxItemCount = _maxItemCount;
+
+		if (_maxText != null)
+			_maxText.gameObject.SetActive(false);
 	}
 
 	// 휘는거 조정.
@@ -95,12 +102,22 @@ public class TrayController : MonoBehaviour
 			if (moveDir != Vector3.zero)
 				_items[i].rotation *= Quaternion.Euler(-i * _bendFactor * rate, 0, 0);
 		}
+
 	}
 
 	public void AddToTray(Transform child)
 	{
 		if (TotalItemCount >= _maxItemCount)
+		{
+			if (_maxText != null)
+				_maxText.gameObject.SetActive(true);
 			return;
+		}
+		else
+		{
+			if (_maxText != null)
+				_maxText.gameObject.SetActive(false);
+		}
 
 		// 운반하는 물체 종류 추적을 위해.
 		EObjectType objectType = Utils.GetTrayObjectType(child);
@@ -118,11 +135,11 @@ public class TrayController : MonoBehaviour
 		Vector3 dest = transform.position + Vector3.up * TotalItemCount * _itemHeight;
 
 		child.DOJump(dest, 5, 1, 0.3f)
-			.OnComplete(() =>
-			{
-				_reserved.Remove(child);
-				_items.Add(child);
-			});
+				.OnComplete(() =>
+				{
+					_reserved.Remove(child);
+					_items.Add(child);
+				});
 	}
 
 	public Transform RemoveFromTray()
@@ -139,6 +156,9 @@ public class TrayController : MonoBehaviour
 		// 운반하는 물체 종류 추적을 위해.
 		if (TotalItemCount == 0)
 			CurrentTrayObjectType = EObjectType.None;
+
+		if (_maxText != null)
+			_maxText.gameObject.SetActive(false);
 
 		return item;
 	}

@@ -188,9 +188,11 @@ public class Table : UnlockableBase
 
 	void OnMoneyInteraction(WorkerController wc)
 	{
+		if (!wc.Tray.IsPlayer)
+			return;
+
 		_moneyPile.DespawnObjectWithJump(wc.transform.position, () =>
 		{
-			// TODO : ADD MONEY
 			GameManager.Instance.Money += 100;
 		});
 	}

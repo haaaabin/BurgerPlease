@@ -58,7 +58,7 @@ public static class Define
 	}
 
 	public const float GRILL_SPAWN_BURGER_INTERVAL = 0.5f;
-	public const int GRILL_MAX_BURGER_COUNT = 20;
+	public const int GRILL_MAX_BURGER_COUNT = 6;
 
 	public const float CONSTRUCTION_UPGRADE_INTERVAL = 0.01f;
 	public const float MONEY_SPAWN_INTERVAL = 0.1f;

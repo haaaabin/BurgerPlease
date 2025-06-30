@@ -66,7 +66,6 @@ public class GameManager : Singleton<GameManager>
 			SaveData.PlayerPosition = Player.transform.position;
 
 			SaveData.Restaurants[Restaurant.StageNum].CounterBurgerCount = Restaurant.GetCounterBurgerCount();
-			Debug.Log("CounterBurgerCount: " + SaveData.Restaurants[Restaurant.StageNum].CounterBurgerCount);
 			SaveManager.Instance.SaveGame();
 		}
 	}

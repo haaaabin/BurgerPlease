@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,13 +12,15 @@ public class Grill : UnlockableBase
 {
 	private BurgerPile _burgers;
 	private WorkerInteraction _interaction;
-
 	public int BurgerCount => _burgers.ObjectCount;
 	public WorkerController CurrentWorker => _interaction.CurrentWorker;
 	public Transform WorkerPos;
 	public bool StopSpawnBurger = true;
 
 	public RestaurantData Data;
+
+	[SerializeField]
+	private TextMeshProUGUI _maxText;
 
 	protected void Awake()
 	{
@@ -55,10 +58,15 @@ public class Grill : UnlockableBase
 	{
 		while (true)
 		{
-			yield return new WaitUntil(() => _burgers.ObjectCount < Define.GRILL_MAX_BURGER_COUNT);
+			int count = _burgers.ObjectCount;
 
-			if (StopSpawnBurger == false)
+			_maxText.gameObject.SetActive(count >= Define.GRILL_MAX_BURGER_COUNT);
+
+			// 스폰은 최대 개수 미만이고 StopSpawn이 아닐 때만
+			if (count < Define.GRILL_MAX_BURGER_COUNT && StopSpawnBurger == false)
+			{
 				_burgers.SpawnObject();
+			}
 
 			yield return new WaitForSeconds(Define.GRILL_SPAWN_BURGER_INTERVAL);
 		}
@@ -71,5 +79,8 @@ public class Grill : UnlockableBase
 			return;
 
 		_burgers.PileToTray(pc.Tray);
+
+		if (_burgers.ObjectCount < Define.GRILL_MAX_BURGER_COUNT)
+			_maxText.gameObject.SetActive(false);
 	}
 }
