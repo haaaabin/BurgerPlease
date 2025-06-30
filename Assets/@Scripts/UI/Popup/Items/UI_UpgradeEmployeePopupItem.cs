@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,14 +22,32 @@ public class UI_UpgradeEmployeePopupItem : MonoBehaviour
 	[SerializeField]
 	private TextMeshProUGUI _costText;
 
+	[SerializeField]
+	private Slider _slider;
+
+	[SerializeField]
+	private GameObject _upgradeEffectArrow;
+
 	EUpgradeEmployeePopupItemType _type = EUpgradeEmployeePopupItemType.None;
 
 	long _money = 0;
-	
-    void Start()
-    {
+
+	void Start()
+	{
 		_purchaseButton.onClick.AddListener(OnClickPurchaseButton);
-    }
+	}
+
+	void Update()
+	{
+		if (GameManager.Instance.Money < _money)
+		{
+			_purchaseButton.interactable = false;
+		}
+		else
+		{
+			_purchaseButton.interactable = true;
+		}
+	}
 
 	public void SetInfo(EUpgradeEmployeePopupItemType type, long money)
 	{
@@ -55,21 +74,36 @@ public class UI_UpgradeEmployeePopupItem : MonoBehaviour
 			case EUpgradeEmployeePopupItemType.Speed:
 				{
 					GameManager.Instance.BroadcastEvent(EEventType.UpgradeEmployeeSpeed);
-					GameManager.Instance.UpgradeEmployeePopup.gameObject.SetActive(false);
+					if (_slider != null && _slider.value <= 1.0f)
+						_slider.value += 0.2f;
+					ShowUpgradeEffect();
 				}
 				break;
 			case EUpgradeEmployeePopupItemType.Capacity:
 				{
 					GameManager.Instance.BroadcastEvent(EEventType.UpgradeEmployeeCapacity);
-					GameManager.Instance.UpgradeEmployeePopup.gameObject.SetActive(false);
+					if (_slider != null && _slider.value <= 1.0f)
+						_slider.value += 0.2f;
+					ShowUpgradeEffect();
 				}
 				break;
 			case EUpgradeEmployeePopupItemType.Hire:
 				{
 					GameManager.Instance.BroadcastEvent(EEventType.HireWorker);
-					GameManager.Instance.UpgradeEmployeePopup.gameObject.SetActive(false);
+					if (_slider != null && _slider.value <= 1.0f)
+						_slider.value += 0.2f;
+					ShowUpgradeEffect();
 				}
 				break;
+		}
+	}
+
+	private void ShowUpgradeEffect()
+	{
+		if (_upgradeEffectArrow != null)
+		{
+			_upgradeEffectArrow.SetActive(true);
+			_upgradeEffectArrow.GetComponent<UI_PurchaseArrowEffect>().PlayEffect();
 		}
 	}
 }
