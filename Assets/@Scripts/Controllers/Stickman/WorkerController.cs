@@ -20,7 +20,7 @@ public class WorkerController : StickmanController
 	{
 		if (WorkerJob != null)
 			StopCoroutine(WorkerJob);
-		
+
 		WorkerJob = StartCoroutine(job);
 	}
 
@@ -37,7 +37,7 @@ public class WorkerController : StickmanController
 	}
 
 	protected override void Update()
-    {
+	{
 		base.Update();
 
 		if (HasArrivedAtDestination)
@@ -51,4 +51,10 @@ public class WorkerController : StickmanController
 			LookAtDestination();
 		}
 	}
+
+	public void IncreaseSpeed()
+	{
+		_navMeshAgent.speed *= 1.2f;
+	}
+
 }

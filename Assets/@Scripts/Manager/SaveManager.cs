@@ -31,6 +31,9 @@ public class RestaurantData
 	// 프랍들.
 	public ETutorialState TutorialState = ETutorialState.None;
 	public List<UnlockableStateData> UnlockableStates;
+
+	public int CounterBurgerCount = 0;
+	public int GrillBurgerCount = 0;
 }
 
 [Serializable]

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEditor.Overlays;
 using UnityEngine;
 using static Define;
@@ -50,6 +51,8 @@ public class GameManager : Singleton<GameManager>
 		int index = Restaurant.StageNum;
 		Restaurant.SetInfo(SaveData.Restaurants[index]);
 
+		Player.transform.position = SaveData.PlayerPosition;
+
 		StartCoroutine(CoSaveData());
 	}
 
@@ -62,6 +65,8 @@ public class GameManager : Singleton<GameManager>
 			SaveData.RestaurantIndex = Restaurant.StageNum;
 			SaveData.PlayerPosition = Player.transform.position;
 
+			SaveData.Restaurants[Restaurant.StageNum].CounterBurgerCount = Restaurant.GetCounterBurgerCount();
+			Debug.Log("CounterBurgerCount: " + SaveData.Restaurants[Restaurant.StageNum].CounterBurgerCount);
 			SaveManager.Instance.SaveGame();
 		}
 	}

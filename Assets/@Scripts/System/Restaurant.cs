@@ -18,12 +18,17 @@ public class Restaurant : MonoBehaviour
 	private void OnEnable()
 	{
 		GameManager.Instance.AddEventListener(EEventType.HireWorker, OnHireWorker);
+		GameManager.Instance.AddEventListener(EEventType.UpgradeEmployeeSpeed, OnUpgradeEmployeeSpeed);
+		GameManager.Instance.AddEventListener(EEventType.UpgradeEmployeeCapacity, OnUpgradeEmployeeCapacity);
+
 		StartCoroutine(CoDistributeWorkerAI());
 	}
 
 	private void OnDisable()
 	{
 		GameManager.Instance.RemoveEventListener(EEventType.HireWorker, OnHireWorker);
+		GameManager.Instance.RemoveEventListener(EEventType.UpgradeEmployeeSpeed, OnUpgradeEmployeeSpeed);
+
 	}
 
 	public void SetInfo(RestaurantData data)
@@ -45,6 +50,11 @@ public class Restaurant : MonoBehaviour
 
 		for (int i = 0; i < data.WorkerCount; i++)
 			OnHireWorker();
+
+		foreach (Grill grill in GetComponentsInChildren<Grill>())
+		{
+			grill.Data = data;
+		}
 	}
 
 	void OnHireWorker()
@@ -59,6 +69,22 @@ public class Restaurant : MonoBehaviour
 		_data.WorkerCount = Mathf.Max(_data.WorkerCount, Workers.Count);
 	}
 
+	void OnUpgradeEmployeeSpeed()
+	{
+		foreach (WorkerController worker in Workers)
+		{
+			worker.IncreaseSpeed();
+		}
+	}
+
+	void OnUpgradeEmployeeCapacity()
+	{
+		foreach (WorkerController worker in Workers)
+		{
+			worker.Tray.IncreaseCapacity();
+		}
+	}
+
 	IEnumerator CoDistributeWorkerAI()
 	{
 		while (true)
@@ -68,14 +94,14 @@ public class Restaurant : MonoBehaviour
 			yield return new WaitUntil(() => Workers.Count > 0);
 
 			foreach (WorkerController worker in Workers)
-			{				
+			{
 				// 어딘가 소속되어 있으면 스킵.
 				if (worker.CurrentSystem != null)
 					continue;
 
 				// 어떤 시스템에 일감이 남아 있으면, 해당 시스템으로 배정.
 				foreach (SystemBase system in RestaurantSystems)
-				{	
+				{
 					if (system.HasJob)
 					{
 						system.AddWorker(worker);
@@ -83,5 +109,15 @@ public class Restaurant : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	public int GetCounterBurgerCount()
+	{
+		return GetComponentsInChildren<Counter>().Sum(x => x.BurgerCount);
+	}
+
+	public int GetGrillBurgerCount()
+	{
+		return GetComponentsInChildren<Grill>().Sum(x => x.BurgerCount);
 	}
 }

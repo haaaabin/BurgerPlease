@@ -17,6 +17,8 @@ public class Grill : UnlockableBase
 	public Transform WorkerPos;
 	public bool StopSpawnBurger = true;
 
+	public RestaurantData Data;
+
 	protected void Awake()
 	{
 		_burgers = Utils.FindChild<BurgerPile>(gameObject);
@@ -25,6 +27,11 @@ public class Grill : UnlockableBase
 		_interaction = _burgers.GetComponent<WorkerInteraction>();
 		_interaction.InteractInterval = 0.2f;
 		_interaction.OnInteraction = OnWorkerBurgerInteraction;
+
+		for (int i = 0; i < Data.GrillBurgerCount; i++)
+		{
+			_burgers.SpawnObject();
+		}
 	}
 
 	Coroutine _coSpawnBurger;

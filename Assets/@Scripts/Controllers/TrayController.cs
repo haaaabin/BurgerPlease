@@ -21,8 +21,8 @@ public class TrayController : MonoBehaviour
 	public EObjectType CurrentTrayObjectType
 	{
 		get { return _objectType; }
-		set 
-		{ 
+		set
+		{
 			_objectType = value;
 			switch (value)
 			{
@@ -40,6 +40,9 @@ public class TrayController : MonoBehaviour
 	public int ReservedCount => _reserved.Count; // 쟁반 위로 이동중.
 	public int TotalItemCount => _reserved.Count + _items.Count; // 쟁반 위로 이동중인 아이템을 포함한 전체 개수.
 
+	private int _maxItemCount = 6; // 쟁반에 들고 있을 수 있는 최대 아이템 개수.
+	private int MaxItemCount;
+
 	private HashSet<Transform> _reserved = new HashSet<Transform>();
 	private List<Transform> _items = new List<Transform>();
 
@@ -49,7 +52,7 @@ public class TrayController : MonoBehaviour
 
 	public bool Visible
 	{
-		set { if (_meshRenderer != null ) _meshRenderer.enabled = value; _owner?.UpdateAnimation(); }
+		set { if (_meshRenderer != null) _meshRenderer.enabled = value; _owner?.UpdateAnimation(); }
 		get { return (_meshRenderer != null) ? _meshRenderer.enabled : false; }
 	}
 
@@ -58,6 +61,8 @@ public class TrayController : MonoBehaviour
 		_meshRenderer = GetComponent<MeshRenderer>();
 		_owner = transform.parent.GetComponent<StickmanController>();
 		Visible = false;
+
+		MaxItemCount = _maxItemCount;
 	}
 
 	// 휘는거 조정.
@@ -67,7 +72,7 @@ public class TrayController : MonoBehaviour
 
 		if (_items.Count == 0)
 			return;
-		
+
 		Vector3 moveDir = Vector3.zero;
 
 		if (IsPlayer)
@@ -84,7 +89,7 @@ public class TrayController : MonoBehaviour
 		{
 			float rate = Mathf.Lerp(_shakeRange.x, _shakeRange.y, i / (float)_items.Count);
 
-			_items[i].position =  Vector3.Lerp(_items[i].position, _items[i - 1].position + (_items[i - 1].up * _itemHeight), rate);
+			_items[i].position = Vector3.Lerp(_items[i].position, _items[i - 1].position + (_items[i - 1].up * _itemHeight), rate);
 			_items[i].rotation = Quaternion.Lerp(_items[i].rotation, _items[i - 1].rotation, rate);
 
 			if (moveDir != Vector3.zero)
@@ -94,6 +99,11 @@ public class TrayController : MonoBehaviour
 
 	public void AddToTray(Transform child)
 	{
+		if (TotalItemCount >= _maxItemCount)
+			return;
+
+		Debug.Log("_maxItemCount" + _maxItemCount);
+
 		// 운반하는 물체 종류 추적을 위해.
 		EObjectType objectType = Utils.GetTrayObjectType(child);
 		if (objectType == EObjectType.None)
@@ -133,5 +143,11 @@ public class TrayController : MonoBehaviour
 			CurrentTrayObjectType = EObjectType.None;
 
 		return item;
+	}
+
+	public void IncreaseCapacity()
+	{
+		_maxItemCount += 1;
+		MaxItemCount = _maxItemCount;
 	}
 }

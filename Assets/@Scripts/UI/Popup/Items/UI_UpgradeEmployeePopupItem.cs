@@ -54,12 +54,14 @@ public class UI_UpgradeEmployeePopupItem : MonoBehaviour
 		{
 			case EUpgradeEmployeePopupItemType.Speed:
 				{
-					// TODO
+					GameManager.Instance.BroadcastEvent(EEventType.UpgradeEmployeeSpeed);
+					GameManager.Instance.UpgradeEmployeePopup.gameObject.SetActive(false);
 				}
 				break;
 			case EUpgradeEmployeePopupItemType.Capacity:
 				{
-					// TODO
+					GameManager.Instance.BroadcastEvent(EEventType.UpgradeEmployeeCapacity);
+					GameManager.Instance.UpgradeEmployeePopup.gameObject.SetActive(false);
 				}
 				break;
 			case EUpgradeEmployeePopupItemType.Hire:

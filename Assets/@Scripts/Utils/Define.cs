@@ -7,6 +7,8 @@ public static class Define
 	public enum EEventType
 	{
 		MoneyChanged,
+		UpgradeEmployeeSpeed,
+		UpgradeEmployeeCapacity,
 		HireWorker,
 		UnlockProp,
 
