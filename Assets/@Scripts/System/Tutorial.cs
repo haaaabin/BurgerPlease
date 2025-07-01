@@ -16,8 +16,9 @@ public enum ETutorialState
 	SellBurger,
 	CleanTable,
 	CreateSecondTable,
-	// OpenDistrictArea
 	CreateOffice,
+	CreatePakingDesk,
+	CreateDriveThruCounter,
 
 	Done,
 }
@@ -26,6 +27,8 @@ public class Tutorial : MonoBehaviour
 {
 	[SerializeField]
 	private MainCounterSystem _mainCounterSystem;
+	[SerializeField]
+	private DriveThruSystem _driveThruSystem;
 
 	private RestaurantData _data;
 
@@ -34,6 +37,8 @@ public class Tutorial : MonoBehaviour
 		get { return _data.TutorialState; }
 		set { _data.TutorialState = value; }
 	}
+
+	private float _expAmount = 3f;
 
 	public void SetInfo(RestaurantData data)
 	{
@@ -64,6 +69,12 @@ public class Tutorial : MonoBehaviour
 		secondTable.SetUnlockedState(EUnlockedState.Hidden);
 		office.SetUnlockedState(EUnlockedState.Hidden);
 
+		// 드라이브 스루 시스템 초기화.
+		PakingDesk pakingDesk = _driveThruSystem.PakingDesk;
+		DriveThruCounter driveThruCounter = _driveThruSystem.DriveThruCounter;
+
+		pakingDesk.SetUnlockedState(EUnlockedState.Hidden);
+		driveThruCounter.SetUnlockedState(EUnlockedState.Hidden);
 
 		grill.StopSpawnBurger = true;
 
@@ -77,6 +88,7 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => _mainCounterSystem.Door.IsUnlocked);
 			Utils.PlayBounceEffect(door.transform);
 			door.UnlockEffect.OnPlayParticleSystem();
+			GameManager.Instance.AddExp(_expAmount);
 
 			_state = ETutorialState.CreateFirstTable;
 		}
@@ -90,6 +102,7 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => firstTable.IsUnlocked);
 			Utils.PlayBounceEffect(firstTable.transform);
 			firstTable.UnlockEffect.OnPlayParticleSystem();
+			GameManager.Instance.AddExp(_expAmount);
 
 			_state = ETutorialState.CreateBurgerMachine;
 		}
@@ -105,6 +118,7 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => grill.IsUnlocked);
 			Utils.PlayBounceEffect(grill.transform);
 			grill.UnlockEffect.OnPlayParticleSystem();
+			GameManager.Instance.AddExp(_expAmount);
 
 			_state = ETutorialState.CreateCounter;
 		}
@@ -120,6 +134,7 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => counter.IsUnlocked);
 			Utils.PlayBounceEffect(counter.transform);
 			counter.UnlockEffect.OnPlayParticleSystem();
+			GameManager.Instance.AddExp(_expAmount);
 
 			_state = ETutorialState.PickupBurger;
 		}
@@ -177,10 +192,10 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => secondTable.IsUnlocked);
 			Utils.PlayBounceEffect(secondTable.transform);
 			secondTable.UnlockEffect.OnPlayParticleSystem();
+			GameManager.Instance.AddExp(_expAmount);
 
 			_state = ETutorialState.CreateOffice;
 		}
-
 		secondTable.SetUnlockedState(EUnlockedState.Unlocked);
 
 		if (_state == ETutorialState.CreateOffice)
@@ -192,11 +207,41 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => office.IsUnlocked);
 			Utils.PlayBounceEffect(office.transform);
 			office.UnlockEffect.OnPlayParticleSystem();
-			
+			GameManager.Instance.AddExp(_expAmount);
+
+			_state = ETutorialState.CreatePakingDesk;
+		}
+		office.SetUnlockedState(EUnlockedState.Unlocked);
+
+		if (_state == ETutorialState.CreatePakingDesk)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Create Paking Desk");
+
+			pakingDesk.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
+			yield return new WaitUntil(() => pakingDesk.IsUnlocked);
+			Utils.PlayBounceEffect(pakingDesk.transform);
+			pakingDesk.UnlockEffect.OnPlayParticleSystem();
+			GameManager.Instance.AddExp(_expAmount);
+
+			_state = ETutorialState.CreateDriveThruCounter;
+		}
+		pakingDesk.SetUnlockedState(EUnlockedState.Unlocked);
+
+		if (_state == ETutorialState.CreateDriveThruCounter)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Create DriveThru Counter");
+
+			driveThruCounter.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
+			yield return new WaitUntil(() => driveThruCounter.IsUnlocked);
+			Utils.PlayBounceEffect(driveThruCounter.transform);
+			driveThruCounter.UnlockEffect.OnPlayParticleSystem();
+			GameManager.Instance.AddExp(_expAmount);
+
 			_state = ETutorialState.Done;
 		}
-
-		office.SetUnlockedState(EUnlockedState.Unlocked);
+		driveThruCounter.SetUnlockedState(EUnlockedState.Unlocked);
 
 		GameManager.Instance.GameSceneUI.SetToastMessage("");
 

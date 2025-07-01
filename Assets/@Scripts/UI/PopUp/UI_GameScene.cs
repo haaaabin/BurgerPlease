@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static Define;
 
 public class UI_GameScene : MonoBehaviour
@@ -10,15 +11,24 @@ public class UI_GameScene : MonoBehaviour
 	[SerializeField]
 	TextMeshProUGUI _toastMessageText;
 
+	[SerializeField]
+	Slider _expSlider;
+
+	[SerializeField]
+	TextMeshProUGUI _levelText;
+
 	private void OnEnable()
 	{
 		RefreshUI();
 		GameManager.Instance.AddEventListener(EEventType.MoneyChanged, RefreshUI);
+		GameManager.Instance.AddEventListener(EEventType.ExpChanged, RefreshExpUI);
+
 	}
 
 	private void OnDisable()
 	{
 		GameManager.Instance.RemoveEventListener(EEventType.MoneyChanged, RefreshUI);
+		GameManager.Instance.RemoveEventListener(EEventType.ExpChanged, RefreshExpUI);
 	}
 
 	public void RefreshUI()
@@ -31,5 +41,13 @@ public class UI_GameScene : MonoBehaviour
 	{
 		_toastMessageText.text = message;
 		_toastMessageText.enabled = (string.IsNullOrEmpty(message) == false);
+	}
+
+	private void RefreshExpUI()
+	{
+		var player = GameManager.Instance.PlayerData;
+		_expSlider.value = player.CurrentExp / player.GetMaxExp();
+		Debug.Log($"Exp: {player.CurrentExp} / {player.GetMaxExp()}");
+		_levelText.text = player.Level.ToString();
 	}
 }

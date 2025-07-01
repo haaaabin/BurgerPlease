@@ -7,6 +7,7 @@ public static class Define
 	public enum EEventType
 	{
 		MoneyChanged,
+		ExpChanged,
 		UpgradeEmployeeSpeed,
 		UpgradeEmployeeCapacity,
 		HireWorker,
@@ -29,6 +30,7 @@ public static class Define
 		Trash,
 		Burger,
 		Money,
+		PakingBox,
 	}
 
 	public enum EGuestState
@@ -53,6 +55,16 @@ public static class Define
 		MoveBurger,
 		CounterCashier,
 		CleanTable,
+
+		MaxCount,
+	}
+
+	public enum EDriveThruJob
+	{
+		MoveBurger,
+		PakingBurger,
+		MovePakingBox,
+		CounterCashier,
 
 		MaxCount,
 	}

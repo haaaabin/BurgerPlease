@@ -37,7 +37,7 @@ public class PileBase : MonoBehaviour
 				{
 					GameObject go = GameManager.Instance.SpawnBurger();
 					AddToPile(go, false);
-				}				
+				}
 				break;
 			case EObjectType.Money:
 				{
@@ -49,9 +49,9 @@ public class PileBase : MonoBehaviour
 				{
 					GameObject go = GameManager.Instance.SpawnTrash();
 					AddToPile(go, false);
-				}				
+				}
 				break;
-		}	
+		}
 	}
 
 	public void SpawnObjectWithJump(Vector3 spawnPos)
@@ -186,13 +186,25 @@ public class PileBase : MonoBehaviour
 
 		tray.AddToTray(go.transform);
 	}
+
+	// Pile -> Pile
+	public void PileToPile(PileBase targetPile)
+	{
+		GameObject go = RemoveFromPile();
+		if (go == null)
+			return;
+
+		go.transform.SetParent(targetPile.transform);
+
+		targetPile.AddToPile(go, jump: true);
+	}
 	#endregion
 
 	#region Pile
 	protected Stack<GameObject> _objects = new Stack<GameObject>();
 
 	public int ObjectCount => _objects.Count;
-	private void AddToPile(GameObject go, bool jump = false)
+	public void AddToPile(GameObject go, bool jump = false)
 	{
 		// 스택에 추가한다.
 		_objects.Push(go);
@@ -206,7 +218,7 @@ public class PileBase : MonoBehaviour
 			go.transform.position = pos;
 	}
 
-	private GameObject RemoveFromPile()
+	public GameObject RemoveFromPile()
 	{
 		if (_objects.Count == 0)
 			return null;

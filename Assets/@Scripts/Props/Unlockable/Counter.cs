@@ -47,7 +47,7 @@ public class Counter : UnlockableBase
 	public Transform GuestSpawnPos;
 
 	void Start()
-    {
+	{
 		_burgerPile = Utils.FindChild<BurgerPile>(gameObject);
 		_moneyPile = Utils.FindChild<MoneyPile>(gameObject);
 		_queuePoints = Utils.FindChild<Waypoints>(gameObject).GetPoints();
@@ -56,7 +56,7 @@ public class Counter : UnlockableBase
 		_burgerInteraction = _burgerPile.GetComponent<WorkerInteraction>();
 		_burgerInteraction.InteractInterval = 0.1f;
 		_burgerInteraction.OnInteraction = OnBurgerInteraction;
-		
+
 		// 돈 인터랙션.
 		_moneyPile.GetComponent<WorkerInteraction>().InteractInterval = 0.02f;
 		_moneyPile.GetComponent<WorkerInteraction>().OnInteraction = OnMoneyInteraction;
@@ -105,10 +105,10 @@ public class Counter : UnlockableBase
 			GuestController guest = go.GetComponent<GuestController>();
 			guest.CurrentDestQueueIndex = _queuePoints.Count - 1;
 			guest.GuestState = Define.EGuestState.Queuing;
-			guest.SetDestination(dest.position, () => 
-			{ 
+			guest.SetDestination(dest.position, () =>
+			{
 				guest.transform.rotation = dest.rotation;
-			}); 			
+			});
 
 			_queueGuests.Add(guest);
 		}
@@ -189,10 +189,13 @@ public class Counter : UnlockableBase
 
 	void OnMoneyInteraction(WorkerController wc)
 	{
+		if (!wc.Tray.IsPlayer)
+			return;
+
 		_moneyPile.DespawnObjectWithJump(wc.transform.position, () =>
 		{
-			// TODO : ADD MONEY
-			GameManager.Instance.Money += 100;
+			GameManager.Instance.Money += 50;
+			GameManager.Instance.AddExp(1f);
 		});
 	}
 

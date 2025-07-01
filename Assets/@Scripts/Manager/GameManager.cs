@@ -33,6 +33,19 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
+	public PlayerData PlayerData = new PlayerData();
+
+	public void AddExp(float amount)
+	{
+		bool leveledUp = PlayerData.AddExp(amount);
+		BroadcastEvent(EEventType.ExpChanged);
+
+		if (leveledUp)
+		{
+			Debug.Log($"Level Up! Now Level {PlayerData.Level}");
+		}
+	}
+
 	private void Start()
 	{
 		UpgradeEmployeePopup = Utils.FindChild<UI_UpgradeEmployeePopup>(gameObject);
@@ -95,6 +108,10 @@ public class GameManager : Singleton<GameManager>
 	public GameObject GuestPrefab;
 	public GameObject SpawnGuest() { return PoolManager.Instance.Pop(GuestPrefab); }
 	public void DespawnGuest(GameObject guest) { PoolManager.Instance.Push(guest); }
+
+	public GameObject PakingBoxPrefab;
+	public GameObject SpawnPakingBox() { return PoolManager.Instance.Pop(PakingBoxPrefab); }
+	public void DespawnPakingBox(GameObject pakingBox) { PoolManager.Instance.Push(pakingBox); }
 	#endregion
 
 	#region Events

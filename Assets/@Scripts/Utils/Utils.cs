@@ -71,6 +71,8 @@ public static class Utils
 				return EObjectType.Burger;
 			case "Money":
 				return EObjectType.Money;
+			case "PakingBox":
+				return EObjectType.PakingBox;
 		}
 
 		return EObjectType.None;

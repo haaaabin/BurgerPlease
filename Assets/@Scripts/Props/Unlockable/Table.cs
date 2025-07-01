@@ -18,7 +18,7 @@ public class Table : UnlockableBase
 	public List<GuestController> Guests = new List<GuestController>();
 
 	private TrashPile _trashPile;
-	private MoneyPile _moneyPile; 
+	private MoneyPile _moneyPile;
 	private BurgerPile _burgerPile;
 
 	public Transform WorkerPos;
@@ -38,7 +38,7 @@ public class Table : UnlockableBase
 
 	public bool IsOccupied
 	{
-		get 
+		get
 		{
 			if (_trashPile.ObjectCount > 0)
 				return true;
@@ -193,7 +193,8 @@ public class Table : UnlockableBase
 
 		_moneyPile.DespawnObjectWithJump(wc.transform.position, () =>
 		{
-			GameManager.Instance.Money += 100;
+			GameManager.Instance.Money += 50;
+			GameManager.Instance.AddExp(1f);
 		});
 	}
 	#endregion

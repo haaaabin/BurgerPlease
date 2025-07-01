@@ -33,7 +33,10 @@ public class TrashCan : MonoBehaviour
 				if (type == EObjectType.Burger)
 					GameManager.Instance.DespawnBurger(t.gameObject);
 				else
+				{
 					GameManager.Instance.DespawnTrash(t.gameObject);
+					GameManager.Instance.AddExp(1f);
+				}
 			});
 	}
 }
