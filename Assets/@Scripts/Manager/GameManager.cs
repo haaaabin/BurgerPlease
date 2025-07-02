@@ -33,16 +33,38 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-	public PlayerData PlayerData = new PlayerData();
+	public int Level
+	{
+		get { return SaveData.Level; }
+		set
+		{
+			SaveData.Level = value;
+		}
+	}
+
+	public float CurrentExp
+	{
+		get { return SaveData.CurrentExp; }
+		set
+		{
+			SaveData.CurrentExp = value;
+			BroadcastEvent(EEventType.ExpChanged);
+		}
+	}
+
+	public float GetMaxExp()
+	{
+		return 50 + (Level - 1) * 50;
+	}
 
 	public void AddExp(float amount)
 	{
-		bool leveledUp = PlayerData.AddExp(amount);
-		BroadcastEvent(EEventType.ExpChanged);
+		CurrentExp += amount;
 
-		if (leveledUp)
+		while (CurrentExp >= GetMaxExp())
 		{
-			Debug.Log($"Level Up! Now Level {PlayerData.Level}");
+			CurrentExp -= GetMaxExp();
+			Level++;
 		}
 	}
 
@@ -73,12 +95,13 @@ public class GameManager : Singleton<GameManager>
 	{
 		while (true)
 		{
-			yield return new WaitForSeconds(10);
+			yield return new WaitForSeconds(2);
 
 			SaveData.RestaurantIndex = Restaurant.StageNum;
 			SaveData.PlayerPosition = Player.transform.position;
 
-			SaveData.Restaurants[Restaurant.StageNum].CounterBurgerCount = Restaurant.GetCounterBurgerCount();
+			SaveData.Level = Level;
+			SaveData.CurrentExp = CurrentExp;
 			SaveManager.Instance.SaveGame();
 		}
 	}

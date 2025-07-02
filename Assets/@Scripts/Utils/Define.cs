@@ -8,6 +8,7 @@ public static class Define
 	{
 		MoneyChanged,
 		ExpChanged,
+		LevelUp,
 		UpgradeEmployeeSpeed,
 		UpgradeEmployeeCapacity,
 		HireWorker,

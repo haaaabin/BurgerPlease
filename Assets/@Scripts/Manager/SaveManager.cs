@@ -18,6 +18,9 @@ public class GameSaveData
 
 	// 스테이지 별 상태.
 	public List<RestaurantData> Restaurants;
+
+	public int Level = 1;
+	public float CurrentExp = 0;
 }
 
 [Serializable]
@@ -33,7 +36,6 @@ public class RestaurantData
 	public List<UnlockableStateData> UnlockableStates;
 
 	public int CounterBurgerCount = 0;
-	public int GrillBurgerCount = 0;
 }
 
 [Serializable]
@@ -42,6 +44,7 @@ public class UnlockableStateData
 	public EUnlockedState State = EUnlockedState.Hidden;
 	public long SpentMoney = 0;
 }
+
 #endregion
 
 public class SaveManager : Singleton<SaveManager>

@@ -20,6 +20,7 @@ public class UI_GameScene : MonoBehaviour
 	private void OnEnable()
 	{
 		RefreshUI();
+		RefreshExpUI();
 		GameManager.Instance.AddEventListener(EEventType.MoneyChanged, RefreshUI);
 		GameManager.Instance.AddEventListener(EEventType.ExpChanged, RefreshExpUI);
 
@@ -43,11 +44,9 @@ public class UI_GameScene : MonoBehaviour
 		_toastMessageText.enabled = (string.IsNullOrEmpty(message) == false);
 	}
 
-	private void RefreshExpUI()
+	public void RefreshExpUI()
 	{
-		var player = GameManager.Instance.PlayerData;
-		_expSlider.value = player.CurrentExp / player.GetMaxExp();
-		Debug.Log($"Exp: {player.CurrentExp} / {player.GetMaxExp()}");
-		_levelText.text = player.Level.ToString();
+		_expSlider.value = GameManager.Instance.CurrentExp / GameManager.Instance.GetMaxExp();
+		_levelText.text = GameManager.Instance.Level.ToString();
 	}
 }

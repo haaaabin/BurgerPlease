@@ -51,10 +51,10 @@ public class Restaurant : MonoBehaviour
 		for (int i = 0; i < data.WorkerCount; i++)
 			OnHireWorker();
 
-		foreach (Grill grill in GetComponentsInChildren<Grill>())
-		{
-			grill.Data = data;
-		}
+		// foreach (Counter counter in GetComponentsInChildren<Counter>())
+		// {
+		// 	counter.SetBurgerCount(data.CounterBurgerCount);
+		// }
 	}
 
 	void OnHireWorker()
@@ -109,15 +109,5 @@ public class Restaurant : MonoBehaviour
 				}
 			}
 		}
-	}
-
-	public int GetCounterBurgerCount()
-	{
-		return GetComponentsInChildren<Counter>().Sum(x => x.BurgerCount);
-	}
-
-	public int GetGrillBurgerCount()
-	{
-		return GetComponentsInChildren<Grill>().Sum(x => x.BurgerCount);
 	}
 }

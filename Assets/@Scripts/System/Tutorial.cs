@@ -37,7 +37,7 @@ public class Tutorial : MonoBehaviour
 		set { _data.TutorialState = value; }
 	}
 
-	private float _expAmount = 3f;
+	private float _expAmount = 5f;
 
 	public void SetInfo(RestaurantData data)
 	{

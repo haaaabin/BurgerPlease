@@ -256,4 +256,12 @@ public class Counter : UnlockableBase
 		return null;
 	}
 	#endregion
+
+	// public void SetBurgerCount(int count)
+	// {
+	// 	for (int i = 0; i < count; i++)
+	// 	{
+	// 		_burgerPile.SpawnObject();
+	// 	}
+	// }
 }
