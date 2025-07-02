@@ -1,8 +1,5 @@
-using DG.Tweening;
 using System.Collections;
-using System.Linq;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public enum ETutorialState
 {
@@ -19,6 +16,8 @@ public enum ETutorialState
 	CreateOffice,
 	CreatePakingDesk,
 	CreateDriveThruCounter,
+	PakingBurgerBox,
+	SellDriveThruBurger,
 
 	Done,
 }
@@ -239,9 +238,25 @@ public class Tutorial : MonoBehaviour
 			driveThruCounter.UnlockEffect.OnPlayParticleSystem();
 			GameManager.Instance.AddExp(_expAmount);
 
-			_state = ETutorialState.Done;
+			_state = ETutorialState.PakingBurgerBox;
 		}
 		driveThruCounter.SetUnlockedState(EUnlockedState.Unlocked);
+
+		if (_state == ETutorialState.PakingBurgerBox)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Paking Burger Box");
+
+			yield return new WaitUntil(() => pakingDesk.IsPakingBox);
+			_state = ETutorialState.SellDriveThruBurger;
+		}
+
+		if (_state == ETutorialState.SellDriveThruBurger)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Sell DriveThru Burger");
+
+			yield return new WaitUntil(() => driveThruCounter.IsSellBurgerBox);
+			_state = ETutorialState.Done;
+		}
 
 		GameManager.Instance.GameSceneUI.SetToastMessage("");
 

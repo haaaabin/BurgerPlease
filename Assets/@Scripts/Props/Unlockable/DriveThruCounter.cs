@@ -34,6 +34,8 @@ public class DriveThruCounter : UnlockableBase
     public Transform CashierWorkerPos;
     public bool NeedCashier => (CurrentCashierWorker == null);
 
+    public bool IsSellBurgerBox = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -54,7 +56,6 @@ public class DriveThruCounter : UnlockableBase
         _cashierInteraction = machine.GetComponent<WorkerInteraction>();
         _cashierInteraction.InteractInterval = 1f;
         _cashierInteraction.OnInteraction = OnCarInteraction;
-
     }
 
     private void OnEnable()
@@ -205,6 +206,8 @@ public class DriveThruCounter : UnlockableBase
         car.OrderCount = 0;
         _queueCars.Remove(car);
         _orderBurgerCount = 0;
+        
+        IsSellBurgerBox = true;
     }
     #endregion
 }

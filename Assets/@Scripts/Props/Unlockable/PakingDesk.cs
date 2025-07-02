@@ -28,6 +28,8 @@ public class PakingDesk : UnlockableBase
     public int BurgerCount => _burgerPile.ObjectCount;
     public bool NeedMoreBurgers => (_spawnBurgerRemaining > 0 && BurgerCount < _spawnBurgerRemaining);
 
+    public bool IsPakingBox => (_currentBox != null && !_currentBox.IsFull);
+
     [SerializeField]
     private Transform _pakingBoxSpawnPos;
 
@@ -59,6 +61,7 @@ public class PakingDesk : UnlockableBase
     {
         _burgerPile.TrayToPile(wc.Tray);
     }
+
     private void OnPakingInteraction(WorkerController wc)
     {
         // 박스가 없으면 생성
