@@ -50,6 +50,13 @@ public static class Define
 		Dirty,
 	}
 
+	public enum ECarState
+	{
+		None,
+		Queuing,
+		Leaving,
+	}
+
 	public enum EMainCounterJob
 	{
 		MoveBurger,
@@ -77,9 +84,11 @@ public static class Define
 	public const float TRASH_SPAWN_INTERVAL = 0.1f;
 	public const float GUEST_SPAWN_INTERVAL = 1f;
 	public const int GUEST_MAX_ORDER_BURGER_COUNT = 2;
+	public const int CAR_MAX_ORDER_BURGER_COUNT = 2;
 
-	public static Vector3 WORKER_SPAWN_POS= new Vector3(0, 0, 0);
+	public static Vector3 WORKER_SPAWN_POS = new Vector3(0, 0, 0);
 	public static Vector3 GUEST_LEAVE_POS = new Vector3(0, 0, 0);
+	public static Vector3 CAR_LEAVE_POS = new Vector3(-10, 0, -4);
 
 	public static int IDLE = Animator.StringToHash("Idle");
 	public static int MOVE = Animator.StringToHash("Move");

@@ -112,6 +112,11 @@ public class GameManager : Singleton<GameManager>
 	public GameObject PakingBoxPrefab;
 	public GameObject SpawnPakingBox() { return PoolManager.Instance.Pop(PakingBoxPrefab); }
 	public void DespawnPakingBox(GameObject pakingBox) { PoolManager.Instance.Push(pakingBox); }
+
+	public GameObject CarPrefab;
+	public GameObject SpawnCar() { return PoolManager.Instance.Pop(CarPrefab); }
+	public void Despawncar(GameObject car) { PoolManager.Instance.Push(car); }
+
 	#endregion
 
 	#region Events

@@ -44,7 +44,7 @@ public class Counter : UnlockableBase
 	public bool NeedCashier => (CurrentCashierWorker == null);
 
 	[SerializeField]
-	public Transform GuestSpawnPos;
+	private Transform GuestSpawnPos;
 
 	void Start()
 	{
