@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public enum ETutorialState
 {
@@ -14,9 +15,9 @@ public enum ETutorialState
 	CleanTable,
 	CreateSecondTable,
 	CreateOffice,
-	CreatePakingDesk,
+	CreateBurgerPackingDesk,
 	CreateDriveThruCounter,
-	PakingBurgerBox,
+	PackBurgerBox,
 	SellDriveThruBurger,
 
 	Done,
@@ -37,7 +38,7 @@ public class Tutorial : MonoBehaviour
 		set { _data.TutorialState = value; }
 	}
 
-	private float _expAmount = 5f;
+	private float _expAmount = 3f;
 
 	public void SetInfo(RestaurantData data)
 	{
@@ -69,10 +70,10 @@ public class Tutorial : MonoBehaviour
 		office.SetUnlockedState(EUnlockedState.Hidden);
 
 		// 드라이브 스루 시스템 초기화.
-		PakingDesk pakingDesk = _driveThruSystem.PakingDesk;
+		PackingDesk packingDesk = _driveThruSystem.PackingDesk;
 		DriveThruCounter driveThruCounter = _driveThruSystem.DriveThruCounter;
 
-		pakingDesk.SetUnlockedState(EUnlockedState.Hidden);
+		packingDesk.SetUnlockedState(EUnlockedState.Hidden);
 		driveThruCounter.SetUnlockedState(EUnlockedState.Hidden);
 
 		grill.StopSpawnBurger = true;
@@ -85,9 +86,12 @@ public class Tutorial : MonoBehaviour
 			door.SetUnlockedState(EUnlockedState.ProcessingConstruction);
 
 			yield return new WaitUntil(() => _mainCounterSystem.Door.IsUnlocked);
+
 			Utils.PlayBounceEffect(door.transform);
 			door.UnlockEffect.OnPlayParticleSystem();
-			GameManager.Instance.AddExp(_expAmount);
+
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(door.transform.position);
+
 
 			_state = ETutorialState.CreateFirstTable;
 		}
@@ -101,6 +105,8 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => firstTable.IsUnlocked);
 			Utils.PlayBounceEffect(firstTable.transform);
 			firstTable.UnlockEffect.OnPlayParticleSystem();
+
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(firstTable.transform.position);
 			GameManager.Instance.AddExp(_expAmount);
 
 			_state = ETutorialState.CreateBurgerMachine;
@@ -117,6 +123,8 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => grill.IsUnlocked);
 			Utils.PlayBounceEffect(grill.transform);
 			grill.UnlockEffect.OnPlayParticleSystem();
+
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(grill.transform.position);
 			GameManager.Instance.AddExp(_expAmount);
 
 			_state = ETutorialState.CreateCounter;
@@ -208,24 +216,24 @@ public class Tutorial : MonoBehaviour
 			office.UnlockEffect.OnPlayParticleSystem();
 			GameManager.Instance.AddExp(_expAmount);
 
-			_state = ETutorialState.CreatePakingDesk;
+			_state = ETutorialState.CreateBurgerPackingDesk;
 		}
 		office.SetUnlockedState(EUnlockedState.Unlocked);
 
-		if (_state == ETutorialState.CreatePakingDesk)
+		if (_state == ETutorialState.CreateBurgerPackingDesk)
 		{
-			GameManager.Instance.GameSceneUI.SetToastMessage("Create Paking Desk");
+			GameManager.Instance.GameSceneUI.SetToastMessage("Create Burger Packing Desk");
 
-			pakingDesk.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+			packingDesk.SetUnlockedState(EUnlockedState.ProcessingConstruction);
 
-			yield return new WaitUntil(() => pakingDesk.IsUnlocked);
-			Utils.PlayBounceEffect(pakingDesk.transform);
-			pakingDesk.UnlockEffect.OnPlayParticleSystem();
+			yield return new WaitUntil(() => packingDesk.IsUnlocked);
+			Utils.PlayBounceEffect(packingDesk.transform);
+			packingDesk.UnlockEffect.OnPlayParticleSystem();
 			GameManager.Instance.AddExp(_expAmount);
 
 			_state = ETutorialState.CreateDriveThruCounter;
 		}
-		pakingDesk.SetUnlockedState(EUnlockedState.Unlocked);
+		packingDesk.SetUnlockedState(EUnlockedState.Unlocked);
 
 		if (_state == ETutorialState.CreateDriveThruCounter)
 		{
@@ -238,15 +246,15 @@ public class Tutorial : MonoBehaviour
 			driveThruCounter.UnlockEffect.OnPlayParticleSystem();
 			GameManager.Instance.AddExp(_expAmount);
 
-			_state = ETutorialState.PakingBurgerBox;
+			_state = ETutorialState.PackBurgerBox;
 		}
 		driveThruCounter.SetUnlockedState(EUnlockedState.Unlocked);
 
-		if (_state == ETutorialState.PakingBurgerBox)
+		if (_state == ETutorialState.PackBurgerBox)
 		{
-			GameManager.Instance.GameSceneUI.SetToastMessage("Paking Burger Box");
+			GameManager.Instance.GameSceneUI.SetToastMessage("Pack Burger Box");
 
-			yield return new WaitUntil(() => pakingDesk.IsPakingBox);
+			yield return new WaitUntil(() => packingDesk.IsPackingBox);
 			_state = ETutorialState.SellDriveThruBurger;
 		}
 
@@ -262,6 +270,5 @@ public class Tutorial : MonoBehaviour
 
 		yield return null;
 	}
-
 
 }

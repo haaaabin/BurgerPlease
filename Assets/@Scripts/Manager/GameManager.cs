@@ -60,6 +60,7 @@ public class GameManager : Singleton<GameManager>
 	public void AddExp(float amount)
 	{
 		CurrentExp += amount;
+		Debug.Log("CurrentExp" + CurrentExp);
 
 		while (CurrentExp >= GetMaxExp())
 		{
@@ -132,9 +133,9 @@ public class GameManager : Singleton<GameManager>
 	public GameObject SpawnGuest() { return PoolManager.Instance.Pop(GuestPrefab); }
 	public void DespawnGuest(GameObject guest) { PoolManager.Instance.Push(guest); }
 
-	public GameObject PakingBoxPrefab;
-	public GameObject SpawnPakingBox() { return PoolManager.Instance.Pop(PakingBoxPrefab); }
-	public void DespawnPakingBox(GameObject pakingBox) { PoolManager.Instance.Push(pakingBox); }
+	public GameObject PackingBoxPrefab;
+	public GameObject SpawnPackingBox() { return PoolManager.Instance.Pop(PackingBoxPrefab); }
+	public void DespawnPackingBox(GameObject packingBox) { PoolManager.Instance.Push(packingBox); }
 
 	public GameObject CarPrefab;
 	public GameObject SpawnCar() { return PoolManager.Instance.Pop(CarPrefab); }

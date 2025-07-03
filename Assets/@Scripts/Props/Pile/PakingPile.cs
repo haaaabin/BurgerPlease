@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PakingPile : PileBase
+public class PackingPile : PileBase
 {
 	public void Awake()
 	{

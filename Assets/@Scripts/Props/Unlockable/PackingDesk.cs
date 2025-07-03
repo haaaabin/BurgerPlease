@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using DG.Tweening;
 using System.Collections;
 
-public class PakingDesk : UnlockableBase
+public class PackingDesk : UnlockableBase
 {
     private BurgerPile _burgerPile;
-    private PakingPile _pakingPile;
+    private PackingPile _packingPile;
 
     public DriveThruSystem Owner;
 
@@ -15,30 +15,30 @@ public class PakingDesk : UnlockableBase
     public List<WorkerController> Workers = new List<WorkerController>();
 
     private WorkerInteraction _burgerInteraction;
-    private WorkerInteraction _pakingBoxInteraction;
+    private WorkerInteraction _packingBoxInteraction;
     private WorkerInteraction _takingBoxInteraction;
     public WorkerController CurrentBurgerWorker => _burgerInteraction.CurrentWorker;
-    public WorkerController CurrentPakingBoxWorker => _pakingBoxInteraction.CurrentWorker;
+    public WorkerController CurrentPackingBoxWorker => _packingBoxInteraction.CurrentWorker;
     public WorkerController CurrentTakingBoxWorker => _takingBoxInteraction.CurrentWorker;
 
     public Transform BurgerWorkerPos;
-    public Transform PakingWorkerPos;
+    public Transform PackingWorkerPos;
     public Transform TakingWorkerPos;
 
     public int BurgerCount => _burgerPile.ObjectCount;
     public bool NeedMoreBurgers => (_spawnBurgerRemaining > 0 && BurgerCount < _spawnBurgerRemaining);
 
-    public bool IsPakingBox => (_currentBox != null && !_currentBox.IsFull);
+    public bool IsPackingBox => (_currentBox != null && !_currentBox.IsFull);
 
     [SerializeField]
-    private Transform _pakingBoxSpawnPos;
+    private Transform _packingBoxSpawnPos;
 
-    private PakingBox _currentBox;
+    private PackingBox _currentBox;
 
     void Start()
     {
         _burgerPile = Utils.FindChild<BurgerPile>(gameObject);
-        _pakingPile = Utils.FindChild<PakingPile>(gameObject);
+        _packingPile = Utils.FindChild<PackingPile>(gameObject);
 
         // 햄버거 인터랙션.
         _burgerInteraction = _burgerPile.GetComponent<WorkerInteraction>();
@@ -46,12 +46,12 @@ public class PakingDesk : UnlockableBase
         _burgerInteraction.OnInteraction = OnBurgerInteraction;
 
         // 포장 인터랙션.
-        _pakingBoxInteraction = _pakingBoxSpawnPos.GetComponent<WorkerInteraction>();
-        _pakingBoxInteraction.InteractInterval = 0.1f;
-        _pakingBoxInteraction.OnInteraction = OnPakingInteraction;
+        _packingBoxInteraction = _packingBoxSpawnPos.GetComponent<WorkerInteraction>();
+        _packingBoxInteraction.InteractInterval = 0.1f;
+        _packingBoxInteraction.OnInteraction = OnPackingInteraction;
 
         // 박스 가져오기 인터랙션.
-        _takingBoxInteraction = _pakingPile.GetComponent<WorkerInteraction>();
+        _takingBoxInteraction = _packingPile.GetComponent<WorkerInteraction>();
         _takingBoxInteraction.InteractInterval = 0.1f;
         _takingBoxInteraction.OnInteraction = OnTakingBoxInteraction;
     }
@@ -62,14 +62,14 @@ public class PakingDesk : UnlockableBase
         _burgerPile.TrayToPile(wc.Tray);
     }
 
-    private void OnPakingInteraction(WorkerController wc)
+    private void OnPackingInteraction(WorkerController wc)
     {
         // 박스가 없으면 생성
         if (_currentBox == null && _burgerPile.ObjectCount >= 4)
         {
-            GameObject boxGO = GameManager.Instance.SpawnPakingBox();
-            _currentBox = boxGO.GetComponent<PakingBox>();
-            _currentBox.transform.position = _pakingBoxSpawnPos.position;
+            GameObject boxGO = GameManager.Instance.SpawnPackingBox();
+            _currentBox = boxGO.GetComponent<PackingBox>();
+            _currentBox.transform.position = _packingBoxSpawnPos.position;
             _currentBox.transform.rotation = Quaternion.identity;
         }
 
@@ -87,32 +87,32 @@ public class PakingDesk : UnlockableBase
         }
     }
 
-    private IEnumerator DelayedMoveBox(PakingBox box)
+    private IEnumerator DelayedMoveBox(PackingBox box)
     {
         yield return new WaitForSeconds(0.4f); // 원하는 시간만큼 대기
 
-        MoveBoxToPakingPile(box);
+        MoveBoxToPackingPile(box);
     }
 
-    private void MoveBoxToPakingPile(PakingBox box)
+    private void MoveBoxToPackingPile(PackingBox box)
     {
         Transform boxTransform = box.transform;
-        box.transform.SetParent(_pakingPile.transform);
+        box.transform.SetParent(_packingPile.transform);
 
         boxTransform
-            .DOJump(_pakingPile.transform.position, 1.5f, 1, 0.5f)
+            .DOJump(_packingPile.transform.position, 1.5f, 1, 0.5f)
             .OnComplete(() =>
             {
-                _pakingPile.AddToPile(box.gameObject, jump: false);
+                _packingPile.AddToPile(box.gameObject, jump: false);
             });
     }
 
     private void OnTakingBoxInteraction(WorkerController wc)
     {
-        if (_pakingPile.ObjectCount <= 0)
+        if (_packingPile.ObjectCount <= 0)
             return;
 
-        GameObject go = _pakingPile.RemoveFromPile();
+        GameObject go = _packingPile.RemoveFromPile();
         if (go == null)
             return;
 

@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 
 public class DriveThruCounter : UnlockableBase
 {
-    private PakingPile _burgerBoxPile;
+    private PackingPile _burgerBoxPile;
     private MoneyPile _moneyPile;
 
     public DriveThruSystem Owner;
@@ -39,7 +39,7 @@ public class DriveThruCounter : UnlockableBase
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _burgerBoxPile = Utils.FindChild<PakingPile>(gameObject);
+        _burgerBoxPile = Utils.FindChild<PackingPile>(gameObject);
         _moneyPile = Utils.FindChild<MoneyPile>(gameObject);
         _queuePoints = Utils.FindChild<Waypoints>(gameObject).GetPoints();
 
@@ -206,7 +206,7 @@ public class DriveThruCounter : UnlockableBase
         car.OrderCount = 0;
         _queueCars.Remove(car);
         _orderBurgerCount = 0;
-        
+
         IsSellBurgerBox = true;
     }
     #endregion

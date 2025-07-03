@@ -4,7 +4,7 @@ using static Define;
 
 public class DriveThruSystem : SystemBase
 {
-    public PakingDesk PakingDesk;
+    public PackingDesk PackingDesk;
     public DriveThruCounter DriveThruCounter;
 
     // 직원들이 담당하는 일들.
