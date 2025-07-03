@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 4253560650446413297}
   - component: {fileID: 3502734435026377076}
   m_Layer: 0
-  m_Name: PakingBox
+  m_Name: PackingBox
   m_TagString: PakingBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
