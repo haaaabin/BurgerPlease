@@ -38,7 +38,7 @@ public class Tutorial : MonoBehaviour
 		set { _data.TutorialState = value; }
 	}
 
-	private float _expAmount = 3f;
+	private float _expAmount = 1f;
 
 	public void SetInfo(RestaurantData data)
 	{
@@ -90,8 +90,15 @@ public class Tutorial : MonoBehaviour
 			Utils.PlayBounceEffect(door.transform);
 			door.UnlockEffect.OnPlayParticleSystem();
 
-			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(door.transform.position);
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(door.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
 
+			// starEffectFinished가 true가 될 때까지 대기
+			yield return new WaitUntil(() => starEffectFinished);
 
 			_state = ETutorialState.CreateFirstTable;
 		}
@@ -106,8 +113,15 @@ public class Tutorial : MonoBehaviour
 			Utils.PlayBounceEffect(firstTable.transform);
 			firstTable.UnlockEffect.OnPlayParticleSystem();
 
-			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(firstTable.transform.position);
-			GameManager.Instance.AddExp(_expAmount);
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(firstTable.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
+
+			// starEffectFinished가 true가 될 때까지 대기
+			yield return new WaitUntil(() => starEffectFinished);
 
 			_state = ETutorialState.CreateBurgerMachine;
 		}
@@ -124,8 +138,14 @@ public class Tutorial : MonoBehaviour
 			Utils.PlayBounceEffect(grill.transform);
 			grill.UnlockEffect.OnPlayParticleSystem();
 
-			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(grill.transform.position);
-			GameManager.Instance.AddExp(_expAmount);
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(grill.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
+
+			yield return new WaitUntil(() => starEffectFinished);
 
 			_state = ETutorialState.CreateCounter;
 		}
@@ -141,7 +161,15 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => counter.IsUnlocked);
 			Utils.PlayBounceEffect(counter.transform);
 			counter.UnlockEffect.OnPlayParticleSystem();
-			GameManager.Instance.AddExp(_expAmount);
+
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(counter.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
+
+			yield return new WaitUntil(() => starEffectFinished);
 
 			_state = ETutorialState.PickupBurger;
 		}
@@ -199,7 +227,15 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => secondTable.IsUnlocked);
 			Utils.PlayBounceEffect(secondTable.transform);
 			secondTable.UnlockEffect.OnPlayParticleSystem();
-			GameManager.Instance.AddExp(_expAmount);
+
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(secondTable.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
+
+			yield return new WaitUntil(() => starEffectFinished);
 
 			_state = ETutorialState.CreateOffice;
 		}
@@ -214,7 +250,15 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => office.IsUnlocked);
 			Utils.PlayBounceEffect(office.transform);
 			office.UnlockEffect.OnPlayParticleSystem();
-			GameManager.Instance.AddExp(_expAmount);
+
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(office.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
+
+			yield return new WaitUntil(() => starEffectFinished);
 
 			_state = ETutorialState.CreateBurgerPackingDesk;
 		}
@@ -229,7 +273,15 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => packingDesk.IsUnlocked);
 			Utils.PlayBounceEffect(packingDesk.transform);
 			packingDesk.UnlockEffect.OnPlayParticleSystem();
-			GameManager.Instance.AddExp(_expAmount);
+
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(packingDesk.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
+
+			yield return new WaitUntil(() => starEffectFinished);
 
 			_state = ETutorialState.CreateDriveThruCounter;
 		}
@@ -244,7 +296,15 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => driveThruCounter.IsUnlocked);
 			Utils.PlayBounceEffect(driveThruCounter.transform);
 			driveThruCounter.UnlockEffect.OnPlayParticleSystem();
-			GameManager.Instance.AddExp(_expAmount);
+
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(driveThruCounter.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
+
+			yield return new WaitUntil(() => starEffectFinished);
 
 			_state = ETutorialState.PackBurgerBox;
 		}

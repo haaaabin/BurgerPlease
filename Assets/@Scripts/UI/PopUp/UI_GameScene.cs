@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Define;
 using DG.Tweening;
+using System;
 
 public class UI_GameScene : MonoBehaviour
 {
@@ -61,7 +62,7 @@ public class UI_GameScene : MonoBehaviour
 		_levelText.text = GameManager.Instance.Level.ToString();
 	}
 
-	public void PlayStarEffectFromWorld(Vector3 worldPosition)
+	public void PlayStarEffectFromWorld(Vector3 worldPosition, Action onComplete = null)
 	{
 		Vector2 startUIPos;
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -89,10 +90,12 @@ public class UI_GameScene : MonoBehaviour
 			seq.AppendInterval(0.2f);
 
 			seq.Append(starRect.DOAnchorPos(targetUIPos, 0.8f).SetEase(Ease.InQuad));
-			seq.OnComplete(() => Destroy(star));
+			seq.OnComplete(() =>
+			{
+				Destroy(star);
+				onComplete?.Invoke();
+			});
 		}
-
-		DOVirtual.DelayedCall(0.4f, () => GameManager.Instance.AddExp(3));
 	}
 
 }
