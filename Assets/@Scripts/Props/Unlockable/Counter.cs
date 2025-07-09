@@ -21,13 +21,13 @@ public class Counter : UnlockableBase
 
 	public MainCounterSystem Owner;
 
-	int _spawnMoneyRemaining = 0;
+	private int _spawnMoneyRemaining = 0;
 
 	// 주문하는 햄버거 수.
-	int _nextOrderBurgerCount = 0;
+	private int _nextOrderBurgerCount = 0;
 
 	private List<Transform> _queuePoints = new List<Transform>();
-	List<GuestController> _queueGuests = new List<GuestController>();
+	private List<GuestController> _queueGuests = new List<GuestController>();
 
 	public List<WorkerController> Workers = new List<WorkerController>();
 	public List<Table> Tables => Owner?.Tables;
@@ -192,9 +192,9 @@ public class Counter : UnlockableBase
 		if (!wc.Tray.IsPlayer)
 			return;
 
-		_moneyPile.DespawnObjectWithJump(wc.transform.position, () =>
+		_moneyPile.DeSpawnObjectWithJump(wc.transform.position, () =>
 		{
-			GameManager.Instance.Money += 50;
+			GameManager.Instance.Money += 10;
 			GameManager.Instance.AddExp(1f);
 		});
 	}

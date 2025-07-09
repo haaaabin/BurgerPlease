@@ -110,7 +110,7 @@ public class PileBase : MonoBehaviour
 		}
 	}
 
-	public void DespawnObjectWithJump(Vector3 destPos, Action onDespawnCallback = null)
+	public void DeSpawnObjectWithJump(Vector3 destPos, Action onDespawnCallback = null)
 	{
 		if (ObjectCount == 0)
 			return;
