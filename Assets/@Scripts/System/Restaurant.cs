@@ -20,6 +20,9 @@ public class Restaurant : MonoBehaviour
 		GameManager.Instance.AddEventListener(EEventType.HireWorker, OnHireWorker);
 		GameManager.Instance.AddEventListener(EEventType.UpgradeEmployeeSpeed, OnUpgradeEmployeeSpeed);
 		GameManager.Instance.AddEventListener(EEventType.UpgradeEmployeeCapacity, OnUpgradeEmployeeCapacity);
+		GameManager.Instance.AddEventListener(EEventType.UpgradePlayerSpeed, OnUpgradePlayerSpeed);
+		GameManager.Instance.AddEventListener(EEventType.UpgradePlayerCapacity, OnUpgradePlayerCapacity);
+		GameManager.Instance.AddEventListener(EEventType.UpgradePlayerProfit, OnUpgradePlayerProfit);
 
 		StartCoroutine(CoDistributeWorkerAI());
 	}
@@ -28,6 +31,10 @@ public class Restaurant : MonoBehaviour
 	{
 		GameManager.Instance.RemoveEventListener(EEventType.HireWorker, OnHireWorker);
 		GameManager.Instance.RemoveEventListener(EEventType.UpgradeEmployeeSpeed, OnUpgradeEmployeeSpeed);
+		GameManager.Instance.RemoveEventListener(EEventType.UpgradeEmployeeCapacity, OnUpgradeEmployeeCapacity);
+		GameManager.Instance.RemoveEventListener(EEventType.UpgradePlayerSpeed, OnUpgradePlayerSpeed);
+		GameManager.Instance.RemoveEventListener(EEventType.UpgradePlayerCapacity, OnUpgradePlayerCapacity);
+		GameManager.Instance.RemoveEventListener(EEventType.UpgradePlayerProfit, OnUpgradePlayerProfit);
 
 	}
 
@@ -78,6 +85,21 @@ public class Restaurant : MonoBehaviour
 		{
 			worker.Tray.IncreaseCapacity();
 		}
+	}
+
+	void OnUpgradePlayerSpeed()
+	{
+		GameManager.Instance.Player.IncreaseSpeed();
+	}
+
+	void OnUpgradePlayerCapacity()
+	{
+		GameManager.Instance.Player.Tray.IncreaseCapacity();
+	}
+
+	void OnUpgradePlayerProfit()
+	{
+		// GameManager.Instance.Player.IncreaseProfit();
 	}
 
 	IEnumerator CoDistributeWorkerAI()

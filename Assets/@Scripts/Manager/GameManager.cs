@@ -73,6 +73,10 @@ public class GameManager : Singleton<GameManager>
 	{
 		UpgradeEmployeePopup = Utils.FindChild<UI_UpgradeEmployeePopup>(gameObject);
 		UpgradeEmployeePopup.gameObject.SetActive(false);
+
+		UpgradePlayerPopup = Utils.FindChild<UI_UpgradePlayerPopup>(gameObject);
+		UpgradePlayerPopup.gameObject.SetActive(false);
+
 		StartCoroutine(CoInitialize());
 	}
 
@@ -109,6 +113,7 @@ public class GameManager : Singleton<GameManager>
 
 	#region UIManager
 	public UI_UpgradeEmployeePopup UpgradeEmployeePopup;
+	public UI_UpgradePlayerPopup UpgradePlayerPopup;
 	public UI_GameScene GameSceneUI;
 	#endregion
 

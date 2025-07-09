@@ -13,6 +13,9 @@ public static class Define
 		UpgradeEmployeeCapacity,
 		HireWorker,
 		UnlockProp,
+		UpgradePlayerSpeed,
+		UpgradePlayerCapacity,
+		UpgradePlayerProfit,
 
 		MaxCount
 	}

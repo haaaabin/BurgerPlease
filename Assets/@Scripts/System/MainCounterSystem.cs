@@ -10,7 +10,7 @@ public class MainCounterSystem : SystemBase
 	public Counter Counter;
 	public List<Table> Tables = new List<Table>();
 	public TrashCan TrashCan;
-	public Office Office;
+	public List<Office> Offices = new List<Office>();
 	public RestaurantDoor Door;
 
 	// 직원들이 담당하는 일들.

@@ -14,11 +14,12 @@ public enum ETutorialState
 	SellBurger,
 	CleanTable,
 	CreateSecondTable,
-	CreateOffice,
+	CreateHROffice,
 	CreateBurgerPackingDesk,
 	CreateDriveThruCounter,
 	PackBurgerBox,
 	SellDriveThruBurger,
+	CreateUpgradeOffice,
 
 	Done,
 }
@@ -59,7 +60,8 @@ public class Tutorial : MonoBehaviour
 		Grill grill = _mainCounterSystem.Grill;
 		Table firstTable = _mainCounterSystem.Tables[0];
 		Table secondTable = _mainCounterSystem.Tables[1];
-		Office office = _mainCounterSystem.Office;
+		Office hrOffice = _mainCounterSystem.Offices[0];
+		Office upgradeOffice = _mainCounterSystem.Offices[1];
 		TrashCan trashCan = _mainCounterSystem.TrashCan;
 
 		door.SetUnlockedState(EUnlockedState.Hidden);
@@ -67,7 +69,8 @@ public class Tutorial : MonoBehaviour
 		grill.SetUnlockedState(EUnlockedState.Hidden);
 		firstTable.SetUnlockedState(EUnlockedState.Hidden);
 		secondTable.SetUnlockedState(EUnlockedState.Hidden);
-		office.SetUnlockedState(EUnlockedState.Hidden);
+		hrOffice.SetUnlockedState(EUnlockedState.Hidden);
+		upgradeOffice.SetUnlockedState(EUnlockedState.Hidden);
 
 		// 드라이브 스루 시스템 초기화.
 		PackingDesk packingDesk = _driveThruSystem.PackingDesk;
@@ -237,22 +240,22 @@ public class Tutorial : MonoBehaviour
 
 			yield return new WaitUntil(() => starEffectFinished);
 
-			_state = ETutorialState.CreateOffice;
+			_state = ETutorialState.CreateHROffice;
 		}
 		secondTable.SetUnlockedState(EUnlockedState.Unlocked);
 
-		if (_state == ETutorialState.CreateOffice)
+		if (_state == ETutorialState.CreateHROffice)
 		{
 			GameManager.Instance.GameSceneUI.SetToastMessage("Create Office");
 
-			office.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+			hrOffice.SetUnlockedState(EUnlockedState.ProcessingConstruction);
 
-			yield return new WaitUntil(() => office.IsUnlocked);
-			Utils.PlayBounceEffect(office.transform);
-			office.UnlockEffect.OnPlayParticleSystem();
+			yield return new WaitUntil(() => hrOffice.IsUnlocked);
+			Utils.PlayBounceEffect(hrOffice.transform);
+			hrOffice.UnlockEffect.OnPlayParticleSystem();
 
 			bool starEffectFinished = false;
-			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(office.transform.position, () =>
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(hrOffice.transform.position, () =>
 			{
 				GameManager.Instance.AddExp(_expAmount);
 				starEffectFinished = true;
@@ -262,7 +265,7 @@ public class Tutorial : MonoBehaviour
 
 			_state = ETutorialState.CreateBurgerPackingDesk;
 		}
-		office.SetUnlockedState(EUnlockedState.Unlocked);
+		hrOffice.SetUnlockedState(EUnlockedState.Unlocked);
 
 		if (_state == ETutorialState.CreateBurgerPackingDesk)
 		{
@@ -323,8 +326,32 @@ public class Tutorial : MonoBehaviour
 			GameManager.Instance.GameSceneUI.SetToastMessage("Sell DriveThru Burger");
 
 			yield return new WaitUntil(() => driveThruCounter.IsSellBurgerBox);
+			_state = ETutorialState.CreateUpgradeOffice;
+		}
+
+		if (_state == ETutorialState.CreateUpgradeOffice)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Create Upgrade Office");
+
+			upgradeOffice.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
+			yield return new WaitUntil(() => upgradeOffice.IsUnlocked);
+			Utils.PlayBounceEffect(upgradeOffice.transform);
+			upgradeOffice.UnlockEffect.OnPlayParticleSystem();
+
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(upgradeOffice.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
+
+			yield return new WaitUntil(() => starEffectFinished);
+
 			_state = ETutorialState.Done;
 		}
+
+		upgradeOffice.SetUnlockedState(EUnlockedState.Unlocked);
 
 		GameManager.Instance.GameSceneUI.SetToastMessage("");
 
