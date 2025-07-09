@@ -50,11 +50,6 @@ public class Restaurant : MonoBehaviour
 
 		for (int i = 0; i < data.WorkerCount; i++)
 			OnHireWorker();
-
-		// foreach (Counter counter in GetComponentsInChildren<Counter>())
-		// {
-		// 	counter.SetBurgerCount(data.CounterBurgerCount);
-		// }
 	}
 
 	void OnHireWorker()
@@ -90,21 +85,20 @@ public class Restaurant : MonoBehaviour
 		while (true)
 		{
 			yield return new WaitForSeconds(1);
-
 			yield return new WaitUntil(() => Workers.Count > 0);
 
 			foreach (WorkerController worker in Workers)
 			{
-				// 어딘가 소속되어 있으면 스킵.
 				if (worker.CurrentSystem != null)
 					continue;
 
-				// 어떤 시스템에 일감이 남아 있으면, 해당 시스템으로 배정.
 				foreach (SystemBase system in RestaurantSystems)
 				{
 					if (system.HasJob)
 					{
 						system.AddWorker(worker);
+						// worker.WorkerJob = null;
+						break;
 					}
 				}
 			}

@@ -3,40 +3,42 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using UnityEngine.AI;
-using Unity.VisualScripting;
 
 public class DriveThruCounter : UnlockableBase
 {
     private PackingPile _burgerBoxPile;
     private MoneyPile _moneyPile;
-
     public DriveThruSystem Owner;
 
-    int _spawnMoneyRemaining = 0;
-
-    int _orderBurgerCount = 0;
+    private int _spawnMoneyRemaining = 0;
+    private int _orderBurgerCount = 0;
 
     private List<Transform> _queuePoints = new List<Transform>();
-    List<CarController> _queueCars = new List<CarController>();
+    private List<CarController> _queueCars = new List<CarController>();
+
+    // 포장된 박스
+    private WorkerInteraction _burgerBoxInteraction;
+    public WorkerController CurrentPackingWorker => _burgerBoxInteraction.CurrentWorker;
+    public Transform PackingWorkerPos;
+    public int PackingCount => _burgerBoxPile.ObjectCount;
+    public bool NeedMorePacking => (_orderBurgerCount > 0 && PackingCount < _orderBurgerCount);
+
+    // 카운터 계산대
+    private WorkerInteraction _cashierInteraction;
+    public WorkerController CurrentCashierWorker => _cashierInteraction.CurrentWorker;
+    public Transform CashierWorkerPos;
+    public bool NeedCashier => (CurrentCashierWorker == null);
+    public bool IsSellBurgerBox = false;
+
+    public bool IsEnoughSellBurger => PackingCount >= _orderBurgerCount;
+
+    public int OrderBurgerCount => _orderBurgerCount;
 
     [SerializeField]
     private Transform CarSpawnPos;
 
-    private WorkerInteraction _burgerBoxInteraction;
-    public WorkerController CurrentTakingWorker => _burgerBoxInteraction.CurrentWorker;
-    public Transform PakingWorkerPos;
-    public int PakingCount => _burgerBoxPile.ObjectCount;
-    public bool NeedMorePaking => (_spawnMoneyRemaining > 0 && PakingCount < _spawnMoneyRemaining);
 
-    private WorkerInteraction _cashierInteraction;
-    public WorkerController CurrentCashierWorker => _cashierInteraction.CurrentWorker;
 
-    public Transform CashierWorkerPos;
-    public bool NeedCashier => (CurrentCashierWorker == null);
-
-    public bool IsSellBurgerBox = false;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _burgerBoxPile = Utils.FindChild<PackingPile>(gameObject);
@@ -161,6 +163,8 @@ public class DriveThruCounter : UnlockableBase
         int orderCount = Random.Range(1, maxOrderCount + 1);
         _orderBurgerCount = orderCount;
         car.OrderCount = orderCount;
+
+        Owner.PackingDesk.RequestBurger(_orderBurgerCount);
     }
     #endregion
 
@@ -175,7 +179,7 @@ public class DriveThruCounter : UnlockableBase
         if (!wc.Tray.IsPlayer)
             return;
 
-        _moneyPile.DespawnObjectWithJump(wc.transform.position, () =>
+        _moneyPile.DeSpawnObjectWithJump(wc.transform.position, () =>
         {
             GameManager.Instance.Money += 50;
             GameManager.Instance.AddExp(1f);

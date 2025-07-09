@@ -1,12 +1,8 @@
-using NUnit.Framework;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using UnityEngine;
 using static Define;
-using static UnityEngine.Rendering.DebugUI;
 
 public class MainCounterSystem : SystemBase
 {
@@ -110,11 +106,77 @@ public class MainCounterSystem : SystemBase
 	{
 		while (true)
 		{
-			yield return new WaitForSeconds(1);
+			yield return new WaitForSeconds(0.5f); // 더 빠른 작업 확인
 
 			bool foundJob = false;
 
-			// 햄버거 운반.
+			// 테이블 청소
+			if (ShouldDoJob(EMainCounterJob.CleanTable))
+			{
+				Table table = Tables.Where(t => t.TableState == ETableState.Dirty).FirstOrDefault();
+				if (table == null)
+					continue;
+
+				foundJob = true;
+
+				// 일감 점유.
+				Jobs[(int)EMainCounterJob.CleanTable] = wc;
+
+				// 테이블로 이동.
+				wc.SetDestination(table.WorkerPos.position, () =>
+				{
+					wc.transform.rotation = table.WorkerPos.rotation;
+				});
+
+				// 가는중.
+				yield return new WaitUntil(() => wc.HasArrivedAtDestination);
+
+				// 테이블 도착했으면 청소 작업 수행.
+				wc.transform.rotation = table.WorkerPos.rotation;
+				yield return new WaitUntil(() => table.TableState != ETableState.Dirty);
+
+				// 쓰레기통으로 이동.
+				wc.SetDestination(TrashCan.WorkerPos.position, () =>
+				{
+					wc.transform.rotation = TrashCan.WorkerPos.rotation;
+				});
+
+				// 가는중.
+				yield return new WaitUntil(() => wc.HasArrivedAtDestination);
+
+				// 쓰레기통 도착했으면 일정 시간 대기 (쓰레기 버리기).
+				wc.transform.rotation = TrashCan.WorkerPos.rotation;
+				yield return new WaitForSeconds(1.5f);
+
+				// 일감 점유 해제.
+				Jobs[(int)EMainCounterJob.CleanTable] = null;
+				// wc.WorkerJob = null;
+			}
+
+			// 카운터 계산대
+			if (ShouldDoJob(EMainCounterJob.CounterCashier))
+			{
+				foundJob = true;
+
+				// 일감 점유.
+				Jobs[(int)EMainCounterJob.CounterCashier] = wc;
+
+				// 계산대로 이동.
+				wc.SetDestination(Counter.CashierWorkerPos.position);
+
+				// 가는중.
+				yield return new WaitUntil(() => wc.HasArrivedAtDestination);
+
+				// 계산대 도착했으면 일정 시간 대기.
+				wc.transform.rotation = Counter.CashierWorkerPos.rotation;
+				yield return new WaitForSeconds(2);
+
+				// 일감 점유 해제.
+				Jobs[(int)EMainCounterJob.CounterCashier] = null;
+				// wc.WorkerJob = null;
+			}
+
+			// 햄버거 운반
 			if (ShouldDoJob(EMainCounterJob.MoveBurger))
 			{
 				foundJob = true;
@@ -150,74 +212,16 @@ public class MainCounterSystem : SystemBase
 
 				// 일감 점유 해제.
 				Jobs[(int)EMainCounterJob.MoveBurger] = null;
+				// wc.WorkerJob = null;
 			}
 
-			// 카운터 계산대.
-			if (ShouldDoJob(EMainCounterJob.CounterCashier))
-			{
-				foundJob = true;
-
-				// 일감 점유.
-				Jobs[(int)EMainCounterJob.CounterCashier] = wc;
-
-				// 계산대로 이동.
-				wc.SetDestination(Counter.CashierWorkerPos.position);
-
-				// 가는중.
-				yield return new WaitUntil(() => wc.HasArrivedAtDestination);
-
-				// 계산대 도착했으면 일정 시간 대기.
-				wc.transform.rotation = Counter.CashierWorkerPos.rotation;
-				yield return new WaitForSeconds(2);
-
-				// 일감 점유 해제.
-				Jobs[(int)EMainCounterJob.CounterCashier] = null;
-			}
-
-			// 테이블 청소.
-			if (ShouldDoJob(EMainCounterJob.CleanTable))
-			{
-				Table table = Tables.Where(t => t.TableState == ETableState.Dirty).FirstOrDefault();
-				if (table == null)
-					continue;
-
-				foundJob = true;
-
-				// 일감 점유.
-				Jobs[(int)EMainCounterJob.CleanTable] = wc;
-
-				// 테이블로 이동.
-				wc.SetDestination(table.WorkerPos.position, () => 
-				{ 
-					wc.transform.rotation = table.WorkerPos.rotation; 
-				});
-
-				// 가는중.
-				yield return new WaitUntil(() => wc.HasArrivedAtDestination);
-
-				// 테이블 도착했으면 일정 시간 대기.
-				wc.transform.rotation = table.WorkerPos.rotation;
-				yield return new WaitUntil(() => table.TableState != ETableState.Dirty);
-
-				// 쓰레기통으로 이동.
-				wc.SetDestination(TrashCan.WorkerPos.position, () => 
-				{ 
-					wc.transform.rotation = TrashCan.WorkerPos.rotation; 
-				});
-
-				// 쓰레기통 도착했으면 일정 시간 대기.
-				wc.transform.rotation = table.WorkerPos.rotation;
-				yield return new WaitUntil(() => wc.IsServing == false);
-
-				// 일감 점유 해제.
-				Jobs[(int)EMainCounterJob.CleanTable] = null;
-			}
-
-			// 일이 없으면 반납.
+			// 일이 없으면 대기.
 			if (foundJob == false)
 			{
+				yield return new WaitForSeconds(1f);
 				RemoveWorker(wc);
-			}	
+				yield break;
+			}
 		}
 	}
 

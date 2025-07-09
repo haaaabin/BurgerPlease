@@ -191,9 +191,9 @@ public class Table : UnlockableBase
 		if (!wc.Tray.IsPlayer)
 			return;
 
-		_moneyPile.DespawnObjectWithJump(wc.transform.position, () =>
+		_moneyPile.DeSpawnObjectWithJump(wc.transform.position, () =>
 		{
-			GameManager.Instance.Money += 50;
+			GameManager.Instance.Money += 10;
 			GameManager.Instance.AddExp(1f);
 		});
 	}

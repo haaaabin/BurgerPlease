@@ -1,10 +1,9 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using static Define;
 
 public class PackingBox : MonoBehaviour
 {
     public BurgerPile pile;
-    private const int MAX_BURGER_COUNT = 4;
-    public bool IsFull => pile.ObjectCount >= MAX_BURGER_COUNT;
-
+    public bool IsFull => pile.ObjectCount >= PACKING_BOX_MAX_BURGER_COUNT;
 }

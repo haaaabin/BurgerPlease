@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 11130445}
   - component: {fileID: 11130444}
   m_Layer: 0
-  m_Name: PackingPile
+  m_Name: BurgerBoxPile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -495,6 +495,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: acf525b4ba4acc2428493a579d217c43, type: 3}
       insertIndex: -1
       addedObject: {fileID: 637838578}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: acf525b4ba4acc2428493a579d217c43, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1916222856}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: acf525b4ba4acc2428493a579d217c43, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 874919587}
     - targetCorrespondingSourceObject: {fileID: -9050661468757206953, guid: acf525b4ba4acc2428493a579d217c43, type: 3}
       insertIndex: -1
       addedObject: {fileID: 495571409}
@@ -1097,7 +1103,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &72554904
 GameObject:
@@ -1771,7 +1777,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 143338168}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 67233533}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &164194750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2458,7 +2476,9 @@ MonoBehaviour:
   Owner: {fileID: 1350557355}
   PackingDesk: {fileID: 829267012}
   DriveThruCounter: {fileID: 1602646540}
+  MainCounter: {fileID: 514546616}
   Jobs:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -5099,9 +5119,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &514546617
 Transform:
   m_ObjectHideFlags: 0
@@ -7093,6 +7110,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9fcb4fcc97decc74a8f592019f2dcff8, type: 3}
   m_PrefabInstance: {fileID: 290211686}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &780530985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 780530986}
+  m_Layer: 0
+  m_Name: MovePackingBoxWorkerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &780530986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780530985}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 1.82, y: 0, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 829267011}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &784491276
 GameObject:
   m_ObjectHideFlags: 0
@@ -7586,6 +7634,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2e5e976c66853904aac4ae7967ad908c, type: 3}
   m_PrefabInstance: {fileID: 164194750}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &874919586
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 874919587}
+  m_Layer: 0
+  m_Name: PackingWorkerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &874919587
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874919586}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.94, y: 0, z: -1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 13714095}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &878185300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11672,6 +11751,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1536208673}
   m_CullTransparentMesh: 1
+--- !u!4 &1555030347 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2049645308266091949, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+  m_PrefabInstance: {fileID: 2080609541968169309}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1563672970
 GameObject:
   m_ObjectHideFlags: 0
@@ -11891,10 +11975,10 @@ MonoBehaviour:
   ConstructionArea: {fileID: 2139418806}
   UnlockEffect: {fileID: 1825419431}
   Owner: {fileID: 231395988}
-  CarSpawnPos: {fileID: 414939871}
-  PakingWorkerPos: {fileID: 0}
-  CashierWorkerPos: {fileID: 0}
+  PackingWorkerPos: {fileID: 874919587}
+  CashierWorkerPos: {fileID: 1916222856}
   IsSellBurgerBox: 0
+  CarSpawnPos: {fileID: 414939871}
 --- !u!1 &1614084274
 GameObject:
   m_ObjectHideFlags: 0
@@ -13677,6 +13761,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6bfcecd6858e39d4abc9cc2c12369b18, type: 3}
   m_PrefabInstance: {fileID: 1914260965}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1916222855
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1916222856}
+  m_Layer: 0
+  m_Name: CashierWorkerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1916222856
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916222855}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.77, y: 0, z: -1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 13714095}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1916358572
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15846,6 +15961,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI_ConstructionArea
       objectReference: {fileID: 0}
+    - target: {fileID: 9163309793018884333, guid: 74726f06beb129c48878d3a59bd5f84b, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16276,19 +16395,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1531107817600736084, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.57
       objectReference: {fileID: 0}
     - target: {fileID: 1531107817600736084, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_LocalPosition.z
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1531107817600736084, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531107817600736084, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531107817600736084, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531107817600736084, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531107817600736084, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 1972042275902681674, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
     - target: {fileID: 2049645308266091949, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.56
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: 2049645308266091949, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_LocalPosition.z
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2049645308266091949, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2049645308266091949, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2049645308266091949, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2049645308266091949, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2049645308266091949, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 2187042394968523619, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16300,7 +16463,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2538487884749797178, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_Center.z
-      value: 1.75
+      value: 1.51
       objectReference: {fileID: 0}
     - target: {fileID: 2657635233802167050, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16355,6 +16518,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5120551903080761690, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+    - target: {fileID: 5120551903080761690, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_Name
       value: PackingWorkerPos
       objectReference: {fileID: 0}
@@ -16395,6 +16562,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 231395988}
     - target: {fileID: 9055351741324853712, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: TakingWorkerPos
+      value: 
+      objectReference: {fileID: 780530986}
+    - target: {fileID: 9055351741324853712, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: PackingWorkerPos
+      value: 
+      objectReference: {fileID: 1555030347}
+    - target: {fileID: 9055351741324853712, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: _pakingBoxPrefab
       value: 
       objectReference: {fileID: 1433474872470375497, guid: 8b5c392574364d64280c85f22e3264f4, type: 3}
@@ -16410,9 +16585,16 @@ PrefabInstance:
       propertyPath: _packingBoxSpawnPos
       value: 
       objectReference: {fileID: 1517008353}
+    - target: {fileID: 9055351741324853712, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: MovePackingBoxWorkerPos
+      value: 
+      objectReference: {fileID: 780530986}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6398822015321377240, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 780530986}
     - targetCorrespondingSourceObject: {fileID: 6398822015321377240, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1517008353}
