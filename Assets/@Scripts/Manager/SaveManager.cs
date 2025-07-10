@@ -9,10 +9,7 @@ using static Define;
 [Serializable]
 public class GameSaveData
 {
-	// 소지금.
 	public long Money = 0;
-
-	// 플레이어 위치.
 	public int RestaurantIndex;
 	public Vector3 PlayerPosition;
 
@@ -21,6 +18,7 @@ public class GameSaveData
 
 	public int Level = 1;
 	public float CurrentExp = 0;
+	public float Profit = 1.0f;
 }
 
 [Serializable]

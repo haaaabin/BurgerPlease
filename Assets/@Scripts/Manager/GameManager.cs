@@ -52,6 +52,20 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
+	public float Profit
+	{
+		get { return SaveData.Profit; }
+		set
+		{
+			SaveData.Profit = value;
+		}
+	}
+
+	public void IncreaseProfit()
+	{
+		Profit += 0.5f;
+	}
+
 	public float GetMaxExp()
 	{
 		return 50 + (Level - 1) * 50;
@@ -67,6 +81,12 @@ public class GameManager : Singleton<GameManager>
 			CurrentExp -= GetMaxExp();
 			Level++;
 		}
+	}
+
+	public void AddMoney(long amount)
+	{
+		long profit = (long)(amount * Profit);
+		Money += profit;
 	}
 
 	private void Start()

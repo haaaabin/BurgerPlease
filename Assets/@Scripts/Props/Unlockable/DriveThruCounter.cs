@@ -181,7 +181,7 @@ public class DriveThruCounter : UnlockableBase
 
         _moneyPile.DeSpawnObjectWithJump(wc.transform.position, () =>
         {
-            GameManager.Instance.Money += 50;
+            GameManager.Instance.AddMoney(30);
             GameManager.Instance.AddExp(1f);
         });
     }

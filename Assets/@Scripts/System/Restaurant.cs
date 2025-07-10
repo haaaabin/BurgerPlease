@@ -99,7 +99,7 @@ public class Restaurant : MonoBehaviour
 
 	void OnUpgradePlayerProfit()
 	{
-		// GameManager.Instance.Player.IncreaseProfit();
+		GameManager.Instance.IncreaseProfit();
 	}
 
 	IEnumerator CoDistributeWorkerAI()

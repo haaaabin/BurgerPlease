@@ -194,7 +194,7 @@ public class Counter : UnlockableBase
 
 		_moneyPile.DeSpawnObjectWithJump(wc.transform.position, () =>
 		{
-			GameManager.Instance.Money += 10;
+			GameManager.Instance.AddMoney(10);
 			GameManager.Instance.AddExp(1f);
 		});
 	}
