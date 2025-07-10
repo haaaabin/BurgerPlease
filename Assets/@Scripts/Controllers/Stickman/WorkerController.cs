@@ -33,7 +33,7 @@ public class WorkerController : StickmanController
 
 	private void Start()
 	{
-		State = Define.EAnimState.Move;
+		State = Define.EAnimState.Idle;
 	}
 
 	protected override void Update()
@@ -62,7 +62,7 @@ public class WorkerController : StickmanController
 
 	public void IncreaseSpeed()
 	{
-		_navMeshAgent.speed *= 1.2f;
+		_navMeshAgent.speed *= 1.2f;	
 	}
 
-}
+}		
