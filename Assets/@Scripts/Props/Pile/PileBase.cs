@@ -92,19 +92,19 @@ public class PileBase : MonoBehaviour
 			case EObjectType.Burger:
 				{
 					GameObject go = RemoveFromPile();
-					GameManager.Instance.DespawnBurger(go);
+					GameManager.Instance.DeSpawnBurger(go);
 				}
 				break;
 			case EObjectType.Money:
 				{
 					GameObject go = RemoveFromPile();
-					GameManager.Instance.DespawnMoney(go);
+					GameManager.Instance.DeSpawnMoney(go);
 				}
 				break;
 			case EObjectType.Trash:
 				{
 					GameObject go = RemoveFromPile();
-					GameManager.Instance.DespawnTrash(go);
+					GameManager.Instance.DeSpawnTrash(go);
 				}
 				break;
 		}
@@ -124,7 +124,7 @@ public class PileBase : MonoBehaviour
 						.DOJump(destPos, 3, 1, 0.3f)
 						.OnComplete(() =>
 						{
-							GameManager.Instance.DespawnBurger(go);
+							GameManager.Instance.DeSpawnBurger(go);
 							onDespawnCallback?.Invoke();
 						});
 				}
@@ -136,7 +136,7 @@ public class PileBase : MonoBehaviour
 						.DOJump(destPos, 3, 1, 0.3f)
 						.OnComplete(() =>
 						{
-							GameManager.Instance.DespawnMoney(go);
+							GameManager.Instance.DeSpawnMoney(go);
 							onDespawnCallback?.Invoke();
 						});
 				}
@@ -148,7 +148,7 @@ public class PileBase : MonoBehaviour
 						.DOJump(destPos, 3, 1, 0.3f)
 						.OnComplete(() =>
 						{
-							GameManager.Instance.DespawnTrash(go);
+							GameManager.Instance.DeSpawnTrash(go);
 							onDespawnCallback?.Invoke();
 						});
 				}

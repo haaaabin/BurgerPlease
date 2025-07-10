@@ -120,31 +120,31 @@ public class GameManager : Singleton<GameManager>
 	#region ObjectManager
 	public GameObject WorkerPrefab;
 	public GameObject SpawnWorker() { return PoolManager.Instance.Pop(WorkerPrefab); }
-	public void DespawnWorker(GameObject worker) { PoolManager.Instance.Push(worker); }
+	public void DeSpawnWorker(GameObject worker) { PoolManager.Instance.Push(worker); }
 
 	public GameObject BurgerPrefab;
 	public GameObject SpawnBurger() { return PoolManager.Instance.Pop(BurgerPrefab); }
-	public void DespawnBurger(GameObject burger) { PoolManager.Instance.Push(burger); }
+	public void DeSpawnBurger(GameObject burger) { PoolManager.Instance.Push(burger); }
 
 	public GameObject MoneyPrefab;
 	public GameObject SpawnMoney() { return PoolManager.Instance.Pop(MoneyPrefab); }
-	public void DespawnMoney(GameObject money) { PoolManager.Instance.Push(money); }
+	public void DeSpawnMoney(GameObject money) { PoolManager.Instance.Push(money); }
 
 	public GameObject TrashPrefab;
 	public GameObject SpawnTrash() { return PoolManager.Instance.Pop(TrashPrefab); }
-	public void DespawnTrash(GameObject trash) { PoolManager.Instance.Push(trash); }
+	public void DeSpawnTrash(GameObject trash) { PoolManager.Instance.Push(trash); }
 
 	public GameObject GuestPrefab;
 	public GameObject SpawnGuest() { return PoolManager.Instance.Pop(GuestPrefab); }
-	public void DespawnGuest(GameObject guest) { PoolManager.Instance.Push(guest); }
+	public void DeSpawnGuest(GameObject guest) { PoolManager.Instance.Push(guest); }
 
 	public GameObject PackingBoxPrefab;
 	public GameObject SpawnPackingBox() { return PoolManager.Instance.Pop(PackingBoxPrefab); }
-	public void DespawnPackingBox(GameObject packingBox) { PoolManager.Instance.Push(packingBox); }
+	public void DeSpawnPackingBox(GameObject packingBox) { PoolManager.Instance.Push(packingBox); }
 
 	public GameObject CarPrefab;
 	public GameObject SpawnCar() { return PoolManager.Instance.Pop(CarPrefab); }
-	public void Despawncar(GameObject car) { PoolManager.Instance.Push(car); }
+	public void DeSpawnCar(GameObject car) { PoolManager.Instance.Push(car); }
 
 	#endregion
 

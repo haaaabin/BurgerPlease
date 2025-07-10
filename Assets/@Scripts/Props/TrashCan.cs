@@ -12,7 +12,7 @@ public class TrashCan : MonoBehaviour
 	private WorkerInteraction _interaction;
 
 	void Start()
-    {
+	{
 		_interaction = Utils.FindChild<WorkerInteraction>(gameObject);
 		_interaction.InteractInterval = 0.1f;
 		_interaction.OnInteraction = OnWorkerInteraction;
@@ -31,11 +31,10 @@ public class TrashCan : MonoBehaviour
 			.OnComplete(() =>
 			{
 				if (type == EObjectType.Burger)
-					GameManager.Instance.DespawnBurger(t.gameObject);
+					GameManager.Instance.DeSpawnBurger(t.gameObject);
 				else
 				{
-					GameManager.Instance.DespawnTrash(t.gameObject);
-					GameManager.Instance.AddExp(1f);
+					GameManager.Instance.DeSpawnTrash(t.gameObject);
 				}
 			});
 	}

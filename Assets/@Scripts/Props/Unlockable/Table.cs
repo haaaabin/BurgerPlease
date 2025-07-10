@@ -131,7 +131,7 @@ public class Table : UnlockableBase
 				guest.GuestState = EGuestState.Leaving;
 				guest.SetDestination(Define.GUEST_LEAVE_POS, () =>
 				{
-					GameManager.Instance.DespawnGuest(guest.gameObject);
+					GameManager.Instance.DeSpawnGuest(guest.gameObject);
 				});
 			}
 
