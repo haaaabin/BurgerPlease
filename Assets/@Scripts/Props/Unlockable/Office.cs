@@ -21,6 +21,9 @@ public class Office : UnlockableBase
 
 	public void OnEnterOffice(WorkerController wc)
 	{
+		if (!wc.Tray.IsPlayer)
+			return;
+
 		switch (officeType)
 		{
 			case EOfficeType.UpgradeOffice:
@@ -34,6 +37,9 @@ public class Office : UnlockableBase
 
 	public void OnLeaveOffice(WorkerController wc)
 	{
+		if (!wc.Tray.IsPlayer)
+			return;
+
 		switch (officeType)
 		{
 			case EOfficeType.UpgradeOffice:
