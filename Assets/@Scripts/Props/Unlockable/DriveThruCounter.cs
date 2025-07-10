@@ -205,7 +205,10 @@ public class DriveThruCounter : UnlockableBase
 
         _spawnMoneyRemaining = _orderBurgerCount * 10;
 
-        car.SetDestination(Define.CAR_LEAVE_POS);
+        car.SetDestination(Define.CAR_LEAVE_POS, () =>
+        {
+            GameManager.Instance.DeSpawnCar(car.gameObject);
+        });
         car.CarState = Define.ECarState.Leaving;
         car.OrderCount = 0;
         _queueCars.Remove(car);
