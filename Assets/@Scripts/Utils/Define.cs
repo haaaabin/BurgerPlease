@@ -26,6 +26,7 @@ public static class Define
 		Idle,
 		Move,
 		Eating,
+		Dance,
 	}
 
 	public enum EObjectType
@@ -89,9 +90,9 @@ public static class Define
 	public const float GUEST_SPAWN_INTERVAL = 1f;
 	public const int GUEST_MAX_ORDER_BURGER_COUNT = 2;
 	public const int CAR_MAX_ORDER_BURGER_COUNT = 2;
-    public const int PACKING_BOX_MAX_BURGER_COUNT = 4;
+	public const int PACKING_BOX_MAX_BURGER_COUNT = 4;
 
-	public static Vector3 WORKER_SPAWN_POS = new Vector3(27, 0, 34);			
+	public static Vector3 WORKER_SPAWN_POS = new Vector3(27, 0, 34);
 	public static Vector3 GUEST_LEAVE_POS = new Vector3(0, 0, 0);
 	public static Vector3 CAR_LEAVE_POS = new Vector3(-10, 0, -4);
 
@@ -100,4 +101,5 @@ public static class Define
 	public static int SERVING_IDLE = Animator.StringToHash("ServingIdle");
 	public static int SERVING_MOVE = Animator.StringToHash("ServingMove");
 	public static int EATING = Animator.StringToHash("Eating");
+	public static int DANCE = Animator.StringToHash("akai_e_espiritu@Dance");
 }

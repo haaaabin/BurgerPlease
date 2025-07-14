@@ -43,8 +43,19 @@ public class PlayerController : WorkerController
 				_particle.Stop();
 			}
 		}
-		
+
 		// 중력 작용.
 		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+	}
+
+	public void PlayDance()
+	{
+		_animator.SetTrigger("Dance");
+	}
+
+	public void StopDance()
+	{
+		_animator.ResetTrigger("Dance");
+		State = EAnimState.Idle;
 	}
 }
