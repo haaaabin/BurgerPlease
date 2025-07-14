@@ -4,10 +4,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Define;
-
 public class UI_Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
 	[SerializeField]
+
 	private GameObject _background;
 
 	[SerializeField]
@@ -16,27 +16,28 @@ public class UI_Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	private float _radius;
 	private Vector2 _touchPos;
 
-	public void Start()
+	void Start()
 	{
 		_radius = _background.GetComponent<RectTransform>().sizeDelta.y / 3;
 	}
 
 	public void OnPointerDown(PointerEventData eventData)
 	{
+		_background.SetActive(true);
+		_cursor.SetActive(true);
+
 		_background.transform.position = eventData.position;
 		_cursor.transform.position = eventData.position;
 		_touchPos = eventData.position;
-
-		//Debug.Log("OnPointerDown");
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
 		_cursor.transform.position = _touchPos;
+		_background.SetActive(false);
+		_cursor.SetActive(false);
 
 		GameManager.Instance.JoystickDir = Vector2.zero;
-
-		//Debug.Log("OnPointerUp");
 	}
 
 	public void OnDrag(PointerEventData eventData)
@@ -49,7 +50,5 @@ public class UI_Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		_cursor.transform.position = newPosition;
 
 		GameManager.Instance.JoystickDir = moveDir;
-
-		//Debug.Log("OnDrag");
 	}
 }
