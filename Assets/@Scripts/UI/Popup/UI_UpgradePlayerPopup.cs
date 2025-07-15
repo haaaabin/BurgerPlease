@@ -19,9 +19,9 @@ public class UI_UpgradePlayerPopup : MonoBehaviour
     {
         _closeButton.onClick.AddListener(OnClickCloseButton);
 
-        _speedItem.SetInfo(EUpgradePlayerPopupItemType.Speed, 500);
-        _capacityItem.SetInfo(EUpgradePlayerPopupItemType.Capacity, 500);
-        _profitItem.SetInfo(EUpgradePlayerPopupItemType.Profit, 500);
+        _speedItem.SetInfo(EUpgradePlayerPopupItemType.Speed, 500, SaveManager.Instance.SaveData.Restaurants[0].PlayerSpeedUpgradeLevel);
+        _capacityItem.SetInfo(EUpgradePlayerPopupItemType.Capacity, 500, SaveManager.Instance.SaveData.Restaurants[0].PlayerCapacityUpgradeLevel);
+        _profitItem.SetInfo(EUpgradePlayerPopupItemType.Profit, 500, SaveManager.Instance.SaveData.Restaurants[0].ProfitUpgradeLevel);
     }
 
     void OnClickCloseButton()

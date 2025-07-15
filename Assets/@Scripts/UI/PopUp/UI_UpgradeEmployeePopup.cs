@@ -19,9 +19,9 @@ public class UI_UpgradeEmployeePopup : MonoBehaviour
 	{
 		_closeButton.onClick.AddListener(OnClickCloseButton);
 
-		_hireItem.SetInfo(EUpgradeEmployeePopupItemType.Hire, 1000);
-		_speedItem.SetInfo(EUpgradeEmployeePopupItemType.Speed, 500);
-		_capacityItem.SetInfo(EUpgradeEmployeePopupItemType.Capacity, 500);
+		_hireItem.SetInfo(EUpgradeEmployeePopupItemType.Hire, 1000, SaveManager.Instance.SaveData.Restaurants[0].WorkerCount);
+		_speedItem.SetInfo(EUpgradeEmployeePopupItemType.Speed, 500, SaveManager.Instance.SaveData.Restaurants[0].EmployeeSpeedUpgradeLevel);
+		_capacityItem.SetInfo(EUpgradeEmployeePopupItemType.Capacity, 500, SaveManager.Instance.SaveData.Restaurants[0].EmployeeCapacityUpgradeLevel);
 	}
 
 	void OnClickCloseButton()

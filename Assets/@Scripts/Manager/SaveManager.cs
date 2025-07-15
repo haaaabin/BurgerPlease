@@ -28,6 +28,11 @@ public class RestaurantData
 	public int WorkerCount;
 
 	// 업그레이드.
+	public int EmployeeSpeedUpgradeLevel = 0;
+	public int EmployeeCapacityUpgradeLevel = 0;
+	public int PlayerSpeedUpgradeLevel = 0;
+	public int PlayerCapacityUpgradeLevel = 0;
+	public int ProfitUpgradeLevel = 0;
 
 	// 프랍들.
 	public ETutorialState TutorialState = ETutorialState.None;

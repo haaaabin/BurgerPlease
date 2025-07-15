@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using static Define;
@@ -60,6 +61,34 @@ public class Restaurant : MonoBehaviour
 
 		for (int i = 0; i < data.WorkerCount; i++)
 			OnHireWorker();
+
+		Debug.Log("OnUpgradeEmployeeSpeed: " + data.EmployeeSpeedUpgradeLevel);
+		for (int i = 0; i < data.EmployeeSpeedUpgradeLevel; i++)
+		{
+			foreach (WorkerController worker in Workers)
+				worker.IncreaseSpeed();
+		}
+
+		for (int i = 0; i < data.EmployeeCapacityUpgradeLevel; i++)
+		{
+			foreach (WorkerController worker in Workers)
+				worker.Tray.IncreaseCapacity();
+		}
+
+		for (int i = 0; i < data.PlayerSpeedUpgradeLevel; i++)
+		{
+			GameManager.Instance.Player.IncreaseSpeed();
+		}
+
+		for (int i = 0; i < data.PlayerCapacityUpgradeLevel; i++)
+		{
+			GameManager.Instance.Player.Tray.IncreaseCapacity();
+		}
+
+		for (int i = 0; i < data.ProfitUpgradeLevel; i++)
+		{
+			GameManager.Instance.IncreaseProfit();
+		}
 	}
 
 	void OnHireWorker()
@@ -80,6 +109,7 @@ public class Restaurant : MonoBehaviour
 		{
 			worker.IncreaseSpeed();
 		}
+		_data.EmployeeSpeedUpgradeLevel++;
 	}
 
 	void OnUpgradeEmployeeCapacity()
@@ -88,21 +118,25 @@ public class Restaurant : MonoBehaviour
 		{
 			worker.Tray.IncreaseCapacity();
 		}
+		_data.EmployeeCapacityUpgradeLevel++;
 	}
 
 	void OnUpgradePlayerSpeed()
 	{
 		GameManager.Instance.Player.IncreaseSpeed();
+		_data.PlayerSpeedUpgradeLevel++;
 	}
 
 	void OnUpgradePlayerCapacity()
 	{
 		GameManager.Instance.Player.Tray.IncreaseCapacity();
+		_data.PlayerCapacityUpgradeLevel++;
 	}
 
 	void OnUpgradePlayerProfit()
 	{
 		GameManager.Instance.IncreaseProfit();
+		_data.ProfitUpgradeLevel++;
 	}
 
 	IEnumerator CoDistributeWorkerAI()

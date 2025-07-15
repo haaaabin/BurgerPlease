@@ -62,7 +62,8 @@ public class WorkerController : StickmanController
 
 	public void IncreaseSpeed()
 	{
-		_navMeshAgent.speed *= 1.2f;	
+		_moveSpeed *= 1.2f;
+		Debug.Log("IncreaseSpeed: " + _moveSpeed);
 	}
 
-}		
+}

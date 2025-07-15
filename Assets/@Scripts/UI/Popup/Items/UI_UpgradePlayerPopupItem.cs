@@ -44,11 +44,18 @@ public class UI_UpgradePlayerPopupItem : MonoBehaviour
         }
     }
 
-    public void SetInfo(EUpgradePlayerPopupItemType type, long money)
+    public void SetInfo(EUpgradePlayerPopupItemType type, long money, int upgradeLevel)
     {
         _type = type;
         _money = money;
         RefreshUI();
+        if (_slider != null)
+        {
+            if (upgradeLevel == 0)
+                _slider.value = 0f;
+            else
+                _slider.value = Mathf.Clamp01(upgradeLevel * 0.2f);
+        }
     }
 
     public void RefreshUI()

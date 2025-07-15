@@ -41,7 +41,7 @@ public class TrayController : MonoBehaviour
 	public int ReservedCount => _reserved.Count; // 쟁반 위로 이동중.
 	public int TotalItemCount => _reserved.Count + _items.Count; // 쟁반 위로 이동중인 아이템을 포함한 전체 개수.
 
-	private int _maxItemCount = 6; // 쟁반에 들고 있을 수 있는 최대 아이템 개수.
+	private int _maxItemCount = 3; // 쟁반에 들고 있을 수 있는 최대 아이템 개수.
 	private int MaxItemCount;
 
 	private HashSet<Transform> _reserved = new HashSet<Transform>();
@@ -167,5 +167,6 @@ public class TrayController : MonoBehaviour
 	{
 		_maxItemCount += 1;
 		MaxItemCount = _maxItemCount;
+		Debug.Log("IncreaseCapacity: " + _maxItemCount);
 	}
 }
