@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using static Define;
 
-public class MainCounterSystem : SystemBase
+public class MainCounterSystem : WorkerSystemBase<EMainCounterJob>
 {
 	public Grill Grill;
 	public Counter Counter;
@@ -13,8 +13,6 @@ public class MainCounterSystem : SystemBase
 	public List<Office> Offices = new List<Office>();
 	public RestaurantDoor Door;
 
-	// 직원들이 담당하는 일들.
-	public WorkerController[] Jobs = new WorkerController[(int)EMainCounterJob.MaxCount];
 	public override bool HasJob
 	{
 		get
@@ -30,79 +28,13 @@ public class MainCounterSystem : SystemBase
 		}
 	}
 
-	private void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
 		Counter.Owner = this;
 	}
 
-	private void Update()
-	{
-		foreach (WorkerController worker in Workers)
-		{
-			if (worker.WorkerJob != null)
-				continue;
-
-			IEnumerator job = DoMainCounterWorkerJob(worker);
-			worker.DoJob(job);
-		}
-	}
-
-	#region Worker
-	public override void AddWorker(WorkerController worker)
-	{
-		base.AddWorker(worker);
-	}
-
-	bool ShouldDoJob(EMainCounterJob jobType)
-	{
-		// 이미 다른 직원이 점유중이라면 스킵.
-		WorkerController wc = Jobs[(int)jobType];
-		if (wc != null)
-			return false;
-
-		// 일감이 있는지 확인.
-		switch (jobType)
-		{
-			case EMainCounterJob.MoveBurger:
-				{
-					if (Grill == null)
-						return false;
-					if (Grill.CurrentWorker != null)
-						return false;
-					if (Grill.BurgerCount == 0)
-						return false;
-					if (Counter.NeedMoreBurgers == false)
-						return false;
-					return true;
-				}
-			case EMainCounterJob.CounterCashier:
-				{
-					if (Counter == null)
-						return false;
-					if (Counter.CurrentCashierWorker != null)
-						return false;
-					if (Counter.NeedCashier == false)
-						return false;
-					if (Counter.FindTableToServeGuests() == null)
-						return false;
-
-					return true;
-				}
-			case EMainCounterJob.CleanTable:
-				{
-					foreach (Table table in Tables)
-					{
-						if (table.TableState == ETableState.Dirty)
-							return true;
-					}
-					return false;
-				}
-		}
-
-		return false;
-	}
-
-	IEnumerator DoMainCounterWorkerJob(WorkerController wc)
+	protected override IEnumerator DoWorkerJob(WorkerController wc)
 	{
 		while (true)
 		{
@@ -225,6 +157,55 @@ public class MainCounterSystem : SystemBase
 		}
 	}
 
+	protected override bool ShouldDoJob(EMainCounterJob jobType)
+	{
+		// 이미 다른 직원이 점유중이라면 스킵.
+		WorkerController wc = Jobs[(int)jobType];
+		if (wc != null)
+			return false;
+
+		// 일감이 있는지 확인.
+		switch (jobType)
+		{
+			case EMainCounterJob.MoveBurger:
+				{
+					if (Grill == null)
+						return false;
+					if (Grill.CurrentWorker != null)
+						return false;
+					if (Grill.BurgerCount == 0)
+						return false;
+					if (Counter.NeedMoreBurgers == false)
+						return false;
+					return true;
+				}
+			case EMainCounterJob.CounterCashier:
+				{
+					if (Counter == null)
+						return false;
+					if (Counter.CurrentCashierWorker != null)
+						return false;
+					if (Counter.NeedCashier == false)
+						return false;
+					if (Counter.FindTableToServeGuests() == null)
+						return false;
+
+					return true;
+				}
+			case EMainCounterJob.CleanTable:
+				{
+					foreach (Table table in Tables)
+					{
+						if (table.TableState == ETableState.Dirty)
+							return true;
+					}
+					return false;
+				}
+		}
+
+		return false;
+	}
+
 	public bool HasEmptyCleanTable()
 	{
 		foreach (Table table in Tables)
@@ -235,5 +216,4 @@ public class MainCounterSystem : SystemBase
 
 		return false;
 	}
-	#endregion
 }

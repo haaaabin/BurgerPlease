@@ -2,15 +2,11 @@ using System.Collections;
 using UnityEngine;
 using static Define;
 
-public class DriveThruSystem : SystemBase
+public class DriveThruSystem : WorkerSystemBase<EDriveThruJob>
 {
     public PackingDesk PackingDesk;
     public DriveThruCounter DriveThruCounter;
-
     public MainCounterSystem MainCounter;
-
-    // 직원들이 담당하는 일들.
-    public WorkerController[] Jobs = new WorkerController[(int)EDriveThruJob.MaxCount];
 
     public override bool HasJob
     {
@@ -22,107 +18,17 @@ public class DriveThruSystem : SystemBase
                 if (ShouldDoJob(type))
                     return true;
             }
-
             return false;
         }
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         DriveThruCounter.Owner = this;
     }
 
-    private void Update()
-    {
-        foreach (WorkerController worker in Workers)
-        {
-            if (worker.WorkerJob != null)
-                continue;
-
-            IEnumerator job = DoDriveThruWorkerJob(worker);
-            worker.DoJob(job);
-        }
-    }
-
-    #region Worker
-    public override void AddWorker(WorkerController worker)
-    {
-        base.AddWorker(worker);
-    }
-
-    bool ShouldDoJob(EDriveThruJob jobType)
-    {
-        int idx = (int)jobType;
-        if (idx < 0 || idx >= Jobs.Length)
-            return false; // 잘못된 인덱스면 false 반환
-
-        // 이미 다른 직원이 점유중이라면 스킵.
-        WorkerController wc = Jobs[idx];
-        if (wc != null)
-            return false;
-
-        // 일감이 있는지 확인.
-        switch (jobType)
-        {
-            case EDriveThruJob.MoveBurger:
-                {
-                    if (MainCounter.Grill.BurgerCount == 0)
-                        return false;
-                    if (PackingDesk == null)
-                        return false;
-                    if (PackingDesk.NeedMoreBurgers == false)
-                        return false;
-                    if (PackingDesk.CurrentBurgerWorker != null)
-                        return false;
-
-                    return true;
-                }
-            case EDriveThruJob.PackingBurger:
-                {
-                    if (PackingDesk == null)
-                        return false;
-                    if (PackingDesk.BurgerCount < Define.PACKING_BOX_MAX_BURGER_COUNT)
-                        return false;
-                    if (DriveThruCounter.NeedMorePacking == false)
-                        return false;
-                    if (PackingDesk.CurrentPackingBoxWorker != null)
-                        return false;
-
-                    return true;
-                }
-            case EDriveThruJob.MovePackingBox:
-                {
-                    if (DriveThruCounter == null)
-                        return false;
-                    if (DriveThruCounter.NeedMorePacking == false)
-                        return false;
-                    if (PackingDesk.PackingCount == 0)
-                        return false;
-                    if (PackingDesk.CurrentTakingBoxWorker != null)
-                        return false;
-
-                    return true;
-                }
-
-            case EDriveThruJob.CounterCashier:
-                {
-                    if (DriveThruCounter == null)
-                        return false;
-                    if (DriveThruCounter.PackingCount == 0)
-                        return false;
-                    if (DriveThruCounter.NeedCashier == false)
-                        return false;
-                    if (DriveThruCounter.IsEnoughSellBurger == false)
-                        return false;
-
-                    return true;
-                }
-
-        }
-        return false;
-    }
-
-    IEnumerator DoDriveThruWorkerJob(WorkerController wc)
+    protected override IEnumerator DoWorkerJob(WorkerController wc)
     {
         while (true)
         {
@@ -139,7 +45,6 @@ public class DriveThruSystem : SystemBase
                 {
                     wc.transform.rotation = MainCounter.Grill.WorkerPos.rotation;
                 });
-
                 yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
                 wc.transform.rotation = MainCounter.Grill.WorkerPos.rotation;
@@ -149,7 +54,6 @@ public class DriveThruSystem : SystemBase
                 {
                     wc.transform.rotation = PackingDesk.BurgerWorkerPos.rotation;
                 });
-
                 yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
                 wc.transform.rotation = PackingDesk.BurgerWorkerPos.rotation;
@@ -167,7 +71,6 @@ public class DriveThruSystem : SystemBase
                 {
                     wc.transform.rotation = PackingDesk.PackingWorkerPos.rotation;
                 });
-
                 yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
                 wc.transform.rotation = PackingDesk.PackingWorkerPos.rotation;
@@ -185,7 +88,6 @@ public class DriveThruSystem : SystemBase
                 {
                     wc.transform.rotation = PackingDesk.MovePackingBoxWorkerPos.rotation;
                 });
-
                 yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
                 wc.transform.rotation = PackingDesk.MovePackingBoxWorkerPos.rotation;
@@ -195,7 +97,6 @@ public class DriveThruSystem : SystemBase
                 {
                     wc.transform.rotation = DriveThruCounter.PackingWorkerPos.rotation;
                 });
-
                 yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
                 wc.transform.rotation = DriveThruCounter.PackingWorkerPos.rotation;
@@ -213,7 +114,6 @@ public class DriveThruSystem : SystemBase
                 {
                     wc.transform.rotation = DriveThruCounter.CashierWorkerPos.rotation;
                 });
-
                 yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
                 wc.transform.rotation = DriveThruCounter.CashierWorkerPos.rotation;
@@ -231,5 +131,61 @@ public class DriveThruSystem : SystemBase
         }
     }
 
-    #endregion
+    protected override bool ShouldDoJob(EDriveThruJob jobType)
+    {
+        int idx = (int)jobType;
+        if (idx < 0 || idx >= Jobs.Length)
+            return false;
+
+        WorkerController wc = Jobs[idx];
+        if (wc != null)
+            return false;
+
+        switch (jobType)
+        {
+            case EDriveThruJob.MoveBurger:
+                if (MainCounter.Grill.BurgerCount == 0)
+                    return false;
+                if (PackingDesk == null || !PackingDesk.gameObject.activeInHierarchy)
+                    return false;
+                if (PackingDesk.NeedMoreBurgers == false)
+                    return false;
+                if (PackingDesk.CurrentBurgerWorker != null)
+                    return false;
+                return true;
+            case EDriveThruJob.PackingBurger:
+                if (PackingDesk == null || !PackingDesk.gameObject.activeInHierarchy)
+                    return false;
+                if (PackingDesk.BurgerCount < Define.PACKING_BOX_MAX_BURGER_COUNT)
+                    return false;
+                if (DriveThruCounter == null || !DriveThruCounter.gameObject.activeInHierarchy)
+                    return false;
+                if (DriveThruCounter.NeedMorePacking == false)
+                    return false;
+                if (PackingDesk.CurrentPackingBoxWorker != null)
+                    return false;
+                return true;
+            case EDriveThruJob.MovePackingBox:
+                if (DriveThruCounter == null || !DriveThruCounter.gameObject.activeInHierarchy)
+                    return false;
+                if (DriveThruCounter.NeedMorePacking == false)
+                    return false;
+                if (PackingDesk.PackingCount == 0)
+                    return false;
+                if (PackingDesk.CurrentTakingBoxWorker != null)
+                    return false;
+                return true;
+            case EDriveThruJob.CounterCashier:
+                if (DriveThruCounter == null || !DriveThruCounter.gameObject.activeInHierarchy)
+                    return false;
+                if (DriveThruCounter.PackingCount == 0)
+                    return false;
+                if (DriveThruCounter.NeedCashier == false)
+                    return false;
+                if (DriveThruCounter.IsEnoughSellBurger == false)
+                    return false;
+                return true;
+        }
+        return false;
+    }
 }
