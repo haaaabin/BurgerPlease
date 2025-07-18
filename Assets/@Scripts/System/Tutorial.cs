@@ -20,6 +20,7 @@ public enum ETutorialState
 	PackBurgerBox,
 	SellDriveThruBurger,
 	CreateUpgradeOffice,
+	TutorialComplete,
 
 	Done,
 }
@@ -30,6 +31,8 @@ public class Tutorial : MonoBehaviour
 	private MainCounterSystem _mainCounterSystem;
 	[SerializeField]
 	private DriveThruSystem _driveThruSystem;
+	[SerializeField]
+	private CinematicDirector _cinematicDirector;
 
 	private RestaurantData _data;
 
@@ -90,8 +93,10 @@ public class Tutorial : MonoBehaviour
 
 			yield return new WaitUntil(() => _mainCounterSystem.Door.IsUnlocked);
 
+			GameManager.Instance.GameSceneUI.SetToastMessage("");
 			Utils.PlayBounceEffect(door.transform);
 			door.UnlockEffect.OnPlayParticleSystem();
+			_cinematicDirector.PlayCinematic();
 
 			bool starEffectFinished = false;
 			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(door.transform.position, () =>
@@ -103,6 +108,7 @@ public class Tutorial : MonoBehaviour
 			// starEffectFinished가 true가 될 때까지 대기
 			yield return new WaitUntil(() => starEffectFinished);
 
+			yield return new WaitForSeconds(5f);
 			_state = ETutorialState.CreateFirstTable;
 		}
 
@@ -246,7 +252,7 @@ public class Tutorial : MonoBehaviour
 
 		if (_state == ETutorialState.CreateHROffice)
 		{
-			GameManager.Instance.GameSceneUI.SetToastMessage("Create Office");
+			GameManager.Instance.GameSceneUI.SetToastMessage("Create HR Office");
 
 			hrOffice.SetUnlockedState(EUnlockedState.ProcessingConstruction);
 
@@ -348,10 +354,22 @@ public class Tutorial : MonoBehaviour
 
 			yield return new WaitUntil(() => starEffectFinished);
 
-			_state = ETutorialState.Done;
+			_state = ETutorialState.TutorialComplete;
 		}
 
 		upgradeOffice.SetUnlockedState(EUnlockedState.Unlocked);
+
+		if (_state == ETutorialState.TutorialComplete)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Tutorial Complete!!");
+			GameManager.Instance.Player.UnlockEffect.OnPlayParticleSystem();
+
+			_cinematicDirector.PlayCinematic();
+
+			yield return new WaitForSeconds(5f);
+			GameManager.Instance.GameSceneUI.SetToastMessage("");
+			_state = ETutorialState.Done;
+		}
 
 		GameManager.Instance.GameSceneUI.SetToastMessage("");
 
