@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using static Define;
 
 public enum EUpgradePlayerPopupItemType
@@ -8,62 +6,12 @@ public enum EUpgradePlayerPopupItemType
     None,
     Speed,
     Capacity,
-    Profit,
+    Profit
 }
-public class UI_UpgradePlayerPopupItem : MonoBehaviour
+
+public class UI_UpgradePlayerPopupItem : UI_UpgradePopupItemBase<EUpgradePlayerPopupItemType>
 {
-    [SerializeField]
-    private Button _purchaseButton;
-
-    [SerializeField]
-    private TextMeshProUGUI _costText;
-
-    [SerializeField]
-    private Slider _slider;
-
-    [SerializeField]
-    private GameObject _upgradeEffectArrow;
-    EUpgradePlayerPopupItemType _type = EUpgradePlayerPopupItemType.None;
-
-    long _money = 0;
-
-    void Start()
-    {
-        _purchaseButton.onClick.AddListener(OnClickPurchaseButton);
-    }
-
-    void Update()
-    {
-        if (GameManager.Instance.Money < _money)
-        {
-            _purchaseButton.interactable = false;
-        }
-        else
-        {
-            _purchaseButton.interactable = true;
-        }
-    }
-
-    public void SetInfo(EUpgradePlayerPopupItemType type, long money, int upgradeLevel)
-    {
-        _type = type;
-        _money = money;
-        RefreshUI();
-        if (_slider != null)
-        {
-            if (upgradeLevel == 0)
-                _slider.value = 0f;
-            else
-                _slider.value = Mathf.Clamp01(upgradeLevel * 0.2f);
-        }
-    }
-
-    public void RefreshUI()
-    {
-        _costText.text = Utils.GetMoneyText(_money);
-    }
-
-    public void OnClickPurchaseButton()
+    protected override void OnClickPurchaseButton()
     {
         if (GameManager.Instance.Money < _money)
             return;
@@ -73,38 +21,23 @@ public class UI_UpgradePlayerPopupItem : MonoBehaviour
         switch (_type)
         {
             case EUpgradePlayerPopupItemType.Speed:
-                {
-                    GameManager.Instance.BroadcastEvent(EEventType.UpgradePlayerSpeed);
-                    if (_slider != null && _slider.value <= 1.0f)
-                        _slider.value += 0.2f;
-                    ShowUpgradeEffect();
-                }
+                GameManager.Instance.BroadcastEvent(EEventType.UpgradePlayerSpeed);
+                if (_slider != null && _slider.value <= 1.0f)
+                    _slider.value += 0.2f;
+                ShowUpgradeEffect();
                 break;
             case EUpgradePlayerPopupItemType.Capacity:
-                {
-                    GameManager.Instance.BroadcastEvent(EEventType.UpgradePlayerCapacity);
-                    if (_slider != null && _slider.value <= 1.0f)
-                        _slider.value += 0.2f;
-                    ShowUpgradeEffect();
-                }
+                GameManager.Instance.BroadcastEvent(EEventType.UpgradePlayerCapacity);
+                if (_slider != null && _slider.value <= 1.0f)
+                    _slider.value += 0.2f;
+                ShowUpgradeEffect();
                 break;
             case EUpgradePlayerPopupItemType.Profit:
-                {
-                    GameManager.Instance.BroadcastEvent(EEventType.UpgradePlayerProfit);
-                    if (_slider != null && _slider.value <= 1.0f)
-                        _slider.value += 0.2f;
-                    ShowUpgradeEffect();
-                }
+                GameManager.Instance.BroadcastEvent(EEventType.UpgradePlayerProfit);
+                if (_slider != null && _slider.value <= 1.0f)
+                    _slider.value += 0.2f;
+                ShowUpgradeEffect();
                 break;
-        }
-    }
-
-    private void ShowUpgradeEffect()
-    {
-        if (_upgradeEffectArrow != null)
-        {
-            _upgradeEffectArrow.SetActive(true);
-            _upgradeEffectArrow.GetComponent<UI_PurchaseArrowEffect>().PlayEffect();
         }
     }
 }

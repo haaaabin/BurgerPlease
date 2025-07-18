@@ -12,68 +12,13 @@ public enum EUpgradeEmployeePopupItemType
 	Hire
 }
 
-public class UI_UpgradeEmployeePopupItem : MonoBehaviour
+public class UI_UpgradeEmployeePopupItem : UI_UpgradePopupItemBase<EUpgradeEmployeePopupItemType>
 {
-	// TODO : 나머지 UI 연동
-
-	[SerializeField]
-	private Button _purchaseButton;
-
-	[SerializeField]
-	private TextMeshProUGUI _costText;
-
-	[SerializeField]
-	private Slider _slider;
-
-	[SerializeField]
-	private GameObject _upgradeEffectArrow;
-
-	EUpgradeEmployeePopupItemType _type = EUpgradeEmployeePopupItemType.None;
-
-	long _money = 0;
-
-	void Start()
-	{
-		_purchaseButton.onClick.AddListener(OnClickPurchaseButton);
-	}
-
-	void Update()
-	{
-		if (GameManager.Instance.Money < _money)
-		{
-			_purchaseButton.interactable = false;
-		}
-		else
-		{
-			_purchaseButton.interactable = true;
-		}
-	}
-
-	public void SetInfo(EUpgradeEmployeePopupItemType type, long money, int upgradeLevel)
-	{
-		_type = type;
-		_money = money;
-		RefreshUI();
-		if (_slider != null)
-		{
-			if (upgradeLevel == 0)
-				_slider.value = 0f;
-			else
-				_slider.value = Mathf.Clamp01(upgradeLevel * 0.2f);
-		}
-	}
-
-	public void RefreshUI()
-	{
-		_costText.text = Utils.GetMoneyText(_money);
-	}
-
-	public void OnClickPurchaseButton()
+	protected override void OnClickPurchaseButton()
 	{
 		if (GameManager.Instance.Money < _money)
 			return;
 
-		// 돈 소모.
 		GameManager.Instance.Money -= _money;
 
 		switch (_type)
@@ -102,15 +47,6 @@ public class UI_UpgradeEmployeePopupItem : MonoBehaviour
 					ShowUpgradeEffect();
 				}
 				break;
-		}
-	}
-
-	private void ShowUpgradeEffect()
-	{
-		if (_upgradeEffectArrow != null)
-		{
-			_upgradeEffectArrow.SetActive(true);
-			_upgradeEffectArrow.GetComponent<UI_PurchaseArrowEffect>().PlayEffect();
 		}
 	}
 }
