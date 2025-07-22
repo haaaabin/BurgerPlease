@@ -27,6 +27,7 @@ public static class Define
 		Move,
 		Eating,
 		Dance,
+		Kiosk,
 	}
 
 	public enum EObjectType
@@ -45,6 +46,7 @@ public static class Define
 		Serving,
 		Eating,
 		Leaving,
+		Kiosk,
 	}
 
 	public enum ETableState
@@ -81,8 +83,16 @@ public static class Define
 		MaxCount,
 	}
 
+	public enum EKioskJob
+	{
+		MoveBurger,
+		CounterCashier,
+		MaxCount,
+	}
+
 	public const float GRILL_SPAWN_BURGER_INTERVAL = 0.5f;
 	public const int GRILL_MAX_BURGER_COUNT = 6;
+	public const int KIOSK_MAX_BURGER_COUNT = 8;
 
 	public const float CONSTRUCTION_UPGRADE_INTERVAL = 0.01f;
 	public const float MONEY_SPAWN_INTERVAL = 0.1f;
@@ -102,4 +112,5 @@ public static class Define
 	public static int SERVING_MOVE = Animator.StringToHash("ServingMove");
 	public static int EATING = Animator.StringToHash("Eating");
 	public static int DANCE = Animator.StringToHash("akai_e_espiritu@Dance");
+	public static int KIOSK = Animator.StringToHash("Kiosk");
 }

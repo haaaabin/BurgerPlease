@@ -2,6 +2,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.UIElements;
 using static Define;
 
 public class GuestController : StickmanController
@@ -22,6 +23,9 @@ public class GuestController : StickmanController
 	}
 
 	public int CurrentDestQueueIndex;
+	public GameObject bubbleGameObject;
+	public bool IsOrderingNow = false;
+	public bool IsBubbleShown = false;
 
 	protected override void Awake()
 	{
@@ -32,22 +36,33 @@ public class GuestController : StickmanController
 	{
 		base.Update();
 
-		if (GuestState != EGuestState.Eating)
+		if (GuestState == EGuestState.Eating)
 		{
-			if (HasArrivedAtDestination)
+			return;
+		}
+
+		if (HasArrivedAtDestination)
+		{
+			switch (GuestState)
 			{
-				//_navMeshAgent.isStopped = true;
-				State = EAnimState.Idle;
-			}
-			else
-			{
-				State = EAnimState.Move;
-				LookAtDestination();
+				case EGuestState.Kiosk:
+					State = EAnimState.Kiosk;
+					break;
+
+				case EGuestState.Queuing:
+					State = EAnimState.Idle; 
+					break;
+
+				default:
+					State = EAnimState.Idle;
+					break;
 			}
 		}
 		else
 		{
-			//_navMeshAgent.isStopped = true;
+			State = EAnimState.Move;
+			LookAtDestination();
 		}
+
 	}
 }

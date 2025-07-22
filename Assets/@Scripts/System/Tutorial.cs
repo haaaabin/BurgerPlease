@@ -20,6 +20,7 @@ public enum ETutorialState
 	PackBurgerBox,
 	SellDriveThruBurger,
 	CreateUpgradeOffice,
+	CreateKiosk,
 	TutorialComplete,
 
 	Done,
@@ -31,6 +32,8 @@ public class Tutorial : MonoBehaviour
 	private MainCounterSystem _mainCounterSystem;
 	[SerializeField]
 	private DriveThruSystem _driveThruSystem;
+	[SerializeField]
+	private KioskSystem _kioskSystem;
 	[SerializeField]
 	private CinematicDirector _cinematicDirector;
 
@@ -82,8 +85,11 @@ public class Tutorial : MonoBehaviour
 		packingDesk.SetUnlockedState(EUnlockedState.Hidden);
 		driveThruCounter.SetUnlockedState(EUnlockedState.Hidden);
 
-		grill.StopSpawnBurger = true;
+		// 키오스크 시스템 초기화
+		KioskCounter kioskCounter = _kioskSystem.Kiosk;
+		kioskCounter.SetUnlockedState(EUnlockedState.Hidden);
 
+		grill.StopSpawnBurger = true;
 
 		if (_state == ETutorialState.CreateDoor)
 		{
@@ -109,7 +115,7 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => starEffectFinished);
 
 			yield return new WaitForSeconds(5f);
-			_state = ETutorialState.CreateFirstTable;
+			_state = ETutorialState.CreateKiosk;
 		}
 
 		if (_state == ETutorialState.CreateFirstTable)
@@ -354,8 +360,31 @@ public class Tutorial : MonoBehaviour
 
 			yield return new WaitUntil(() => starEffectFinished);
 
+			_state = ETutorialState.CreateKiosk;
+		}
+
+		if (_state == ETutorialState.CreateKiosk)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Create Kiosk");
+
+			kioskCounter.SetUnlockedState(EUnlockedState.ProcessingConstruction);
+
+			yield return new WaitUntil(() => kioskCounter.IsUnlocked);
+			Utils.PlayBounceEffect(kioskCounter.transform);
+			kioskCounter.UnlockEffect.OnPlayParticleSystem();
+
+			bool starEffectFinished = false;
+			GameManager.Instance.GameSceneUI.PlayStarEffectFromWorld(upgradeOffice.transform.position, () =>
+			{
+				GameManager.Instance.AddExp(_expAmount);
+				starEffectFinished = true;
+			});
+
+			yield return new WaitUntil(() => starEffectFinished);
+
 			_state = ETutorialState.TutorialComplete;
 		}
+		kioskCounter.SetUnlockedState(EUnlockedState.Unlocked);
 
 		upgradeOffice.SetUnlockedState(EUnlockedState.Unlocked);
 

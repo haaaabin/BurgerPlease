@@ -56,6 +56,9 @@ public class StickmanController : MonoBehaviour
 			case EAnimState.Eating:
 				nextAnim = Define.EATING;
 				break;
+			case EAnimState.Kiosk:
+				nextAnim = Define.KIOSK;
+				break;
 		}
 
 		if (_lastAnim == nextAnim)
@@ -138,7 +141,7 @@ public class StickmanController : MonoBehaviour
 		_navMeshAgent.stoppingDistance = 0.1f;
 		_navMeshAgent.radius = 0.01f;
 		_navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
-
+		_navMeshAgent.updateRotation = false;
 		Destination = transform.position;
 
 		OrderCount = 0;

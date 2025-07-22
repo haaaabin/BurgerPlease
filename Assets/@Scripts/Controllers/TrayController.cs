@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Define;
 using static UnityEngine.UI.GridLayoutGroup;
@@ -50,6 +51,7 @@ public class TrayController : MonoBehaviour
 	private MeshRenderer _meshRenderer;
 	private StickmanController _owner;
 	public bool IsPlayer = false;
+	public bool IsGuest = false;
 
 	[SerializeField]
 	private TextMeshProUGUI _maxText;
@@ -66,7 +68,10 @@ public class TrayController : MonoBehaviour
 		_owner = transform.parent.GetComponent<StickmanController>();
 		Visible = false;
 
-		MaxItemCount = _maxItemCount;
+		if (!IsGuest)
+			MaxItemCount = _maxItemCount;
+		else
+			MaxItemCount = 10;
 
 		if (_maxText != null)
 			_maxText.gameObject.SetActive(false);
@@ -107,16 +112,19 @@ public class TrayController : MonoBehaviour
 
 	public void AddToTray(Transform child)
 	{
-		if (TotalItemCount >= _maxItemCount)
+		if (!IsGuest)
 		{
-			if (_maxText != null)
-				_maxText.gameObject.SetActive(true);
-			return;
-		}
-		else
-		{
-			if (_maxText != null)
-				_maxText.gameObject.SetActive(false);
+			if (TotalItemCount >= _maxItemCount)
+			{
+				if (_maxText != null)
+					_maxText.gameObject.SetActive(true);
+				return;
+			}
+			else
+			{
+				if (_maxText != null)
+					_maxText.gameObject.SetActive(false);
+			}
 		}
 
 		// 운반하는 물체 종류 추적을 위해.
@@ -162,9 +170,25 @@ public class TrayController : MonoBehaviour
 
 		return item;
 	}
+	
+	public void ClearTray()
+	{
+		foreach (Transform item in _items)
+		{
+			Destroy(item.gameObject);
+		}
+
+		_items.Clear();
+		_reserved.Clear();
+		CurrentTrayObjectType = EObjectType.None;
+
+		if (_maxText != null)
+			_maxText.gameObject.SetActive(false);
+	}
 
 	public void IncreaseCapacity()
 	{
+		if (IsGuest) return;
 		_maxItemCount += 1;
 		MaxItemCount = _maxItemCount;
 		Debug.Log("IncreaseCapacity: " + _maxItemCount);
