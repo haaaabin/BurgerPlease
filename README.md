@@ -28,16 +28,9 @@
 
 <a name="Play"></a>
 ## 게임 플레이
+[게임 영상](https://youtu.be/wnCnzKtJKHQ)
 
-![Tree-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/4eb5383d-9b33-4093-98c6-539f1de4a0bf)
-![ItemBox-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/ea50d89d-af3f-4b14-a8f4-59d0cf22aab4)
-![Inventory-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/eebd03e8-8ed2-4d68-b263-6b0919d09028)
-![Drop-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/b3056266-edd1-45dc-b7d6-3e4219514c54)
-![OnDayEnd-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/d8cd3d1c-a4d2-4ba5-85b6-cf9f5ed0a107)
-![Shop-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/7ef89135-b101-45d4-bdd9-6c82a6117b93)
-![Seed-ezgif com-video-to-gif-converter (1)](https://github.com/user-attachments/assets/daceb67b-afc3-4b5d-9099-e7f3cc0c56c2)
-![Harvest-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/c7731736-6ee0-42b2-90a8-224095f02e6f)
-![Save-ezgif com-video-to-gif-converter (1)](https://github.com/user-attachments/assets/5ab81b3a-c02f-4457-bfc0-52af5845fd55)
+
 <br/>
 
 <a name="CoreFeatures"></a>
