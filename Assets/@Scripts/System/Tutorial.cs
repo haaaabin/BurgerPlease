@@ -15,12 +15,15 @@ public enum ETutorialState
 	CleanTable,
 	CreateSecondTable,
 	CreateHROffice,
+	HireWorker,
 	CreateBurgerPackingDesk,
 	CreateDriveThruCounter,
 	PackBurgerBox,
 	SellDriveThruBurger,
 	CreateUpgradeOffice,
+	UpgradePlayer,
 	CreateKiosk,
+	SellKioskBurger,
 	TutorialComplete,
 
 	Done,
@@ -115,7 +118,7 @@ public class Tutorial : MonoBehaviour
 			yield return new WaitUntil(() => starEffectFinished);
 
 			yield return new WaitForSeconds(5f);
-			_state = ETutorialState.CreateKiosk;
+			_state = ETutorialState.CreateFirstTable;
 		}
 
 		if (_state == ETutorialState.CreateFirstTable)
@@ -275,9 +278,19 @@ public class Tutorial : MonoBehaviour
 
 			yield return new WaitUntil(() => starEffectFinished);
 
-			_state = ETutorialState.CreateBurgerPackingDesk;
+			_state = ETutorialState.HireWorker;
 		}
 		hrOffice.SetUnlockedState(EUnlockedState.Unlocked);
+
+		if (_state == ETutorialState.HireWorker)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Hire Worker");
+
+			yield return new WaitUntil(() => SaveManager.Instance.SaveData.Restaurants[0].WorkerCount == 1);
+
+			yield return new WaitForSeconds(3f);
+			_state = ETutorialState.CreateBurgerPackingDesk;
+		}
 
 		if (_state == ETutorialState.CreateBurgerPackingDesk)
 		{
@@ -360,6 +373,17 @@ public class Tutorial : MonoBehaviour
 
 			yield return new WaitUntil(() => starEffectFinished);
 
+			_state = ETutorialState.UpgradePlayer;
+		}
+		upgradeOffice.SetUnlockedState(EUnlockedState.Unlocked);
+
+		if (_state == ETutorialState.UpgradePlayer)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Upgrade Player");
+
+			yield return new WaitUntil(() => SaveManager.Instance.SaveData.Restaurants[0].PlayerSpeedUpgradeLevel == 1);
+
+			yield return new WaitForSeconds(3f);
 			_state = ETutorialState.CreateKiosk;
 		}
 
@@ -382,11 +406,19 @@ public class Tutorial : MonoBehaviour
 
 			yield return new WaitUntil(() => starEffectFinished);
 
-			_state = ETutorialState.TutorialComplete;
+			_state = ETutorialState.SellKioskBurger;
 		}
 		kioskCounter.SetUnlockedState(EUnlockedState.Unlocked);
 
-		upgradeOffice.SetUnlockedState(EUnlockedState.Unlocked);
+		if (_state == ETutorialState.SellKioskBurger)
+		{
+			GameManager.Instance.GameSceneUI.SetToastMessage("Sell Kiosk Burger");
+
+			yield return new WaitUntil(() => kioskCounter.IsSelling);
+
+			yield return new WaitForSeconds(1f);
+			_state = ETutorialState.TutorialComplete;
+		}
 
 		if (_state == ETutorialState.TutorialComplete)
 		{
