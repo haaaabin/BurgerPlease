@@ -62,6 +62,7 @@ public class DriveThruSystem : WorkerSystemBase<EDriveThruJob>
                 Jobs[(int)EDriveThruJob.MoveBurger] = null;
             }
 
+            // 포장 작업
             if (ShouldDoJob(EDriveThruJob.PackingBurger))
             {
                 foundJob = true;
@@ -79,6 +80,7 @@ public class DriveThruSystem : WorkerSystemBase<EDriveThruJob>
                 Jobs[(int)EDriveThruJob.PackingBurger] = null;
             }
 
+            // 포장 박스 이동 작업
             if (ShouldDoJob(EDriveThruJob.MovePackingBox))
             {
                 foundJob = true;
@@ -91,12 +93,13 @@ public class DriveThruSystem : WorkerSystemBase<EDriveThruJob>
                 yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
                 wc.transform.rotation = PackingDesk.MovePackingBoxWorkerPos.rotation;
+
                 yield return new WaitForSeconds(2);
 
                 wc.SetDestination(DriveThruCounter.PackingWorkerPos.position, () =>
                 {
                     wc.transform.rotation = DriveThruCounter.PackingWorkerPos.rotation;
-                });
+                });  
                 yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
                 wc.transform.rotation = DriveThruCounter.PackingWorkerPos.rotation;
@@ -105,6 +108,7 @@ public class DriveThruSystem : WorkerSystemBase<EDriveThruJob>
                 Jobs[(int)EDriveThruJob.MovePackingBox] = null;
             }
 
+            // 카운터 계산대 작업
             if (ShouldDoJob(EDriveThruJob.CounterCashier))
             {
                 foundJob = true;

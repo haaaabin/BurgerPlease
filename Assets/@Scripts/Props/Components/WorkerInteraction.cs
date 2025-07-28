@@ -6,8 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class WorkerInteraction : MonoBehaviour
 {
-	public Action<WorkerController> OnTriggerStart;
 	public Action<WorkerController> OnInteraction;
+	public Action<WorkerController> OnTriggerStart;
 	public Action<WorkerController> OnTriggerEnd;
 
 	public float InteractInterval = 0.5f;

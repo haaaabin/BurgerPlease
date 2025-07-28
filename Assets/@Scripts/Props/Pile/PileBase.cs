@@ -1,13 +1,8 @@
 using DG.Tweening;
-using NUnit.Framework.Internal;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static Define;
-using static UnityEditor.PlayerSettings;
 
 [RequireComponent(typeof(BoxCollider))]
 public class PileBase : MonoBehaviour
@@ -163,6 +158,7 @@ public class PileBase : MonoBehaviour
 			return;
 		if (tray.CurrentTrayObjectType != EObjectType.None && _objectType != tray.CurrentTrayObjectType)
 			return;
+
 		Transform t = tray.RemoveFromTray();
 		if (t == null)
 			return;

@@ -19,20 +19,19 @@ public class UI_ConstructionArea : MonoBehaviour
 
 	public long SpentMoney
 	{
-		get { return Owner.SpentMoney; }
+		get { if (Owner == null) return 0; return Owner.SpentMoney; }
 		set { Owner.SpentMoney = value; }
 	}
 
 	void Start()
-    {
+	{
 		GetComponent<WorkerInteraction>().OnInteraction = OnWorkerInteraction;
 		GetComponent<WorkerInteraction>().InteractInterval = Define.CONSTRUCTION_UPGRADE_INTERVAL;
 
-		// TODO : 데이터 참고해서 업그레이드 비용 설정.
 		TotalUpgradeMoney = 50;
 	}
 
-    public void OnWorkerInteraction(WorkerController wc)
+	public void OnWorkerInteraction(WorkerController wc)
 	{
 		if (Owner == null)
 			return;

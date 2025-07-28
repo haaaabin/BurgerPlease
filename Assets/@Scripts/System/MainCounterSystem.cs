@@ -38,7 +38,7 @@ public class MainCounterSystem : WorkerSystemBase<EMainCounterJob>
 	{
 		while (true)
 		{
-			yield return new WaitForSeconds(0.5f); // 더 빠른 작업 확인
+			yield return new WaitForSeconds(0.5f);
 
 			bool foundJob = false;
 
@@ -51,36 +51,36 @@ public class MainCounterSystem : WorkerSystemBase<EMainCounterJob>
 
 				foundJob = true;
 
-				// 일감 점유.
+				// 일감 점유
 				Jobs[(int)EMainCounterJob.CleanTable] = wc;
 
-				// 테이블로 이동.
+				// 테이블로 이동
 				wc.SetDestination(table.WorkerPos.position, () =>
 				{
 					wc.transform.rotation = table.WorkerPos.rotation;
 				});
 
-				// 가는중.
+				// 가는중
 				yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
-				// 테이블 도착했으면 청소 작업 수행.
+				// 테이블 도착했으면 청소 작업 수행
 				wc.transform.rotation = table.WorkerPos.rotation;
 				yield return new WaitUntil(() => table.TableState != ETableState.Dirty);
 
-				// 쓰레기통으로 이동.
+				// 쓰레기통으로 이동
 				wc.SetDestination(TrashCan.WorkerPos.position, () =>
 				{
 					wc.transform.rotation = TrashCan.WorkerPos.rotation;
 				});
 
-				// 가는중.
+				// 가는중
 				yield return new WaitUntil(() => wc.HasArrivedAtDestination);
 
-				// 쓰레기통 도착했으면 일정 시간 대기 (쓰레기 버리기).
+				// 쓰레기통 도착했으면 일정 시간 대기 (쓰레기 버리기)
 				wc.transform.rotation = TrashCan.WorkerPos.rotation;
 				yield return new WaitForSeconds(1.5f);
 
-				// 일감 점유 해제.
+				// 일감 점유 해제
 				Jobs[(int)EMainCounterJob.CleanTable] = null;
 				// wc.WorkerJob = null;
 			}
@@ -206,14 +206,4 @@ public class MainCounterSystem : WorkerSystemBase<EMainCounterJob>
 		return false;
 	}
 
-	public bool HasEmptyCleanTable()
-	{
-		foreach (Table table in Tables)
-		{
-			if (table.TableState == ETableState.None)
-				return true;
-		}
-
-		return false;
-	}
 }

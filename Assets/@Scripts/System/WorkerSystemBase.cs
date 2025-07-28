@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public abstract class WorkerSystemBase<TJobType> : SystemBase where TJobType : Enum
 {
@@ -9,6 +7,7 @@ public abstract class WorkerSystemBase<TJobType> : SystemBase where TJobType : E
 
     protected virtual void Awake()
     {
+        // 직원들이 담당하는 일들
         Jobs = new WorkerController[Enum.GetValues(typeof(TJobType)).Length];
     }
 
@@ -27,6 +26,7 @@ public abstract class WorkerSystemBase<TJobType> : SystemBase where TJobType : E
         base.AddWorker(worker);
     }
 
-    protected abstract IEnumerator DoWorkerJob(WorkerController wc);
-    protected abstract bool ShouldDoJob(TJobType jobType);
+    protected abstract IEnumerator DoWorkerJob(WorkerController wc); // 직원이 해당 일을 하는 동작
+    protected abstract bool ShouldDoJob(TJobType jobType); // 직원이 해당 일을 해야하는지 여부를 반환
 }
+
