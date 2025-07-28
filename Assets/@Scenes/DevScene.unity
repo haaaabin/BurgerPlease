@@ -5016,6 +5016,37 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4480288150385014560, guid: b65088230ae313942a8ba088574787e8, type: 3}
+--- !u!1 &511677752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 511677753}
+  m_Layer: 0
+  m_Name: CashierWorkerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &511677753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 511677752}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.28, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1629834851}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &514470400
 GameObject:
   m_ObjectHideFlags: 0
@@ -7953,6 +7984,37 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5461017166446597428, guid: 43ddcf8231cf8f0479f5e15016941cd5, type: 3}
   m_PrefabInstance: {fileID: 2045765883}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &843907207
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 843907208}
+  m_Layer: 0
+  m_Name: BurgerWorkerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &843907208
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843907207}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.97, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1629834851}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &850387268 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2e5e976c66853904aac4ae7967ad908c, type: 3}
@@ -9653,8 +9715,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InteractInterval: 0.5
   CurrentWorker: {fileID: 0}
-  _machineOnTriggerEnterImage: {fileID: 0}
-  _machineOnTriggerExitImage: {fileID: 0}
+  _machineOnTriggerEnterImage: {fileID: 222154658}
+  _machineOnTriggerExitImage: {fileID: 495571410}
 --- !u!65 &1109099176
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12088,6 +12150,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6bfcecd6858e39d4abc9cc2c12369b18, type: 3}
   m_PrefabInstance: {fileID: 285962649}
   m_PrefabAsset: {fileID: 0}
+--- !u!212 &1420259652 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7883724342765327015, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+  m_PrefabInstance: {fileID: 2080609541968169309}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1421637716 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a1204d7b467cf514c8fe07b7932ae6cc, type: 3}
@@ -12564,8 +12631,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InteractInterval: 0.5
   CurrentWorker: {fileID: 0}
-  _machineOnTriggerEnterImage: {fileID: 0}
-  _machineOnTriggerExitImage: {fileID: 0}
+  _machineOnTriggerEnterImage: {fileID: 1818599136}
+  _machineOnTriggerExitImage: {fileID: 1420259652}
 --- !u!1 &1536208673
 GameObject:
   m_ObjectHideFlags: 0
@@ -13357,6 +13424,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1941705334}
   m_SourcePrefab: {fileID: 100100000, guid: a1204d7b467cf514c8fe07b7932ae6cc, type: 3}
+--- !u!4 &1629834851 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1118242786766336310, guid: 79f6147d19c54ca41a980cef67b24627, type: 3}
+  m_PrefabInstance: {fileID: 1685661770402086309}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1631524957 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 22f9f1c4f3225b94a9f26326fbd618f5, type: 3}
@@ -14218,6 +14290,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1801252733}
   m_CullTransparentMesh: 1
+--- !u!212 &1818599136 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 6590140155103130402, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+  m_PrefabInstance: {fileID: 2080609541968169309}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1820007048
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18009,7 +18086,15 @@ PrefabInstance:
     - target: {fileID: 3279266416967461059, guid: 79f6147d19c54ca41a980cef67b24627, type: 3}
       propertyPath: Owner
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 533228335}
+    - target: {fileID: 3279266416967461059, guid: 79f6147d19c54ca41a980cef67b24627, type: 3}
+      propertyPath: BurgerWorkerPos
+      value: 
+      objectReference: {fileID: 843907208}
+    - target: {fileID: 3279266416967461059, guid: 79f6147d19c54ca41a980cef67b24627, type: 3}
+      propertyPath: CashierWorkerPos
+      value: 
+      objectReference: {fileID: 511677753}
     - target: {fileID: 4133518293531169243, guid: 79f6147d19c54ca41a980cef67b24627, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -18060,7 +18145,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1118242786766336310, guid: 79f6147d19c54ca41a980cef67b24627, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 843907208}
+    - targetCorrespondingSourceObject: {fileID: 1118242786766336310, guid: 79f6147d19c54ca41a980cef67b24627, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 511677753}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79f6147d19c54ca41a980cef67b24627, type: 3}
 --- !u!1001 &2080609541968169309
@@ -18234,6 +18325,10 @@ PrefabInstance:
     - target: {fileID: 7030869072088652616, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7424754555887882805, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7466149267186484429, guid: 990559a3069827246b77b84cb0dcd341, type: 3}
       propertyPath: m_LocalPosition.x

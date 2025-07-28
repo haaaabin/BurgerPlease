@@ -29,6 +29,7 @@ public class KioskCounter : UnlockableBase
     public Transform CashierWorkerPos;
     public bool NeedCashier => (CurrentCashierWorker == null);
     public bool IsEnoughSellBurger => BurgerCount >= _orderBurgerCount;
+    public bool IsSelling = false;
 
     void Start()
     {
@@ -145,6 +146,7 @@ public class KioskCounter : UnlockableBase
         int orderCount = Random.Range(4, Define.KIOSK_MAX_BURGER_COUNT + 1);
         _orderBurgerCount = orderCount;
         guest.OrderCount = orderCount;
+        guest.IsWaitingForBurger = true;
     }
 
     private void OnBurgerInteraction(WorkerController wc)
@@ -178,7 +180,7 @@ public class KioskCounter : UnlockableBase
             if (_queueSlots[i] == null)
                 continue;
 
-            if (_queueSlots[i].HasArrivedAtDestination)
+            if (_queueSlots[i].HasArrivedAtDestination && _queueSlots[i].IsWaitingForBurger)
             {
                 guest = _queueSlots[i];
                 guestIndex = i;
@@ -208,9 +210,12 @@ public class KioskCounter : UnlockableBase
 
         guest.GuestState = Define.EGuestState.Leaving;
         guest.OrderCount = 0;
+        guest.IsWaitingForBurger = false;
         _queueSlots[0] = null;
         _orderBurgerCount = 0;
         _isOrdering = false;
+        
+        IsSelling = true;
     }
 
 }

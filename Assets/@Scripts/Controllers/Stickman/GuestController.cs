@@ -26,6 +26,7 @@ public class GuestController : StickmanController
 	public GameObject bubbleGameObject;
 	public bool IsOrderingNow = false;
 	public bool IsBubbleShown = false;
+	public bool IsWaitingForBurger = false;
 
 	protected override void Awake()
 	{
