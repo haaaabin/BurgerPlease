@@ -22,6 +22,10 @@ public class Grill : UnlockableBase
 	[SerializeField]
 	private TextMeshProUGUI _maxText;
 
+	private bool isPlayerNear = false;
+	private float grillSfxTimer = 0f;
+	public float grillSfxInterval = 0.5f; // 소리 반복 간격
+
 	protected void Awake()
 	{
 		_burgers = Utils.FindChild<BurgerPile>(gameObject);
@@ -30,6 +34,11 @@ public class Grill : UnlockableBase
 		_interaction = _burgers.GetComponent<WorkerInteraction>();
 		_interaction.InteractInterval = 0.2f;
 		_interaction.OnInteraction = OnWorkerBurgerInteraction;
+	}
+
+	void Update()
+	{
+
 	}
 
 	Coroutine _coSpawnBurger;
@@ -77,5 +86,21 @@ public class Grill : UnlockableBase
 
 		if (_burgers.ObjectCount < Define.GRILL_MAX_BURGER_COUNT)
 			_maxText.gameObject.SetActive(false);
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.CompareTag("Player"))
+		{
+			isPlayerNear = true;
+		}
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		if (other.CompareTag("Player"))
+		{
+			isPlayerNear = false;
+		}
 	}
 }
